@@ -3,403 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AZIZI TECH PVT LTD | Restricted Access</title>
+    <title>AZIZI INTELLIGENCE | Secure Portal</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --neon-cyan: #00f3ff;
-            --neon-pink: #bc13fe;
-            --dark-bg: #020205;
-            --glass: rgba(10, 15, 30, 0.75);
-            --error-red: #ff003c;
+            --primary: #00e5ff; /* Cyan */
+            --secondary: #0a0a0a; /* Black */
+            --glass: rgba(10, 10, 15, 0.85);
+            --border: rgba(0, 229, 255, 0.3);
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: var(--dark-bg);
-            font-family: 'Exo 2', sans-serif;
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: 'Rajdhani', sans-serif;
+            color: var(--text-main);
             overflow-x: hidden;
-            position: relative;
-        }
-
-        /* --- SECURITY GATE (LOCK SCREEN) --- */
-        #security-gate {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: #000;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-image: radial-gradient(circle, #1a1a1a 0%, #000 90%);
-        }
-
-        .lock-container {
-            text-align: center;
-            padding: 40px;
-            border: 2px solid var(--error-red);
-            border-radius: 15px;
-            box-shadow: 0 0 50px rgba(255, 0, 60, 0.2);
-            background: rgba(0,0,0,0.9);
-            animation: pulse-red 2s infinite;
-        }
-
-        @keyframes pulse-red {
-            0% { box-shadow: 0 0 20px rgba(255, 0, 60, 0.2); }
-            50% { box-shadow: 0 0 50px rgba(255, 0, 60, 0.6); }
-            100% { box-shadow: 0 0 20px rgba(255, 0, 60, 0.2); }
-        }
-
-        .lock-icon {
-            font-size: 50px;
-            color: var(--error-red);
-            margin-bottom: 20px;
-        }
-
-        .access-input {
-            padding: 15px;
-            width: 250px;
-            border-radius: 5px;
-            border: 1px solid #333;
-            background: #111;
-            color: var(--neon-cyan);
-            font-family: 'Orbitron', sans-serif;
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 16px;
-            outline: none;
-            letter-spacing: 2px;
-        }
-
-        .access-btn {
-            padding: 10px 30px;
-            background: var(--error-red);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-family: 'Orbitron', sans-serif;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .access-btn:hover {
-            background: white;
-            color: var(--error-red);
-            box-shadow: 0 0 20px var(--error-red);
-        }
-
-        /* --- MAIN SITE STYLES (HIDDEN INITIALLY) --- */
-        #main-app {
-            display: none; /* Initially Hidden */
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* --- CYBER GRID ANIMATION --- */
-        .cyber-grid {
-            position: fixed;
-            top: 0; left: 0; width: 200%; height: 200%;
-            background-image: 
-                linear-gradient(rgba(0, 243, 255, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 243, 255, 0.1) 1px, transparent 1px);
-            background-size: 40px 40px;
-            transform: perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px);
-            animation: moveGrid 5s linear infinite;
-            z-index: -2;
-            pointer-events: none;
-        }
-
-        @keyframes moveGrid {
-            0% { transform: perspective(500px) rotateX(60deg) translateY(0) translateZ(-200px); }
-            100% { transform: perspective(500px) rotateX(60deg) translateY(40px) translateZ(-200px); }
-        }
-
-        .overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, transparent 0%, var(--dark-bg) 90%);
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        /* --- MAIN CONTAINER --- */
-        .container {
-            width: 90%;
-            max-width: 600px;
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(0, 243, 255, 0.2);
-            border-radius: 16px;
-            padding: 40px;
-            box-shadow: 0 0 50px rgba(0, 243, 255, 0.15);
-            position: relative;
-            margin-top: 50px;
-            margin-bottom: 50px;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        /* Title with Glitch Effect */
-        h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 36px;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            background: linear-gradient(90deg, #fff, var(--neon-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 5px;
-            text-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
-        }
-
-        .typewriter {
-            text-align: center;
-            font-size: 14px;
-            color: var(--neon-cyan);
-            font-family: 'Courier New', monospace;
-            margin-bottom: 30px;
-            letter-spacing: 1px;
-            border-right: 2px solid var(--neon-cyan);
-            white-space: nowrap;
-            overflow: hidden;
-            width: fit-content;
-            margin-left: auto;
-            margin-right: auto;
-            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
-        }
-
-        @keyframes typing { from { width: 0 } to { width: 100% } }
-        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--neon-cyan); } }
-
-        /* --- FEATURES GRID --- */
-        .features-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .feature-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 13px;
-            color: #ccc;
-            display: flex;
-            align-items: center;
-            transition: 0.3s;
-        }
-
-        .feature-item:hover {
-            border-color: var(--neon-pink);
-            background: rgba(188, 19, 254, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .feature-item i {
-            font-size: 18px;
-            margin-right: 12px;
-            color: var(--neon-cyan);
-            width: 25px;
-            text-align: center;
-        }
-
-        /* --- INPUT & BUTTON --- */
-        .input-wrapper {
-            position: relative;
-            margin-bottom: 25px;
-        }
-
-        .input-wrapper i {
-            position: absolute;
-            left: 20px; top: 50%;
-            transform: translateY(-50%);
-            color: var(--neon-cyan);
-        }
-
-        input {
-            width: 100%;
-            padding: 18px 20px 18px 50px;
-            background: rgba(0,0,0,0.5);
-            border: 1px solid #333;
-            border-radius: 50px;
-            color: white;
-            font-family: 'Exo 2', sans-serif;
-            font-size: 18px;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        input:focus {
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
-        }
-
-        button {
-            width: 100%;
-            padding: 18px;
-            border-radius: 50px;
-            border: none;
-            background: linear-gradient(90deg, #00f3ff, #0066ff);
-            color: #000;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 800;
-            font-size: 18px;
-            cursor: pointer;
-            letter-spacing: 2px;
-            transition: 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        button:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 30px rgba(0, 243, 255, 0.6);
-        }
-
-        /* --- TERMINAL OUTPUT --- */
-        #terminal {
-            margin-top: 30px;
             background: #000;
-            border: 1px solid #333;
+        }
+
+        /* --- VIDEO BACKGROUND --- */
+        #bg-video {
+            position: fixed;
+            right: 0; bottom: 0;
+            min-width: 100%; min-height: 100%;
+            z-index: -2;
+            opacity: 0.6;
+            object-fit: cover;
+        }
+        
+        .overlay-tint {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7); /* Video ko thoda dark karne ke liye */
+            z-index: -1;
+        }
+
+        /* --- LOCK SCREEN (PAYMENT UI) --- */
+        #security-gate {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .login-card {
+            background: rgba(15, 15, 20, 0.95);
+            border: 1px solid var(--primary);
+            width: 90%; max-width: 400px;
+            padding: 30px;
             border-radius: 10px;
-            padding: 20px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            display: none;
-            text-align: left;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .log-line {
-            margin-bottom: 8px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding-bottom: 5px;
-            display: flex;
-            align-items: flex-start;
-            word-break: break-all;
-        }
-
-        .log-line i { margin-right: 10px; margin-top: 3px; }
-        .green { color: #00ff00; }
-        .blue { color: #00f3ff; }
-        .red { color: #ff0055; }
-        .label { color: #888; font-size: 12px; margin-right: 10px; min-width: 80px; display:inline-block; }
-        .val { color: #fff; font-weight: 600; }
-
-        /* --- FOOTER --- */
-        .footer {
-            margin-top: 40px;
-            font-size: 12px;
-            color: #666;
             text-align: center;
+            box-shadow: 0 0 40px rgba(0, 229, 255, 0.2);
+            position: relative;
         }
 
-        .insta-btn {
-            display: inline-flex;
-            align-items: center;
-            margin-top: 15px;
-            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-            padding: 10px 25px;
-            border-radius: 50px;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
+        .login-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+
+        .brand-title {
+            font-size: 24px; font-weight: 700; letter-spacing: 2px;
+            color: var(--primary); margin-bottom: 5px; text-transform: uppercase;
+        }
+        
+        .sub-title { color: var(--text-muted); font-size: 12px; margin-bottom: 25px; }
+
+        .key-input {
+            width: 100%; padding: 12px; background: #000; border: 1px solid #333;
+            color: #fff; text-align: center; letter-spacing: 3px; font-size: 18px;
+            margin-bottom: 15px; border-radius: 4px; outline: none;
+            font-family: 'Rajdhani', sans-serif; font-weight: bold;
+        }
+        .key-input:focus { border-color: var(--primary); }
+
+        .unlock-btn {
+            width: 100%; padding: 12px; background: var(--primary); color: #000;
+            border: none; font-weight: 700; font-size: 16px; cursor: pointer;
+            text-transform: uppercase; border-radius: 4px; transition: 0.3s;
+        }
+        .unlock-btn:hover { background: #fff; box-shadow: 0 0 15px var(--primary); }
+
+        /* PAYMENT SECTION */
+        .pricing-section {
+            margin-top: 25px; border-top: 1px dashed #333; padding-top: 20px;
+        }
+        .price-tag { color: #fff; font-size: 16px; font-weight: 600; margin-bottom: 10px; }
+        .price-highlight { color: #00ff66; font-size: 18px; }
+        
+        .upi-box {
+            background: #1a1a1a; padding: 10px; border-radius: 5px;
+            font-family: monospace; color: #ffeb3b; border: 1px solid #333;
+            margin-bottom: 15px; font-size: 14px;
+        }
+
+        .whatsapp-btn {
+            display: block; width: 100%; padding: 10px;
+            background: #25D366; color: #fff; text-decoration: none;
+            font-weight: 600; border-radius: 4px; font-size: 14px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
             transition: 0.3s;
         }
+        .whatsapp-btn:hover { background: #128C7E; transform: translateY(-2px); }
 
-        .insta-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 20px rgba(220, 39, 67, 0.5); }
+        /* --- MAIN DASHBOARD --- */
+        #main-app { display: none; min-height: 100vh; padding: 20px; justify-content: center; align-items: flex-start; padding-top: 50px; }
+
+        .dashboard {
+            width: 100%; max-width: 800px;
+            background: var(--glass);
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .dash-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 30px;
+        }
+        .dash-title h1 { font-size: 28px; color: #fff; }
+        .dash-title span { color: var(--primary); font-size: 14px; letter-spacing: 1px; }
+
+        .search-bar { position: relative; margin-bottom: 30px; }
+        .search-bar input {
+            width: 100%; padding: 18px 20px 18px 55px;
+            background: rgba(0,0,0,0.5); border: 1px solid #444;
+            color: #fff; font-size: 18px; border-radius: 8px; outline: none;
+            font-family: 'Roboto', sans-serif;
+        }
+        .search-bar i {
+            position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
+            color: var(--primary); font-size: 20px;
+        }
+        .search-btn {
+            width: 100%; padding: 15px; background: linear-gradient(90deg, #0055ff, #00aaff);
+            border: none; color: white; font-size: 16px; font-weight: bold;
+            border-radius: 8px; cursor: pointer; letter-spacing: 1px;
+        }
+
+        /* --- PROFESSIONAL GRID RESULT --- */
+        #terminal { display: none; margin-top: 30px; }
+
+        .status-bar {
+            background: rgba(0, 255, 100, 0.1); border-left: 4px solid #00ff66;
+            padding: 15px; margin-bottom: 20px; display: flex; align-items: center;
+        }
+        .status-bar i { color: #00ff66; margin-right: 10px; font-size: 20px; }
+        .status-text { color: #fff; font-weight: 600; }
+
+        .info-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+        }
+        @media (max-width: 600px) { .info-grid { grid-template-columns: 1fr; } }
+
+        .info-card {
+            background: #111; border: 1px solid #222; padding: 15px;
+            border-radius: 6px; display: flex; flex-direction: column;
+        }
+        .info-label {
+            font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+            color: #888; margin-bottom: 5px;
+        }
+        .info-value {
+            font-size: 16px; color: #fff; font-family: 'Roboto', sans-serif; font-weight: 500;
+        }
+        
+        .full-card { grid-column: 1 / -1; }
+
+        .footer { text-align: center; margin-top: 50px; color: #555; font-size: 12px; }
     </style>
 </head>
 <body>
 
+    <div class="overlay-tint"></div>
+    <video autoplay muted loop id="bg-video">
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-blue-circuit-board-98-large.mp4" type="video/mp4">
+    </video>
+
     <div id="security-gate">
-        <div class="lock-container">
-            <i class="fas fa-user-lock lock-icon"></i>
-            <h2 style="font-family: 'Orbitron'; color:white; margin-bottom:15px; letter-spacing:2px;">SYSTEM LOCKED</h2>
-            <p style="color:#aaa; font-size:12px; margin-bottom:20px;">AUTHORIZATION REQUIRED TO ACCESS DATABASE</p>
+        <div class="login-card">
+            <div class="brand-title">AZIZI TECH PVT LTD</div>
+            <div class="sub-title">RESTRICTED ACCESS PORTAL</div>
             
-            <input type="password" id="accessKey" class="access-input" placeholder="ENTER ACCESS KEY">
-            <br>
-            <button onclick="checkAccess()" class="access-btn">UNLOCK SYSTEM</button>
-            <p id="error-msg" style="color:var(--error-red); font-size:12px; margin-top:15px; display:none;">ACCESS DENIED: INVALID KEY</p>
-        </div>
-    </div>
+            <input type="password" id="accessKey" class="key-input" placeholder="ENTER KEY">
+            <button onclick="checkAccess()" class="unlock-btn">LOGIN</button>
+            <p id="error-msg" style="color:#ff3333; font-size:12px; margin-top:10px; display:none;">INVALID KEY</p>
 
-    <div id="main-app" style="display:none;">
-        <div class="cyber-grid"></div>
-        <div class="overlay"></div>
-
-        <div class="container">
-            <h1>AZIZI TECH <span style="font-size:16px; vertical-align:top;">PVT LTD</span></h1>
-            <div class="typewriter">INITIALIZING INTELLIGENCE PROTOCOL...</div>
-
-            <div class="features-grid">
-                <div class="feature-item"><i class="fas fa-user-secret"></i> <div><strong>Owner Name</strong><br>Full Identity Fetch</div></div>
-                <div class="feature-item"><i class="fas fa-map-marked-alt"></i> <div><strong>Live Address</strong><br>Location Tracking</div></div>
-                <div class="feature-item"><i class="fas fa-fingerprint"></i> <div><strong>Aadhaar Number</strong><br>ID Verification</div></div>
-                <div class="feature-item"><i class="fas fa-sim-card"></i> <div><strong>SIM Details</strong><br>Carrier & Circle</div></div>
-            </div>
-
-            <div class="input-wrapper">
-                <i class="fas fa-search"></i>
-                <input type="text" id="phoneInput" placeholder="Enter Mobile Number (+91...)" autocomplete="off">
-            </div>
-
-            <button onclick="executeSearch()">
-                <i class="fas fa-bolt"></i> INITIATE SEARCH
-            </button>
-
-            <div id="terminal"></div>
-
-            <div class="footer">
-                SECURE SYSTEM ARCHITECT<br>
-                <span style="color: var(--neon-cyan); font-weight: bold; font-size: 14px; letter-spacing:1px;">FAIZAN AZIZI</span>
-                <br>
-                <a href="https://instagram.com/faizan_azizi_" target="_blank" class="insta-btn">
-                    <i class="fab fa-instagram" style="margin-right:10px;"></i> Follow on Instagram
+            <div class="pricing-section">
+                <div class="price-tag">Purchase Access Key</div>
+                <div style="font-size:13px; color:#aaa; margin-bottom:10px;">
+                    <span class="price-highlight">₹20</span> for 3 Hours Access
+                </div>
+                
+                <div class="upi-box">UPI: faixanazizi@ybl</div>
+                
+                <a href="https://wa.me/919931412513?text=Hello%20Sir,%20I%20want%20to%20buy%20key%20for%20Azizi%20Tech.%20Here%20is%20my%20payment%20screenshot." target="_blank" class="whatsapp-btn">
+                    <i class="fab fa-whatsapp"></i> Send Screenshot on WhatsApp
                 </a>
             </div>
         </div>
     </div>
 
+    <div id="main-app">
+        <div class="dashboard">
+            <div class="dash-header">
+                <div class="dash-title">
+                    <h1>INTELLIGENCE HUB</h1>
+                    <span>POWERED BY FAIZAN AZIZI</span>
+                </div>
+                <div style="text-align:right;">
+                    <div style="color:#00ff66; font-size:12px;">● SYSTEM ONLINE</div>
+                </div>
+            </div>
+
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" id="phoneInput" placeholder="Enter Mobile Number (+91...)" autocomplete="off">
+            </div>
+
+            <button onclick="executeSearch()" class="search-btn">
+                SEARCH DATABASE
+            </button>
+
+            <div id="terminal"></div>
+            
+            <div class="footer">
+                DESIGNED & SECURED BY FAIZAN AZIZI<br>
+                COPYRIGHT © 2024
+            </div>
+        </div>
+    </div>
+
     <script>
-        // --- SECURITY LOGIC ---
+        // --- LOGIN LOGIC ---
         function checkAccess() {
             const key = document.getElementById('accessKey').value;
-            const gate = document.getElementById('security-gate');
-            const app = document.getElementById('main-app');
-            const errorMsg = document.getElementById('error-msg');
-
-            // KEY CHECKER
             if(key === "FAIZAN_AZIZI_") {
-                gate.style.display = "none";
-                app.style.display = "flex"; // Show the website
+                document.getElementById('security-gate').style.display = "none";
+                document.getElementById('main-app').style.display = "flex";
             } else {
-                errorMsg.style.display = "block";
-                document.getElementById('accessKey').value = "";
-                document.getElementById('accessKey').focus();
+                const err = document.getElementById('error-msg');
+                err.style.display = "block";
+                setTimeout(() => { err.style.display = "none"; }, 3000);
             }
         }
 
@@ -408,18 +259,18 @@
             const phone = document.getElementById('phoneInput').value;
             const terminal = document.getElementById('terminal');
             
-            if(!phone) { alert("⚠️ SYSTEM ALERT: Target Number Required!"); return; }
+            if(!phone) { alert("Please enter a valid number"); return; }
 
-            // Loading Animation
+            // Loading State
             terminal.style.display = "block";
             terminal.innerHTML = `
-                <div class="log-line blue"><i class="fas fa-satellite-dish fa-spin"></i> CONNECTING TO SATELLITE SERVER...</div>
-                <div class="log-line blue"><i class="fas fa-code-branch"></i> BYPASSING FIREWALLS...</div>
-                <div class="log-line blue"><i class="fas fa-search"></i> QUERYING DATABASE FOR ${phone}...</div>
+                <div style="text-align:center; padding:20px; color:#00e5ff;">
+                    <i class="fas fa-circle-notch fa-spin" style="font-size:24px;"></i><br><br>
+                    FETCHING DETAILS...
+                </div>
             `;
 
             try {
-                // Live Server URL
                 const response = await fetch('/get-info', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -429,48 +280,60 @@
                 const data = await response.json();
 
                 if (data.details) {
-                    displayResult(data.details);
+                    displayProfessionalResult(data.details);
                 } else {
-                    terminal.innerHTML += `<div class="log-line red"><i class="fas fa-times-circle"></i> DATA NOT FOUND IN RECORDS.</div>`;
+                    terminal.innerHTML = `<div style="padding:15px; color:#ff3333; text-align:center; border:1px solid #ff3333; background:rgba(255,50,50,0.1);">DATA NOT FOUND</div>`;
                 }
             } catch (error) {
-                terminal.innerHTML += `<div class="log-line red"><i class="fas fa-exclamation-triangle"></i> SERVER OFFLINE. CHECK PYTHON SCRIPT.</div>`;
+                terminal.innerHTML = `<div style="padding:15px; color:#ff3333; text-align:center;">SERVER ERROR</div>`;
             }
         }
 
-        function displayResult(text) {
+        function displayProfessionalResult(text) {
             const terminal = document.getElementById('terminal');
-            terminal.innerHTML = `<div class="log-line green" style="border-bottom: 2px solid #00ff00; margin-bottom:15px;"><i class="fas fa-check-circle"></i> <strong>DATA EXTRACTION SUCCESSFUL</strong></div>`;
+            
+            let html = `
+                <div class="status-bar">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="status-text">RECORD RETRIEVED SUCCESSFULLY</div>
+                </div>
+                <div class="info-grid">
+            `;
 
             const lines = text.split('\n');
-
+            
             lines.forEach(line => {
                 if(line.trim() !== "" && !line.includes("Results") && !line.includes("━━")) {
                     
-                    let icon = "fas fa-terminal"; 
-                    let colorClass = "val";
-                    let label = "";
+                    let lower = line.toLowerCase();
+                    let label = "INFO";
+                    let value = line;
+                    let isFull = "";
 
-                    if(line.toLowerCase().includes("name")) { icon = "fas fa-user-secret"; label="OWNER NAME"; }
-                    else if(line.toLowerCase().includes("mobile")) { icon = "fas fa-mobile-alt"; label="MOBILE NO"; }
-                    else if(line.toLowerCase().includes("aadhaar") || line.toLowerCase().includes("number")) { icon = "fas fa-id-card"; label="AADHAAR ID"; colorClass="val green"; }
-                    else if(line.toLowerCase().includes("address")) { icon = "fas fa-map-marker-alt"; label="ADDRESS"; }
-                    else if(line.toLowerCase().includes("carrier") || line.toLowerCase().includes("sim")) { icon = "fas fa-broadcast-tower"; label="CARRIER"; }
-                    else if(line.toLowerCase().includes("email")) { icon = "fas fa-envelope-open-text"; label="EMAIL"; }
-                    else { label="INFO"; }
+                    // Data Parsing Logic
+                    if(lower.includes("name") && !lower.includes("father")) { label = "OWNER NAME"; value = line.replace(/name:/gi, ""); }
+                    else if(lower.includes("father")) { label = "FATHER NAME"; value = line.replace(/father name:/gi, ""); }
+                    else if(lower.includes("mobile")) { label = "MOBILE NUMBER"; value = line.replace(/mobile:/gi, ""); }
+                    else if(lower.includes("aadhaar") || lower.includes("id")) { label = "AADHAAR NUMBER"; value = line.replace(/aadhaar number:|id:/gi, ""); }
+                    else if(lower.includes("address")) { label = "AADHAAR ADDRESS"; value = line.replace(/address:/gi, ""); isFull = "full-card"; } // Changed Name Here
+                    else if(lower.includes("gender")) { label = "GENDER"; value = line.replace(/gender:/gi, ""); }
+                    else if(lower.includes("dob")) { label = "DATE OF BIRTH"; value = line.replace(/dob:/gi, ""); }
+                    else if(lower.includes("email")) { label = "EMAIL ID"; value = line.replace(/email:/gi, ""); isFull = "full-card"; }
 
-                    let cleanValue = line.replace(/name:|mobile:|address:|aadhaar number:/gi, "").trim();
+                    // Cleanup Value
+                    value = value.replace(/:/g, "").trim();
 
-                    terminal.innerHTML += `
-                        <div class="log-line">
-                            <i class="${icon} ${colorClass}"></i>
-                            <div>
-                                <span class="label">${label}</span>
-                                <span class="${colorClass}">${cleanValue || line}</span>
-                            </div>
-                        </div>`;
+                    html += `
+                        <div class="info-card ${isFull}">
+                            <div class="info-label">${label}</div>
+                            <div class="info-value">${value}</div>
+                        </div>
+                    `;
                 }
             });
+
+            html += `</div>`; // Close Grid
+            terminal.innerHTML = html;
         }
     </script>
 
