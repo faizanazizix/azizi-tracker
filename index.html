@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AZIZI TECH PVT LTD | Cyber Intelligence</title>
+    <title>AZIZI TECH PVT LTD | Restricted Access</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -14,6 +14,7 @@
             --neon-pink: #bc13fe;
             --dark-bg: #020205;
             --glass: rgba(10, 15, 30, 0.75);
+            --error-red: #ff003c;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -28,6 +29,84 @@
             align-items: center;
             overflow-x: hidden;
             position: relative;
+        }
+
+        /* --- SECURITY GATE (LOCK SCREEN) --- */
+        #security-gate {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #000;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-image: radial-gradient(circle, #1a1a1a 0%, #000 90%);
+        }
+
+        .lock-container {
+            text-align: center;
+            padding: 40px;
+            border: 2px solid var(--error-red);
+            border-radius: 15px;
+            box-shadow: 0 0 50px rgba(255, 0, 60, 0.2);
+            background: rgba(0,0,0,0.9);
+            animation: pulse-red 2s infinite;
+        }
+
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 20px rgba(255, 0, 60, 0.2); }
+            50% { box-shadow: 0 0 50px rgba(255, 0, 60, 0.6); }
+            100% { box-shadow: 0 0 20px rgba(255, 0, 60, 0.2); }
+        }
+
+        .lock-icon {
+            font-size: 50px;
+            color: var(--error-red);
+            margin-bottom: 20px;
+        }
+
+        .access-input {
+            padding: 15px;
+            width: 250px;
+            border-radius: 5px;
+            border: 1px solid #333;
+            background: #111;
+            color: var(--neon-cyan);
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 16px;
+            outline: none;
+            letter-spacing: 2px;
+        }
+
+        .access-btn {
+            padding: 10px 30px;
+            background: var(--error-red);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .access-btn:hover {
+            background: white;
+            color: var(--error-red);
+            box-shadow: 0 0 20px var(--error-red);
+        }
+
+        /* --- MAIN SITE STYLES (HIDDEN INITIALLY) --- */
+        #main-app {
+            display: none; /* Initially Hidden */
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         /* --- CYBER GRID ANIMATION --- */
@@ -255,42 +334,76 @@
 </head>
 <body>
 
-    <div class="cyber-grid"></div>
-    <div class="overlay"></div>
-
-    <div class="container">
-        <h1>AZIZI TECH <span style="font-size:16px; vertical-align:top;">PVT LTD</span></h1>
-        <div class="typewriter">INITIALIZING INTELLIGENCE PROTOCOL...</div>
-
-        <div class="features-grid">
-            <div class="feature-item"><i class="fas fa-user-secret"></i> <div><strong>Owner Name</strong><br>Full Identity Fetch</div></div>
-            <div class="feature-item"><i class="fas fa-map-marked-alt"></i> <div><strong>Live Address</strong><br>Location Tracking</div></div>
-            <div class="feature-item"><i class="fas fa-fingerprint"></i> <div><strong>Aadhaar Number</strong><br>ID Verification</div></div>
-            <div class="feature-item"><i class="fas fa-sim-card"></i> <div><strong>SIM Details</strong><br>Carrier & Circle</div></div>
-        </div>
-
-        <div class="input-wrapper">
-            <i class="fas fa-search"></i>
-            <input type="text" id="phoneInput" placeholder="Enter Mobile Number (+91...)" autocomplete="off">
-        </div>
-
-        <button onclick="executeSearch()">
-            <i class="fas fa-bolt"></i> INITIATE SEARCH
-        </button>
-
-        <div id="terminal"></div>
-
-        <div class="footer">
-            SECURE SYSTEM ARCHITECT<br>
-            <span style="color: var(--neon-cyan); font-weight: bold; font-size: 14px; letter-spacing:1px;">FAIZAN AZIZI</span>
+    <div id="security-gate">
+        <div class="lock-container">
+            <i class="fas fa-user-lock lock-icon"></i>
+            <h2 style="font-family: 'Orbitron'; color:white; margin-bottom:15px; letter-spacing:2px;">SYSTEM LOCKED</h2>
+            <p style="color:#aaa; font-size:12px; margin-bottom:20px;">AUTHORIZATION REQUIRED TO ACCESS DATABASE</p>
+            
+            <input type="password" id="accessKey" class="access-input" placeholder="ENTER ACCESS KEY">
             <br>
-            <a href="https://instagram.com/faizan_azizi_" target="_blank" class="insta-btn">
-                <i class="fab fa-instagram" style="margin-right:10px;"></i> Follow on Instagram
-            </a>
+            <button onclick="checkAccess()" class="access-btn">UNLOCK SYSTEM</button>
+            <p id="error-msg" style="color:var(--error-red); font-size:12px; margin-top:15px; display:none;">ACCESS DENIED: INVALID KEY</p>
+        </div>
+    </div>
+
+    <div id="main-app" style="display:none;">
+        <div class="cyber-grid"></div>
+        <div class="overlay"></div>
+
+        <div class="container">
+            <h1>AZIZI TECH <span style="font-size:16px; vertical-align:top;">PVT LTD</span></h1>
+            <div class="typewriter">INITIALIZING INTELLIGENCE PROTOCOL...</div>
+
+            <div class="features-grid">
+                <div class="feature-item"><i class="fas fa-user-secret"></i> <div><strong>Owner Name</strong><br>Full Identity Fetch</div></div>
+                <div class="feature-item"><i class="fas fa-map-marked-alt"></i> <div><strong>Live Address</strong><br>Location Tracking</div></div>
+                <div class="feature-item"><i class="fas fa-fingerprint"></i> <div><strong>Aadhaar Number</strong><br>ID Verification</div></div>
+                <div class="feature-item"><i class="fas fa-sim-card"></i> <div><strong>SIM Details</strong><br>Carrier & Circle</div></div>
+            </div>
+
+            <div class="input-wrapper">
+                <i class="fas fa-search"></i>
+                <input type="text" id="phoneInput" placeholder="Enter Mobile Number (+91...)" autocomplete="off">
+            </div>
+
+            <button onclick="executeSearch()">
+                <i class="fas fa-bolt"></i> INITIATE SEARCH
+            </button>
+
+            <div id="terminal"></div>
+
+            <div class="footer">
+                SECURE SYSTEM ARCHITECT<br>
+                <span style="color: var(--neon-cyan); font-weight: bold; font-size: 14px; letter-spacing:1px;">FAIZAN AZIZI</span>
+                <br>
+                <a href="https://instagram.com/faizan_azizi_" target="_blank" class="insta-btn">
+                    <i class="fab fa-instagram" style="margin-right:10px;"></i> Follow on Instagram
+                </a>
+            </div>
         </div>
     </div>
 
     <script>
+        // --- SECURITY LOGIC ---
+        function checkAccess() {
+            const key = document.getElementById('accessKey').value;
+            const gate = document.getElementById('security-gate');
+            const app = document.getElementById('main-app');
+            const errorMsg = document.getElementById('error-msg');
+
+            // KEY CHECKER
+            if(key === "FAIZAN_AZIZI_") {
+                gate.style.display = "none";
+                app.style.display = "flex"; // Show the website
+            } else {
+                errorMsg.style.display = "block";
+                document.getElementById('accessKey').value = "";
+                document.getElementById('accessKey').focus();
+            }
+        }
+
+        // --- SEARCH LOGIC ---
         async function executeSearch() {
             const phone = document.getElementById('phoneInput').value;
             const terminal = document.getElementById('terminal');
@@ -306,7 +419,7 @@
             `;
 
             try {
-                // IMPORTANT: Fetch URL fixed for Live Server
+                // Live Server URL
                 const response = await fetch('/get-info', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -338,7 +451,6 @@
                     let colorClass = "val";
                     let label = "";
 
-                    // Smart Formatting Logic
                     if(line.toLowerCase().includes("name")) { icon = "fas fa-user-secret"; label="OWNER NAME"; }
                     else if(line.toLowerCase().includes("mobile")) { icon = "fas fa-mobile-alt"; label="MOBILE NO"; }
                     else if(line.toLowerCase().includes("aadhaar") || line.toLowerCase().includes("number")) { icon = "fas fa-id-card"; label="AADHAAR ID"; colorClass="val green"; }
@@ -347,7 +459,6 @@
                     else if(line.toLowerCase().includes("email")) { icon = "fas fa-envelope-open-text"; label="EMAIL"; }
                     else { label="INFO"; }
 
-                    // Remove the label from the value if it exists in text
                     let cleanValue = line.replace(/name:|mobile:|address:|aadhaar number:/gi, "").trim();
 
                     terminal.innerHTML += `
