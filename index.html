@@ -3,207 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AZIZI INTELLIGENCE | Secure Portal</title>
+    <title>AZIZI TECH PVT LTD | Intelligence Portal</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --primary: #00e5ff; /* Cyan */
-            --secondary: #0a0a0a; /* Black */
-            --glass: rgba(10, 10, 15, 0.85);
-            --border: rgba(0, 229, 255, 0.3);
-            --text-main: #ffffff;
-            --text-muted: #a0a0a0;
+            --primary: #00e5ff;
+            --glass: rgba(5, 5, 10, 0.85);
+            --red-alert: #ff3333;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Rajdhani', sans-serif;
-            color: var(--text-main);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             overflow-x: hidden;
             background: #000;
         }
 
-        /* --- VIDEO BACKGROUND --- */
+        /* --- BACKGROUND VIDEO (Fix) --- */
         #bg-video {
             position: fixed;
             right: 0; bottom: 0;
             min-width: 100%; min-height: 100%;
+            width: auto; height: auto;
             z-index: -2;
-            opacity: 0.6;
             object-fit: cover;
+            opacity: 0.5;
         }
         
-        .overlay-tint {
+        .overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7); /* Video ko thoda dark karne ke liye */
+            background: radial-gradient(circle, rgba(0,0,0,0.4) 0%, #000000 90%);
             z-index: -1;
         }
 
-        /* --- LOCK SCREEN (PAYMENT UI) --- */
+        /* --- LOCK SCREEN & PAYMENT --- */
         #security-gate {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 9999;
+            background: rgba(0,0,0,0.9);
             display: flex; justify-content: center; align-items: center;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(8px);
         }
 
-        .login-card {
-            background: rgba(15, 15, 20, 0.95);
+        .lock-box {
+            background: rgba(10, 20, 30, 0.9);
             border: 1px solid var(--primary);
-            width: 90%; max-width: 400px;
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 0 40px rgba(0, 229, 255, 0.2);
-            position: relative;
+            padding: 30px; width: 90%; max-width: 400px;
+            text-align: center; border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.15);
         }
 
-        .login-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        .lock-title {
+            font-family: 'Orbitron', sans-serif; font-size: 24px; color: var(--primary);
+            margin-bottom: 5px; letter-spacing: 2px;
         }
-
-        .brand-title {
-            font-size: 24px; font-weight: 700; letter-spacing: 2px;
-            color: var(--primary); margin-bottom: 5px; text-transform: uppercase;
-        }
-        
-        .sub-title { color: var(--text-muted); font-size: 12px; margin-bottom: 25px; }
 
         .key-input {
             width: 100%; padding: 12px; background: #000; border: 1px solid #333;
-            color: #fff; text-align: center; letter-spacing: 3px; font-size: 18px;
-            margin-bottom: 15px; border-radius: 4px; outline: none;
-            font-family: 'Rajdhani', sans-serif; font-weight: bold;
+            color: var(--primary); text-align: center; font-size: 18px; letter-spacing: 3px;
+            margin: 20px 0; outline: none; border-radius: 4px; font-weight: bold;
         }
-        .key-input:focus { border-color: var(--primary); }
 
-        .unlock-btn {
-            width: 100%; padding: 12px; background: var(--primary); color: #000;
-            border: none; font-weight: 700; font-size: 16px; cursor: pointer;
-            text-transform: uppercase; border-radius: 4px; transition: 0.3s;
+        .btn-unlock {
+            width: 100%; padding: 12px; background: var(--primary); color: #000; border: none;
+            font-weight: bold; font-size: 16px; cursor: pointer; text-transform: uppercase;
         }
-        .unlock-btn:hover { background: #fff; box-shadow: 0 0 15px var(--primary); }
+        .btn-unlock:hover { background: #fff; }
 
-        /* PAYMENT SECTION */
-        .pricing-section {
-            margin-top: 25px; border-top: 1px dashed #333; padding-top: 20px;
-        }
-        .price-tag { color: #fff; font-size: 16px; font-weight: 600; margin-bottom: 10px; }
-        .price-highlight { color: #00ff66; font-size: 18px; }
+        /* PAYMENT INFO */
+        .pay-info { margin-top: 25px; border-top: 1px solid #333; padding-top: 15px; }
+        .pay-text { font-size: 14px; color: #ccc; margin-bottom: 10px; }
+        .highlight { color: #00ff00; font-weight: bold; }
         
-        .upi-box {
-            background: #1a1a1a; padding: 10px; border-radius: 5px;
-            font-family: monospace; color: #ffeb3b; border: 1px solid #333;
-            margin-bottom: 15px; font-size: 14px;
+        .upi-id { 
+            background: #222; padding: 8px; border-radius: 4px; 
+            font-family: monospace; color: #ffd700; margin-bottom: 15px; border: 1px dashed #555;
         }
 
-        .whatsapp-btn {
-            display: block; width: 100%; padding: 10px;
-            background: #25D366; color: #fff; text-decoration: none;
-            font-weight: 600; border-radius: 4px; font-size: 14px;
+        .wp-btn {
+            background: #25D366; color: white; text-decoration: none; padding: 10px;
             display: flex; align-items: center; justify-content: center; gap: 8px;
-            transition: 0.3s;
+            border-radius: 4px; font-weight: bold; font-size: 14px;
         }
-        .whatsapp-btn:hover { background: #128C7E; transform: translateY(-2px); }
+        .wp-btn:hover { background: #128C7E; }
 
-        /* --- MAIN DASHBOARD --- */
-        #main-app { display: none; min-height: 100vh; padding: 20px; justify-content: center; align-items: flex-start; padding-top: 50px; }
+        /* --- MAIN INTERFACE --- */
+        #main-app { display: none; width: 100%; justify-content: center; padding: 20px; }
 
-        .dashboard {
-            width: 100%; max-width: 800px;
+        .container {
+            width: 100%; max-width: 750px;
             background: var(--glass);
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 40px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            padding: 40px; border-radius: 15px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            position: relative;
         }
 
-        .dash-header {
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 30px;
+        h1 {
+            font-family: 'Orbitron', sans-serif; font-size: 32px; text-align: center;
+            background: linear-gradient(90deg, #fff, var(--primary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 10px; letter-spacing: 2px;
         }
-        .dash-title h1 { font-size: 28px; color: #fff; }
-        .dash-title span { color: var(--primary); font-size: 14px; letter-spacing: 1px; }
 
-        .search-bar { position: relative; margin-bottom: 30px; }
-        .search-bar input {
-            width: 100%; padding: 18px 20px 18px 55px;
-            background: rgba(0,0,0,0.5); border: 1px solid #444;
-            color: #fff; font-size: 18px; border-radius: 8px; outline: none;
-            font-family: 'Roboto', sans-serif;
+        .sub-text {
+            text-align: center; color: #aaa; font-size: 14px; margin-bottom: 30px;
+            border-bottom: 1px solid #333; padding-bottom: 20px;
         }
-        .search-bar i {
-            position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
+
+        .features {
+            background: rgba(0, 229, 255, 0.05); border: 1px solid rgba(0, 229, 255, 0.1);
+            padding: 15px; border-radius: 8px; margin-bottom: 25px; text-align: center;
+        }
+        .features p { font-size: 16px; color: #fff; font-weight: 600; }
+        .features span { color: var(--primary); }
+
+        .search-box { position: relative; margin-bottom: 20px; }
+        .search-box input {
+            width: 100%; padding: 15px 15px 15px 50px; background: #000;
+            border: 1px solid #444; color: #fff; font-size: 18px; border-radius: 6px;
+            outline: none; font-family: 'Rajdhani', sans-serif;
+        }
+        .search-box input:focus { border-color: var(--primary); }
+        .search-box i {
+            position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
             color: var(--primary); font-size: 20px;
         }
-        .search-btn {
-            width: 100%; padding: 15px; background: linear-gradient(90deg, #0055ff, #00aaff);
-            border: none; color: white; font-size: 16px; font-weight: bold;
-            border-radius: 8px; cursor: pointer; letter-spacing: 1px;
-        }
 
-        /* --- PROFESSIONAL GRID RESULT --- */
+        .btn-search {
+            width: 100%; padding: 15px; background: linear-gradient(90deg, #0055ff, #00aaff);
+            border: none; color: white; font-size: 18px; font-weight: 700;
+            border-radius: 6px; cursor: pointer; letter-spacing: 1px; transition: 0.3s;
+        }
+        .btn-search:hover { box-shadow: 0 0 20px rgba(0, 170, 255, 0.5); }
+
+        /* --- TERMINAL & LOADING --- */
         #terminal { display: none; margin-top: 30px; }
 
-        .status-bar {
-            background: rgba(0, 255, 100, 0.1); border-left: 4px solid #00ff66;
-            padding: 15px; margin-bottom: 20px; display: flex; align-items: center;
+        .loading-text {
+            font-family: 'Courier New', monospace; color: var(--primary);
+            margin-bottom: 5px; font-size: 14px;
         }
-        .status-bar i { color: #00ff66; margin-right: 10px; font-size: 20px; }
-        .status-text { color: #fff; font-weight: 600; }
 
-        .info-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+        /* --- RESULT CARDS --- */
+        .result-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;
         }
-        @media (max-width: 600px) { .info-grid { grid-template-columns: 1fr; } }
+        @media(max-width: 600px) { .result-grid { grid-template-columns: 1fr; } }
 
-        .info-card {
-            background: #111; border: 1px solid #222; padding: 15px;
-            border-radius: 6px; display: flex; flex-direction: column;
+        .card {
+            background: #111; border: 1px solid #333; padding: 15px; border-radius: 5px;
         }
-        .info-label {
-            font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
-            color: #888; margin-bottom: 5px;
-        }
-        .info-value {
-            font-size: 16px; color: #fff; font-family: 'Roboto', sans-serif; font-weight: 500;
-        }
+        .card-label { font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 5px; letter-spacing: 1px; }
+        .card-val { font-size: 16px; color: #fff; font-weight: 600; word-break: break-all; }
+        .full { grid-column: 1 / -1; }
+
+        /* --- FOOTER --- */
+        .footer { margin-top: 40px; text-align: center; border-top: 1px solid #333; padding-top: 20px; }
         
-        .full-card { grid-column: 1 / -1; }
-
-        .footer { text-align: center; margin-top: 50px; color: #555; font-size: 12px; }
+        .insta-link {
+            display: inline-flex; align-items: center; gap: 10px;
+            color: #fff; text-decoration: none; font-size: 14px;
+            padding: 8px 20px; border: 1px solid #333; border-radius: 50px;
+            transition: 0.3s; background: rgba(255,255,255,0.05);
+        }
+        .insta-link:hover { border-color: #E1306C; color: #E1306C; }
     </style>
 </head>
 <body>
 
-    <div class="overlay-tint"></div>
-    <video autoplay muted loop id="bg-video">
-        <source src="https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-blue-circuit-board-98-large.mp4" type="video/mp4">
+    <div class="overlay"></div>
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="https://v4.cdnpk.net/videvo_files/video/free/video0467/large_watermarked/_import_615152b4156680.12457497_FPpreview.mp4" type="video/mp4">
     </video>
 
     <div id="security-gate">
-        <div class="login-card">
-            <div class="brand-title">AZIZI TECH PVT LTD</div>
-            <div class="sub-title">RESTRICTED ACCESS PORTAL</div>
-            
-            <input type="password" id="accessKey" class="key-input" placeholder="ENTER KEY">
-            <button onclick="checkAccess()" class="unlock-btn">LOGIN</button>
-            <p id="error-msg" style="color:#ff3333; font-size:12px; margin-top:10px; display:none;">INVALID KEY</p>
+        <div class="lock-box">
+            <div class="lock-title">AZIZI TECH PVT LTD</div>
+            <p style="color:#aaa; font-size:12px;">SECURE ACCESS GATEWAY</p>
 
-            <div class="pricing-section">
-                <div class="price-tag">Purchase Access Key</div>
-                <div style="font-size:13px; color:#aaa; margin-bottom:10px;">
-                    <span class="price-highlight">₹20</span> for 3 Hours Access
-                </div>
-                
-                <div class="upi-box">UPI: faixanazizi@ybl</div>
-                
-                <a href="https://wa.me/919931412513?text=Hello%20Sir,%20I%20want%20to%20buy%20key%20for%20Azizi%20Tech.%20Here%20is%20my%20payment%20screenshot." target="_blank" class="whatsapp-btn">
+            <input type="password" id="accessKey" class="key-input" placeholder="ENTER ACCESS KEY">
+            <button onclick="checkAccess()" class="btn-unlock">UNLOCK SYSTEM</button>
+            <p id="error-msg" style="color:var(--red-alert); font-size:12px; margin-top:10px; display:none;">ACCESS DENIED</p>
+
+            <div class="pay-info">
+                <p class="pay-text">GET ACCESS KEY: <span class="highlight">₹20 / 3 HOURS</span></p>
+                <div class="upi-id">UPI: faixanazizi@ybl</div>
+                <a href="https://wa.me/919931412513?text=I%20want%20to%20buy%20key%20for%20Azizi%20Tech.%20Here%20is%20payment%20screenshot." target="_blank" class="wp-btn">
                     <i class="fab fa-whatsapp"></i> Send Screenshot on WhatsApp
                 </a>
             </div>
@@ -211,37 +206,38 @@
     </div>
 
     <div id="main-app">
-        <div class="dashboard">
-            <div class="dash-header">
-                <div class="dash-title">
-                    <h1>INTELLIGENCE HUB</h1>
-                    <span>POWERED BY FAIZAN AZIZI</span>
-                </div>
-                <div style="text-align:right;">
-                    <div style="color:#00ff66; font-size:12px;">● SYSTEM ONLINE</div>
-                </div>
+        <div class="container">
+            <h1>AZIZI TECH <span style="font-size:16px; color:#aaa;">PVT LTD</span></h1>
+            <p class="sub-text">ADVANCED INTELLIGENCE & DATA RETRIEVAL SYSTEM</p>
+
+            <div class="features">
+                <p>CAPABILITY: <span style="color:#fff;">Retrieve Data using Phone Number</span></p>
+                <p style="font-size:13px; color:#aaa; margin-top:5px;">
+                    Fetch Owner Name • Alt Mobile • Aadhaar No • Aadhaar Address
+                </p>
             </div>
 
-            <div class="search-bar">
+            <div class="search-box">
                 <i class="fas fa-search"></i>
                 <input type="text" id="phoneInput" placeholder="Enter Mobile Number (+91...)" autocomplete="off">
             </div>
 
-            <button onclick="executeSearch()" class="search-btn">
-                SEARCH DATABASE
+            <button onclick="executeSearch()" class="btn-search">
+                <i class="fas fa-bolt"></i> INITIATE SEARCH
             </button>
 
             <div id="terminal"></div>
-            
+
             <div class="footer">
-                DESIGNED & SECURED BY FAIZAN AZIZI<br>
-                COPYRIGHT © 2024
+                <div style="margin-bottom: 15px; color:#666; font-size:12px;">SYSTEM DESIGNED BY FAIZAN AZIZI</div>
+                <a href="https://instagram.com/faizan_azizi_" target="_blank" class="insta-link">
+                    <i class="fab fa-instagram"></i> Follow on Instagram
+                </a>
             </div>
         </div>
     </div>
 
     <script>
-        // --- LOGIN LOGIC ---
         function checkAccess() {
             const key = document.getElementById('accessKey').value;
             if(key === "FAIZAN_AZIZI_") {
@@ -250,27 +246,31 @@
             } else {
                 const err = document.getElementById('error-msg');
                 err.style.display = "block";
-                setTimeout(() => { err.style.display = "none"; }, 3000);
+                setTimeout(() => err.style.display = "none", 3000);
             }
         }
 
-        // --- SEARCH LOGIC ---
         async function executeSearch() {
             const phone = document.getElementById('phoneInput').value;
             const terminal = document.getElementById('terminal');
             
             if(!phone) { alert("Please enter a valid number"); return; }
 
-            // Loading State
+            // Loading Animation Sequence
             terminal.style.display = "block";
             terminal.innerHTML = `
-                <div style="text-align:center; padding:20px; color:#00e5ff;">
-                    <i class="fas fa-circle-notch fa-spin" style="font-size:24px;"></i><br><br>
-                    FETCHING DETAILS...
-                </div>
+                <div class="loading-text"><i class="fas fa-satellite"></i> FETCHING DATA FROM SATELLITE...</div>
             `;
 
+            // 1.5 Second baad text change hoga
+            setTimeout(() => {
+                terminal.innerHTML += `
+                    <div class="loading-text" style="color:#00ff00;"><i class="fas fa-database"></i> GETTING INFORMATION FROM GOVERNMENT DATABASE...</div>
+                `;
+            }, 1500);
+
             try {
+                // Request bhejna
                 const response = await fetch('/get-info', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -279,13 +279,19 @@
 
                 const data = await response.json();
 
-                if (data.details) {
-                    displayProfessionalResult(data.details);
-                } else {
-                    terminal.innerHTML = `<div style="padding:15px; color:#ff3333; text-align:center; border:1px solid #ff3333; background:rgba(255,50,50,0.1);">DATA NOT FOUND</div>`;
-                }
+                // Result aane par (Thoda delay taaki animation dikhe)
+                setTimeout(() => {
+                    if (data.details) {
+                        displayProfessionalResult(data.details);
+                    } else {
+                        terminal.innerHTML = `<div style="padding:15px; color:var(--red-alert); text-align:center; border:1px solid var(--red-alert); margin-top:15px;">DATA NOT FOUND IN RECORDS</div>`;
+                    }
+                }, 3000);
+
             } catch (error) {
-                terminal.innerHTML = `<div style="padding:15px; color:#ff3333; text-align:center;">SERVER ERROR</div>`;
+                setTimeout(() => {
+                    terminal.innerHTML = `<div style="padding:15px; color:var(--red-alert); text-align:center; margin-top:15px;">SERVER CONNECTION FAILED</div>`;
+                }, 3000);
             }
         }
 
@@ -293,11 +299,11 @@
             const terminal = document.getElementById('terminal');
             
             let html = `
-                <div class="status-bar">
-                    <i class="fas fa-check-circle"></i>
-                    <div class="status-text">RECORD RETRIEVED SUCCESSFULLY</div>
-                </div>
-                <div class="info-grid">
+                <div style="border-top:1px dashed #333; margin-top:15px; padding-top:15px;">
+                    <div style="color:#00ff00; font-size:14px; margin-bottom:15px; text-align:center;">
+                        <i class="fas fa-check-circle"></i> RECORD RETRIEVED SUCCESSFULLY
+                    </div>
+                    <div class="result-grid">
             `;
 
             const lines = text.split('\n');
@@ -310,29 +316,28 @@
                     let value = line;
                     let isFull = "";
 
-                    // Data Parsing Logic
+                    // Parsing Logic
                     if(lower.includes("name") && !lower.includes("father")) { label = "OWNER NAME"; value = line.replace(/name:/gi, ""); }
                     else if(lower.includes("father")) { label = "FATHER NAME"; value = line.replace(/father name:/gi, ""); }
                     else if(lower.includes("mobile")) { label = "MOBILE NUMBER"; value = line.replace(/mobile:/gi, ""); }
                     else if(lower.includes("aadhaar") || lower.includes("id")) { label = "AADHAAR NUMBER"; value = line.replace(/aadhaar number:|id:/gi, ""); }
-                    else if(lower.includes("address")) { label = "AADHAAR ADDRESS"; value = line.replace(/address:/gi, ""); isFull = "full-card"; } // Changed Name Here
+                    else if(lower.includes("address")) { label = "AADHAAR ADDRESS"; value = line.replace(/address:/gi, ""); isFull = "full"; } 
                     else if(lower.includes("gender")) { label = "GENDER"; value = line.replace(/gender:/gi, ""); }
                     else if(lower.includes("dob")) { label = "DATE OF BIRTH"; value = line.replace(/dob:/gi, ""); }
-                    else if(lower.includes("email")) { label = "EMAIL ID"; value = line.replace(/email:/gi, ""); isFull = "full-card"; }
+                    else if(lower.includes("email")) { label = "EMAIL ID"; value = line.replace(/email:/gi, ""); isFull = "full"; }
 
-                    // Cleanup Value
                     value = value.replace(/:/g, "").trim();
 
                     html += `
-                        <div class="info-card ${isFull}">
-                            <div class="info-label">${label}</div>
-                            <div class="info-value">${value}</div>
+                        <div class="card ${isFull}">
+                            <div class="card-label">${label}</div>
+                            <div class="card-val">${value}</div>
                         </div>
                     `;
                 }
             });
 
-            html += `</div>`; // Close Grid
+            html += `</div></div>`;
             terminal.innerHTML = html;
         }
     </script>
