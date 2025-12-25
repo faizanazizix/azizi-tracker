@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AZIZI INTELLIGENCE | Full Spectrum</title>
+    <title>AZIZI TECH PVT LTD | Intelligence Portal</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Orbitron:wght@500;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -25,37 +25,38 @@
             min-height: 100vh;
         }
 
-        /* --- 1. FULL SCREEN VIDEO BACKGROUND --- */
+        /* --- 1. RELIABLE VIDEO BACKGROUND --- */
         #bg-video {
             position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
             object-fit: cover;
             z-index: -3;
-            opacity: 0.6; /* Thoda clear kiya taaki background dikhe */
+            opacity: 0.5;
         }
         
         .video-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.9) 100%);
+            background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.95) 100%);
             z-index: -2;
         }
 
-        /* --- 2. FULL SCREEN LOCK (NO DABBA) --- */
+        /* --- 2. FULL SCREEN LOCK --- */
         #security-gate {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 9999;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(20px); /* Heavy Blur for Pro look */
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
             text-align: center;
         }
 
-        .brand-title {
-            font-family: 'Orbitron', sans-serif; font-size: 40px;
-            letter-spacing: 5px; color: var(--neon-blue);
-            text-shadow: 0 0 20px var(--neon-blue); margin-bottom: 10px;
+        .main-brand {
+            font-family: 'Orbitron', sans-serif; font-size: 36px;
+            letter-spacing: 4px; color: #fff;
+            text-shadow: 0 0 20px var(--neon-blue); margin-bottom: 5px;
         }
+        .sub-brand { color: var(--neon-blue); letter-spacing: 6px; font-size: 14px; margin-bottom: 40px; }
 
         .access-input {
             background: transparent; border: none;
@@ -63,118 +64,112 @@
             width: 300px; padding: 15px;
             color: #fff; font-size: 24px; text-align: center;
             font-family: 'Orbitron'; letter-spacing: 3px; outline: none;
-            margin-top: 30px; transition: 0.3s;
+            transition: 0.3s;
         }
-        .access-input:focus { width: 380px; border-bottom-color: #fff; }
+        .access-input:focus { width: 350px; border-bottom-color: #fff; }
 
         .unlock-btn {
             margin-top: 40px; padding: 15px 50px;
             background: transparent; color: var(--neon-blue);
             font-size: 18px; font-weight: bold; border: 1px solid var(--neon-blue);
-            cursor: pointer; 
-            transition: 0.3s; letter-spacing: 2px;
+            cursor: pointer; transition: 0.3s; letter-spacing: 2px;
             text-transform: uppercase;
         }
-        .unlock-btn:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 40px var(--neon-blue); }
+        .unlock-btn:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 30px var(--neon-blue); }
 
         .payment-link { margin-top: 50px; color: #aaa; font-size: 14px; }
         .wp-link { 
             color: #25D366; text-decoration: none; font-weight: bold; font-size: 16px; 
             display: inline-flex; align-items: center; gap: 8px; margin-top: 15px;
-            background: rgba(37, 211, 102, 0.1); padding: 10px 20px; border-radius: 50px;
-            border: 1px solid #25D366; transition: 0.3s;
+            padding: 10px 20px; border: 1px solid #25D366; border-radius: 50px; transition: 0.3s;
         }
-        .wp-link:hover { background: #25D366; color: #000; box-shadow: 0 0 20px #25D366; }
+        .wp-link:hover { background: #25D366; color: #000; }
 
-        /* --- 3. MAIN INTERFACE (OPEN LAYOUT) --- */
+        /* --- 3. MAIN INTERFACE --- */
         #main-app {
-            display: none; /* Initially Hidden */
-            width: 100%; min-height: 100vh;
+            display: none; width: 100%; min-height: 100vh;
             padding: 40px 20px;
             flex-direction: column; align-items: center;
         }
 
-        .main-header { text-align: center; margin-bottom: 60px; margin-top: 20px; }
-        .main-header h1 {
-            font-family: 'Orbitron'; font-size: 5vw; color: #fff;
-            text-transform: uppercase; letter-spacing: 8px;
-            text-shadow: 0 0 15px rgba(0, 243, 255, 0.6);
+        .header-section { text-align: center; margin-bottom: 50px; margin-top: 20px; }
+        .company-name {
+            font-family: 'Orbitron'; font-size: 40px; color: #fff;
+            text-transform: uppercase; letter-spacing: 3px;
         }
-        .subtitle { color: var(--neon-blue); letter-spacing: 4px; font-size: 16px; margin-top: 15px; }
+        .system-name {
+            color: var(--neon-blue); letter-spacing: 5px; font-size: 20px; 
+            font-weight: bold; margin-top: 5px; text-shadow: 0 0 10px var(--neon-blue);
+        }
 
-        /* Transparent Feature Icons */
+        /* 5 Feature Cards Layout */
         .features-row {
-            display: flex; flex-wrap: wrap; justify-content: center; gap: 50px;
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 30px;
             width: 100%; max-width: 1200px; margin-bottom: 60px;
         }
 
-        .feature-item { text-align: center; width: 200px; transition: 0.3s; }
-        .feature-item:hover { transform: translateY(-10px); }
-        .feature-item i { font-size: 45px; color: var(--neon-blue); margin-bottom: 15px; text-shadow: 0 0 20px var(--neon-blue); }
-        .feature-item h3 { font-size: 16px; font-weight: 700; letter-spacing: 1px; color: #fff; }
-        .feature-item p { font-size: 12px; color: #aaa; margin-top: 5px; }
+        .feature-item { text-align: center; width: 180px; transition: 0.3s; }
+        .feature-item:hover { transform: translateY(-5px); }
+        .feature-item i { font-size: 35px; color: var(--neon-blue); margin-bottom: 10px; text-shadow: 0 0 15px var(--neon-blue); }
+        .feature-item h3 { font-size: 14px; font-weight: 700; letter-spacing: 1px; color: #fff; }
+        .feature-item p { font-size: 11px; color: #aaa; margin-top: 3px; }
 
-        /* Full Width Search Bar */
-        .search-area { width: 100%; max-width: 900px; position: relative; margin-bottom: 50px; }
+        /* Search Bar */
+        .search-area { width: 100%; max-width: 800px; position: relative; margin-bottom: 50px; }
         
         .search-input {
             width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2);
-            padding: 25px 25px 25px 80px; font-size: 24px; color: #fff;
-            border-radius: 10px; outline: none; font-family: 'Rajdhani'; letter-spacing: 2px;
-            backdrop-filter: blur(10px); transition: 0.3s;
+            padding: 20px 20px 20px 60px; font-size: 20px; color: #fff;
+            border-radius: 8px; outline: none; font-family: 'Rajdhani'; letter-spacing: 2px;
+            backdrop-filter: blur(5px); transition: 0.3s;
         }
-        .search-input:focus { border-color: var(--neon-blue); background: rgba(0,0,0,0.6); }
+        .search-input:focus { border-color: var(--neon-blue); background: rgba(0,0,0,0.8); }
         
-        .search-icon { position: absolute; left: 30px; top: 50%; transform: translateY(-50%); color: var(--neon-blue); font-size: 28px; }
+        .search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--neon-blue); font-size: 22px; }
 
         .action-btn {
             display: block; width: 100%; margin-top: 20px;
-            padding: 20px; background: var(--neon-blue);
-            border: none; color: #000; border-radius: 10px;
-            font-family: 'Orbitron'; font-size: 20px; font-weight: 900; cursor: pointer;
-            text-transform: uppercase; letter-spacing: 4px; transition: 0.4s;
-            box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
+            padding: 18px; background: var(--neon-blue);
+            border: none; color: #000; border-radius: 8px;
+            font-family: 'Orbitron'; font-size: 18px; font-weight: 900; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 3px; transition: 0.3s;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
         }
-        .action-btn:hover { background: #fff; letter-spacing: 8px; box-shadow: 0 0 50px #fff; }
+        .action-btn:hover { background: #fff; box-shadow: 0 0 40px #fff; }
 
-        /* --- TERMINAL & RESULTS (TRANSPARENT) --- */
-        #terminal { display: none; width: 100%; max-width: 1000px; }
+        /* Results */
+        #terminal { display: none; width: 100%; max-width: 900px; }
 
         .status-msg {
-            text-align: center; color: var(--neon-blue); font-size: 20px;
-            font-family: monospace; margin-bottom: 40px; text-shadow: 0 0 10px var(--neon-blue);
+            text-align: center; color: var(--neon-blue); font-size: 18px;
+            font-family: monospace; margin-bottom: 30px; text-shadow: 0 0 10px var(--neon-blue);
         }
 
-        .result-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
-        }
-        @media (max-width: 800px) { .result-grid { grid-template-columns: 1fr; } }
+        .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        @media (max-width: 768px) { .result-grid { grid-template-columns: 1fr; } }
 
-        /* Transparent Info Strips */
         .info-strip {
             border-bottom: 1px solid rgba(255,255,255,0.15);
             padding: 10px 0; display: flex; flex-direction: column;
         }
-        .info-label { color: var(--neon-blue); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
-        .info-val { font-size: 26px; color: #fff; font-weight: 500; text-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        .info-label { color: var(--neon-blue); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
+        .info-val { font-size: 20px; color: #fff; font-weight: 500; text-shadow: 0 0 5px rgba(0,0,0,0.5); }
         
         .full-w { grid-column: 1 / -1; }
 
-        /* --- PRO INSTAGRAM FOOTER --- */
-        .footer { margin-top: auto; padding-top: 80px; text-align: center; padding-bottom: 40px; }
+        /* Footer */
+        .footer { margin-top: auto; padding-top: 60px; text-align: center; padding-bottom: 40px; }
         
         .insta-btn { 
-            display: inline-flex; align-items: center; gap: 12px;
+            display: inline-flex; align-items: center; gap: 10px;
             text-decoration: none; 
-            padding: 15px 40px; border-radius: 50px; 
-            /* Instagram Gradient Background */
+            padding: 12px 35px; border-radius: 50px; 
             background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); 
-            color: #fff; font-size: 16px; font-weight: bold; letter-spacing: 1px;
-            box-shadow: 0 10px 30px rgba(220, 39, 67, 0.4);
+            color: #fff; font-size: 15px; font-weight: bold; letter-spacing: 1px;
+            box-shadow: 0 5px 20px rgba(220, 39, 67, 0.4);
             transition: 0.3s;
         }
-        .insta-btn:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(220, 39, 67, 0.6); filter: brightness(1.2); }
-        .insta-btn i { font-size: 24px; }
+        .insta-btn:hover { transform: translateY(-3px); filter: brightness(1.2); }
 
     </style>
 </head>
@@ -182,66 +177,71 @@
 
     <div class="video-overlay"></div>
     <video autoplay muted loop playsinline id="bg-video">
-        <source src="https://assets.mixkit.co/videos/preview/mixkit-digital-earth-rotating-loop-2782-large.mp4" type="video/mp4">
+        <source src="https://static.videezy.com/system/resources/previews/000/052/735/original/Holographic_Earth.mp4" type="video/mp4">
     </video>
 
     <div id="security-gate">
-        <div class="brand-title">AZIZI TECH PVT LTD</div>
-        <div style="color: #ccc; letter-spacing: 3px; margin-bottom: 20px;">CLASSIFIED DATABASE PORTAL</div>
+        <div class="main-brand">AZIZI TECH PVT LTD</div>
+        <div class="sub-brand">RESTRICTED ACCESS PORTAL</div>
         
-        <input type="password" id="accessKey" class="access-input" placeholder="ENTER ACCESS KEY" autocomplete="off">
-        <button onclick="checkAccess()" class="unlock-btn">AUTHENTICATE</button>
-        <div id="error-msg" style="color: #ff3333; margin-top: 20px; display: none; font-weight:bold;">ACCESS DENIED</div>
+        <input type="password" id="accessKey" class="access-input" placeholder="ENTER KEY" autocomplete="off">
+        <button onclick="checkAccess()" class="unlock-btn">LOGIN</button>
+        <div id="error-msg" style="color: #ff3333; margin-top: 20px; display: none; font-weight:bold;">INVALID KEY</div>
 
         <div class="payment-link">
-            NEED A KEY? <span style="color: var(--neon-gold); font-weight:bold;">₹20 / 3 HOURS</span>
+            ACCESS PRICE: <span style="color: var(--neon-gold); font-weight:bold;">₹20 / 3 HOURS</span>
             <div style="margin-top:5px; color:#fff;">UPI: faixanazizi@ybl</div>
-            <a href="https://wa.me/919931412513?text=I%20want%20to%20buy%20key%20screenshot%20attached" target="_blank" class="wp-link">
-                <i class="fab fa-whatsapp" style="font-size:20px;"></i> BUY KEY ON WHATSAPP
+            <a href="https://wa.me/919931412513?text=I%20want%20to%20buy%20access%20key" target="_blank" class="wp-link">
+                <i class="fab fa-whatsapp"></i> BUY KEY
             </a>
         </div>
     </div>
 
     <div id="main-app">
         
-        <div class="main-header">
-            <h1>AZIZI INTELLIGENCE</h1>
-            <div class="subtitle">ADVANCED OSINT & DATA RETRIEVAL</div>
+        <div class="header-section">
+            <div class="company-name">AZIZI TECH PVT LTD</div>
+            <div class="system-name">AZIZI INTELLIGENCE SYSTEM</div>
         </div>
 
         <div class="features-row">
             <div class="feature-item">
                 <i class="fas fa-user-secret"></i>
                 <h3>OWNER NAME</h3>
-                <p>Full Identity Verification</p>
+                <p>Verify Identity</p>
             </div>
             <div class="feature-item">
                 <i class="fas fa-users"></i>
-                <h3>FATHER/HUSBAND NAME</h3> 
-                <p>Family Relation Check</p>
+                <h3>FATHER/HUSBAND</h3>
+                <p>Family Check</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-phone-volume"></i>
+                <h3>ALT PHONE NO</h3>
+                <p>Linked Contacts</p>
             </div>
             <div class="feature-item">
                 <i class="fas fa-map-marked-alt"></i>
                 <h3>AADHAAR ADDRESS</h3>
-                <p>Permanent Residence</p>
+                <p>Permanent Location</p>
             </div>
             <div class="feature-item">
                 <i class="fas fa-fingerprint"></i>
                 <h3>AADHAAR NUMBER</h3>
-                <p>Unique ID Retrieval</p>
+                <p>Unique ID Fetch</p>
             </div>
         </div>
 
         <div class="search-area">
             <i class="fas fa-search search-icon"></i>
-            <input type="text" id="phoneInput" class="search-input" placeholder="ENTER TARGET MOBILE NUMBER..." autocomplete="off">
-            <button onclick="executeSearch()" class="action-btn">INITIATE SATELLITE SCAN</button>
+            <input type="text" id="phoneInput" class="search-input" placeholder="ENTER MOBILE NUMBER..." autocomplete="off">
+            <button onclick="executeSearch()" class="action-btn">SEARCH DATABASE</button>
         </div>
 
         <div id="terminal"></div>
 
         <div class="footer">
-            <div style="margin-bottom: 25px; color:#aaa; font-size:12px; letter-spacing:2px;">SECURED BY FAIZAN AZIZI</div>
+            <div style="margin-bottom: 20px; color:#aaa; font-size:12px; letter-spacing:2px;">POWERED BY AZIZI TECH</div>
             <a href="https://instagram.com/faizan_azizi_" target="_blank" class="insta-btn">
                 <i class="fab fa-instagram"></i> Follow on Instagram
             </a>
@@ -252,7 +252,6 @@
         function checkAccess() {
             const key = document.getElementById('accessKey').value;
             if(key === "FAIZAN_AZIZI_") {
-                // Fade out animation
                 const gate = document.getElementById('security-gate');
                 gate.style.transition = "opacity 0.5s";
                 gate.style.opacity = '0';
@@ -271,14 +270,14 @@
             const phone = document.getElementById('phoneInput').value;
             const terminal = document.getElementById('terminal');
             
-            if(!phone) { alert("INPUT REQUIRED"); return; }
+            if(!phone) { alert("Enter a number first!"); return; }
 
             terminal.style.display = "block";
             terminal.innerHTML = `
                 <div class="status-msg">> CONNECTING TO SATELLITE... <i class="fas fa-satellite fa-spin"></i></div>
             `;
 
-            setTimeout(() => { terminal.innerHTML = `<div class="status-msg" style="color:var(--neon-gold)">> FETCHING GOVERNMENT DATABASE...</div>`; }, 1500);
+            setTimeout(() => { terminal.innerHTML = `<div class="status-msg" style="color:var(--neon-gold)">> FETCHING FROM GOVERNMENT DATABASE...</div>`; }, 1500);
 
             try {
                 const response = await fetch('/get-info', {
@@ -321,10 +320,13 @@
                     let value = line;
                     let isFull = "";
 
-                    // Updated Logic for Father/Husband
+                    // Result Logic (Including Alt Mobile & Father/Husband)
                     if(lower.includes("name") && !lower.includes("father")) { label = "OWNER NAME"; value = line.replace(/name:/gi, ""); }
                     else if(lower.includes("father")) { label = "FATHER/HUSBAND NAME"; value = line.replace(/father name:/gi, ""); } 
                     else if(lower.includes("mobile")) { label = "MOBILE NUMBER"; value = line.replace(/mobile:/gi, ""); }
+                    // Naya Logic for Alt Number detection (Agar data me 'Alt' likha ho)
+                    else if(lower.includes("alt")) { label = "ALT PHONE NUMBER"; value = line; }
+                    
                     else if(lower.includes("aadhaar") || lower.includes("id")) { label = "AADHAAR NUMBER"; value = line.replace(/aadhaar number:|id:/gi, ""); }
                     else if(lower.includes("address")) { label = "AADHAAR ADDRESS"; value = line.replace(/address:/gi, ""); isFull = "full-w"; }
                     else if(lower.includes("gender")) { label = "GENDER"; value = line.replace(/gender:/gi, ""); }
@@ -333,7 +335,6 @@
 
                     value = value.replace(/:/g, "").trim();
 
-                    // Transparent Cards
                     html += `
                         <div class="info-strip ${isFull}">
                             <div class="info-label">${label}</div>
