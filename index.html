@@ -264,4 +264,63 @@
             terminal.innerHTML = `<div style="text-align:center; font-size:20px; color:#fff; margin-top:30px; font-family:'Orbitron';"><i class="fas fa-circle-notch fa-spin" style="color:var(--neon-blue);"></i> CONNECTING TO SATELLITE...</div>`;
 
             setTimeout(() => {
-                terminal.innerHTML = `<div style="text-align:center; font-size:20px; color:
+                terminal.innerHTML = `<div style="text-align:center; font-size:20px; color:var(--neon-blue); margin-top:30px; font-family:'Orbitron';"><i class="fas fa-database"></i> FETCHING GOVERNMENT DATA...</div>`;
+            }, 1500);
+
+            try {
+                const response = await fetch('/get-info', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ number: phone })
+                });
+
+                const data = await response.json();
+
+                setTimeout(() => {
+                    if (data.details) {
+                        displayResult(data.details);
+                    } else {
+                        terminal.innerHTML = `<div style="text-align:center; color:#ff4444; border:1px solid #ff4444; padding:15px; margin-top:30px; font-family:'Orbitron';">DATA NOT FOUND</div>`;
+                    }
+                }, 3000);
+
+            } catch (error) {
+                terminal.innerHTML = `<div style="text-align:center; color:#ff4444; margin-top:30px; font-family:'Orbitron';">SERVER ERROR</div>`;
+            }
+        }
+
+        function displayResult(text) {
+            const terminal = document.getElementById('terminal');
+            let html = `<div style="margin-top:40px; border-top:1px solid rgba(255,255,255,0.2); padding-top:20px;">
+                <div style="text-align:center; color:var(--neon-blue); font-size:22px; font-weight:bold; margin-bottom:20px; font-family:'Orbitron';"><i class="fas fa-check-circle"></i> TARGET FOUND</div>
+                <div class="result-box">`;
+
+            const lines = text.split('\n');
+            lines.forEach(line => {
+                if(line.trim() !== "" && !line.includes("Results") && !line.includes("━━")) {
+                    let lower = line.toLowerCase();
+                    let label = "INFO";
+                    let value = line;
+                    let isFull = "";
+                    
+                    if(lower.includes("name") && !lower.includes("father")) { label = "OWNER NAME"; value = line.replace(/name:/gi, ""); }
+                    else if(lower.includes("father")) { label = "FATHER/HUSBAND"; value = line.replace(/father name:/gi, ""); } 
+                    else if(lower.includes("mobile")) { label = "MOBILE NUMBER"; value = line.replace(/mobile:/gi, ""); }
+                    else if(lower.includes("alt")) { label = "ALT PHONE NO"; value = line; }
+                    else if(lower.includes("aadhaar") || lower.includes("id")) { label = "AADHAAR NUMBER"; value = line.replace(/aadhaar number:|id:/gi, ""); }
+                    else if(lower.includes("address")) { label = "AADHAAR ADDRESS"; value = line.replace(/address:/gi, ""); isFull="full-width"; }
+                    else if(lower.includes("gender")) { label = "GENDER"; value = line.replace(/gender:/gi, ""); }
+                    else if(lower.includes("dob")) { label = "DATE OF BIRTH"; value = line.replace(/dob:/gi, ""); }
+                    else if(lower.includes("email")) { label = "EMAIL ID"; value = line.replace(/email:/gi, ""); isFull="full-width"; }
+
+                    value = value.replace(/:/g, "").trim();
+
+                    html += `<div class="info-item ${isFull}"><span style="display:block; font-size:12px; color:var(--neon-blue); letter-spacing:2px; margin-bottom:5px;">${label}</span><span style="font-size:22px; font-weight:bold; color:#fff; word-break:break-all;">${value}</span></div>`;
+                }
+            });
+            html += `</div></div>`;
+            terminal.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
