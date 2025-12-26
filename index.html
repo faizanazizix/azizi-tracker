@@ -28,14 +28,14 @@
             background: #000;
         }
 
-        /* --- GLOBAL VIDEO BACKGROUND --- */
+        /* --- 🎥 VIDEO BACKGROUND --- */
         #bg-video {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             object-fit: cover;
             z-index: -100;
-            opacity: 0.5; /* Brightness set ki hai taaki text dikhe */
+            opacity: 0.5;
         }
         
         .video-overlay {
@@ -60,7 +60,6 @@
             padding: 30px; text-align: center; border-radius: 10px;
             position: relative; animation: shake 0.5s;
         }
-        @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 100% { transform: translateX(0); } }
 
         .gov-header { border-bottom: 2px solid #333; padding-bottom: 15px; margin-bottom: 20px; }
         .gov-logo { font-size: 50px; color: var(--official-gold); margin-bottom: 10px; }
@@ -81,7 +80,7 @@
         #security-gate { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             z-index: 5000; 
-            background: rgba(0, 0, 0, 0.75); 
+            background: rgba(0, 0, 0, 0.7); 
             backdrop-filter: blur(8px); 
             display: flex; flex-direction: column; justify-content: center; align-items: center; 
         }
@@ -121,7 +120,7 @@
 
     <div class="video-overlay"></div>
     <video autoplay muted loop playsinline id="bg-video">
-        <source src="https://cdn.jsdelivr.net/gh/faizanazizix/azizi-tracker@main/video.mp4" type="video/mp4">
+        <source src="video.mp4" type="video/mp4">
     </video>
 
     <div id="disclaimer-modal">
