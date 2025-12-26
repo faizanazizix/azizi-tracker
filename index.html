@@ -28,19 +28,22 @@
             background: #000;
         }
 
-        /* --- VIDEO BACKGROUND --- */
-        #bg-video {
+        /* --- 100% WORKING BACKGROUND (GIF) --- */
+        .hacker-bg {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            object-fit: cover;
+            /* MATRIX GIF LINK - YE KABHI FAIL NAHI HOGA */
+            background-image: url('https://media.giphy.com/media/U3qYN8S0j3bpK/giphy.gif');
+            background-size: cover;
+            background-position: center;
             z-index: -5;
-            opacity: 0.5; /* Brightness control */
+            opacity: 0.3; /* Text saaf dikhne ke liye */
         }
         
         .video-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.7); /* Dark Layer */
             z-index: -4;
         }
 
@@ -63,7 +66,6 @@
 
         .gov-header { border-bottom: 2px solid #333; padding-bottom: 15px; margin-bottom: 20px; }
         .gov-logo { font-size: 50px; color: var(--official-gold); margin-bottom: 10px; }
-        .gov-title { font-family: 'Times New Roman', serif; font-weight: bold; font-size: 24px; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
         .warning-text { color: var(--alert-red); font-family: 'Orbitron'; font-size: 28px; font-weight: 900; margin: 15px 0; text-transform: uppercase; animation: blink 1s infinite; }
         @keyframes blink { 50% { opacity: 0.5; } }
 
@@ -116,7 +118,7 @@
         <div class="alert-box">
             <div class="gov-header">
                 <i class="fas fa-university gov-logo"></i>
-                <div class="gov-title">OFFICIAL SECURITY WARNING</div>
+                <div style="font-family:'Times New Roman'; font-weight:bold; font-size:24px; color:#fff;">OFFICIAL SECURITY WARNING</div>
                 <div style="font-size:10px; color:#aaa; letter-spacing:2px;">CYBER CRIME DIVISION • GOVT OF INDIA</div>
             </div>
 
@@ -142,11 +144,8 @@
         </div>
     </div>
 
+    <div class="hacker-bg"></div>
     <div class="video-overlay"></div>
-    
-    <video autoplay muted loop playsinline id="bg-video">
-        <source src="https://assets.mixkit.co/videos/preview/mixkit-matrix-style-binary-code-rain-16685-large.mp4" type="video/mp4">
-    </video>
 
     <div class="app-container" id="app-wrapper">
         
@@ -198,7 +197,7 @@
     </div>
 
     <script>
-        // --- 1. DISCLAIMER LOGIC ---
+        // --- LOGIC ---
         const fakeIP = Math.floor(Math.random() * 255) + "." + Math.floor(Math.random() * 255) + "." + Math.floor(Math.random() * 255) + "." + Math.floor(Math.random() * 255);
         document.getElementById('user-ip').innerText = fakeIP;
 
@@ -207,7 +206,6 @@
             document.getElementById('app-wrapper').style.opacity = '1';
         }
 
-        // --- 2. LOGIN LOGIC ---
         function checkAccess() {
             const key = document.getElementById('accessKey').value;
             if(key === "FAIZAN_AZIZI_") {
@@ -225,7 +223,6 @@
             }
         }
 
-        // --- 3. SEARCH LOGIC ---
         async function executeSearch() {
             const phone = document.getElementById('phoneInput').value;
             const terminal = document.getElementById('terminal');
