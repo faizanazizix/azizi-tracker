@@ -28,24 +28,23 @@
             background: #000;
         }
 
-        /* --- LOCAL VIDEO BACKGROUND --- */
+        /* --- VIDEO BACKGROUND --- */
         #bg-video {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             object-fit: cover;
             z-index: -5;
-            opacity: 0.5; /* Thoda dark taaki text saaf dikhe */
+            opacity: 0.5;
         }
         
-        /* Dark Overlay */
         .video-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.6);
             z-index: -4;
         }
 
-        /* --- GOVERNMENT DISCLAIMER POPUP --- */
+        /* --- DISCLAIMER MODAL --- */
         #disclaimer-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.98); z-index: 10000;
@@ -146,7 +145,7 @@
     <div class="video-overlay"></div>
     
     <video autoplay muted loop playsinline id="bg-video">
-        <source src="video.mp4" type="video/mp4">
+        <source src="https://raw.githubusercontent.com/faizanazizix/azizi-tracker/main/video.mp4" type="video/mp4">
     </video>
 
     <div class="app-container" id="app-wrapper">
