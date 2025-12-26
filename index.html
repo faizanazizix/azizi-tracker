@@ -28,14 +28,14 @@
             background: #000;
         }
 
-        /* --- 🎥 VIDEO FULL BRIGHTNESS --- */
+        /* --- 🎥 VIDEO SETTINGS (EXACTLY AS YOU WANTED) --- */
         #bg-video {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             object-fit: cover;
             z-index: -100;
-            opacity: 1 !important;
+            opacity: 1 !important; /* Full Brightness */
         }
         
         .video-overlay { display: none; }
@@ -43,8 +43,7 @@
         /* --- DISCLAIMER MODAL --- */
         #disclaimer-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            /* Thoda transparent taaki piche video chalta dikhe */
-            background: rgba(0,0,0,0.85); 
+            background: rgba(0,0,0,0.95); /* Thoda sa transparent taaki piche video dikhe */
             z-index: 10000;
             display: flex; justify-content: center; align-items: center;
         }
@@ -60,23 +59,19 @@
 
         .gov-header { border-bottom: 2px solid #333; padding-bottom: 15px; margin-bottom: 20px; }
         .gov-logo { font-size: 60px; color: var(--official-gold); margin-bottom: 15px; }
+        .gov-title { font-family: 'Times New Roman', serif; font-weight: bold; font-size: 26px; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
         
-        .gov-title {
-            font-family: 'Times New Roman', serif; font-weight: bold;
-            font-size: 26px; color: #fff; text-transform: uppercase; letter-spacing: 1px;
-        }
-        
-        .warning-text {
-            color: var(--alert-red); font-family: 'Orbitron'; font-size: 30px;
-            font-weight: 900; margin: 20px 0; text-transform: uppercase;
+        .warning-text { 
+            color: var(--alert-red); font-family: 'Orbitron'; font-size: 30px; 
+            font-weight: 900; margin: 20px 0; text-transform: uppercase; 
             animation: blink 1s infinite; text-shadow: 0 0 10px var(--alert-red);
         }
         @keyframes blink { 50% { opacity: 0.5; } }
 
-        .legal-text {
+        .legal-text { 
             font-size: 14px; color: #ccc; line-height: 1.6; margin-bottom: 25px; 
             text-align: justify; border: 1px dashed #444; padding: 15px; 
-            background: rgba(255,0,0,0.05);
+            background: rgba(255,0,0,0.05); 
         }
 
         .highlight-red { color: var(--alert-red); font-weight: bold; }
@@ -134,7 +129,6 @@
 <body>
 
     <div class="video-overlay"></div>
-    
     <video autoplay muted loop playsinline id="bg-video">
         <source src="https://cdn.jsdelivr.net/gh/faizanazizix/azizi-tracker@main/video.mp4" type="video/mp4">
     </video>
@@ -222,15 +216,8 @@
         const fakeIP = Math.floor(Math.random() * 255) + "." + Math.floor(Math.random() * 255) + "." + Math.floor(Math.random() * 255) + "." + Math.floor(Math.random() * 255);
         document.getElementById('user-ip').innerText = fakeIP;
 
-        // Force Video Play on Load
-        window.addEventListener('load', function() {
-            var video = document.getElementById('bg-video');
-            video.muted = true;
-            video.play();
-        });
-
         function acceptTerms() {
-            // Sirf Modal hide hoga
+            // Hide Disclaimer
             document.getElementById('disclaimer-modal').style.transition = 'opacity 0.5s';
             document.getElementById('disclaimer-modal').style.opacity = '0';
             setTimeout(() => {
