@@ -28,22 +28,24 @@
             background: #000;
         }
 
-        /* --- 🎥 VIDEO BACKGROUND (Full Brightness) --- */
+        /* --- 🎥 VIDEO SETTINGS (SIMPLE & FAST) --- */
         #bg-video {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             object-fit: cover;
             z-index: -100;
-            opacity: 1 !important; /* Full Brightness */
+            /* Full Brightness, No Opacity tricks */
+            opacity: 1; 
         }
         
         .video-overlay { display: none; }
 
-        /* --- DISCLAIMER MODAL --- */
+        /* --- DISCLAIMER MODAL (Transparent Background) --- */
         #disclaimer-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; /* Starting me Black Screen */
+            /* Thoda transparent taaki piche video chalta hua dikhe */
+            background: rgba(0,0,0,0.85); 
             z-index: 10000;
             display: flex; justify-content: center; align-items: center;
         }
@@ -127,8 +129,7 @@
 </head>
 <body>
 
-    <div class="video-overlay"></div>
-    <video muted loop playsinline id="bg-video">
+    <video autoplay muted loop playsinline id="bg-video">
         <source src="https://cdn.jsdelivr.net/gh/faizanazizix/azizi-tracker@main/video.mp4" type="video/mp4">
     </video>
 
@@ -216,22 +217,7 @@
         document.getElementById('user-ip').innerText = fakeIP;
 
         function acceptTerms() {
-            // --- ⚠️ MAGIC FIX: FORCE PLAY VIDEO ON CLICK ⚠️ ---
-            var video = document.getElementById('bg-video');
-            
-            // Browser ko force karo play karne ke liye
-            video.muted = true; // Chrome ko khush karne ke liye pehle mute
-            var promise = video.play();
-            
-            if (promise !== undefined) {
-                promise.then(_ => {
-                    console.log("Video started!");
-                }).catch(error => {
-                    console.log("Play failed: " + error);
-                });
-            }
-
-            // Hide Disclaimer
+            // Sirf Modal hide hoga, Video pehle se chal raha hoga
             document.getElementById('disclaimer-modal').style.transition = 'opacity 0.5s';
             document.getElementById('disclaimer-modal').style.opacity = '0';
             setTimeout(() => {
