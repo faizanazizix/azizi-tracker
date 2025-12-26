@@ -28,37 +28,35 @@
             background: #000;
         }
 
-        /* --- 100% WORKING BACKGROUND (GIF) --- */
-        .hacker-bg {
+        /* --- GLOBAL VIDEO BACKGROUND --- */
+        #bg-video {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            /* MATRIX GIF LINK - YE KABHI FAIL NAHI HOGA */
-            background-image: url('https://media.giphy.com/media/U3qYN8S0j3bpK/giphy.gif');
-            background-size: cover;
-            background-position: center;
-            z-index: -5;
-            opacity: 0.3; /* Text saaf dikhne ke liye */
+            object-fit: cover;
+            z-index: -100;
+            opacity: 0.5; /* Brightness set ki hai taaki text dikhe */
         }
         
         .video-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7); /* Dark Layer */
-            z-index: -4;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: -99;
         }
 
         /* --- DISCLAIMER MODAL --- */
         #disclaimer-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.98); z-index: 10000;
+            background: rgba(0,0,0,0.95);
+            z-index: 10000;
             display: flex; justify-content: center; align-items: center;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(5px);
         }
 
         .alert-box {
             width: 90%; max-width: 600px;
-            background: #050505; border: 2px solid var(--alert-red);
-            box-shadow: 0 0 30px var(--alert-red) inset;
+            background: rgba(5, 5, 5, 0.95); border: 2px solid var(--alert-red);
+            box-shadow: 0 0 50px var(--alert-red);
             padding: 30px; text-align: center; border-radius: 10px;
             position: relative; animation: shake 0.5s;
         }
@@ -77,11 +75,18 @@
         .agree-btn:hover { background: #cc0000; box-shadow: 0 0 30px var(--alert-red); }
 
         /* --- APP CONTAINER --- */
-        .app-container { opacity: 0; transition: 2s; }
+        .app-container { opacity: 0; transition: 2s; width: 100%; }
 
         /* --- LOCK SCREEN --- */
-        #security-gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 5000; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(15px); display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .glass-box { background: rgba(255,255,255,0.05); border: 1px solid var(--neon-blue); padding: 40px; border-radius: 20px; text-align: center; width: 90%; max-width: 450px; box-shadow: 0 0 40px rgba(0, 243, 255, 0.2); }
+        #security-gate { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            z-index: 5000; 
+            background: rgba(0, 0, 0, 0.75); 
+            backdrop-filter: blur(8px); 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+        }
+        
+        .glass-box { background: rgba(0, 20, 40, 0.6); border: 1px solid var(--neon-blue); padding: 40px; border-radius: 20px; text-align: center; width: 90%; max-width: 450px; box-shadow: 0 0 40px rgba(0, 243, 255, 0.2); }
         .access-input { width: 100%; padding: 15px; margin-top: 20px; border-radius: 50px; border: 2px solid var(--neon-blue); background: rgba(0,0,0,0.5); color: #fff; font-size: 20px; text-align: center; outline: none; font-family: 'Orbitron'; letter-spacing: 3px; }
         .btn-unlock { margin-top: 20px; width: 100%; padding: 15px; border-radius: 50px; border: none; background: var(--neon-blue); color: #000; font-weight: bold; cursor: pointer; font-family: 'Orbitron'; font-size: 18px; }
 
@@ -114,6 +119,11 @@
 </head>
 <body>
 
+    <div class="video-overlay"></div>
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="https://cdn.jsdelivr.net/gh/faizanazizix/azizi-tracker@main/video.mp4" type="video/mp4">
+    </video>
+
     <div id="disclaimer-modal">
         <div class="alert-box">
             <div class="gov-header">
@@ -143,9 +153,6 @@
             </button>
         </div>
     </div>
-
-    <div class="hacker-bg"></div>
-    <div class="video-overlay"></div>
 
     <div class="app-container" id="app-wrapper">
         
@@ -197,7 +204,6 @@
     </div>
 
     <script>
-        // --- LOGIC ---
         const fakeIP = Math.floor(Math.random() * 255) + "." + Math.floor(Math.random() * 255) + "." + Math.floor(Math.random() * 255) + "." + Math.floor(Math.random() * 255);
         document.getElementById('user-ip').innerText = fakeIP;
 
