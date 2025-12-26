@@ -28,20 +28,20 @@
             background: #000;
         }
 
-        /* --- NEW FAST VIDEO BACKGROUND --- */
+        /* --- LOCAL VIDEO BACKGROUND --- */
         #bg-video {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             object-fit: cover;
-            z-index: -5; /* Sabse piche */
-            opacity: 0.4; /* Thoda dark taaki text dikhe */
+            z-index: -5;
+            opacity: 0.5; /* Thoda dark taaki text saaf dikhe */
         }
         
-        /* Dark Overlay over video */
+        /* Dark Overlay */
         .video-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
             z-index: -4;
         }
 
@@ -79,8 +79,8 @@
         .app-container { opacity: 0; transition: 2s; }
 
         /* --- LOCK SCREEN --- */
-        #security-gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 5000; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .glass-box { background: rgba(255,255,255,0.05); border: 1px solid var(--neon-blue); padding: 40px; border-radius: 20px; text-align: center; width: 90%; max-width: 450px; box-shadow: 0 0 30px rgba(0, 243, 255, 0.2); }
+        #security-gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 5000; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(15px); display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .glass-box { background: rgba(255,255,255,0.05); border: 1px solid var(--neon-blue); padding: 40px; border-radius: 20px; text-align: center; width: 90%; max-width: 450px; box-shadow: 0 0 40px rgba(0, 243, 255, 0.2); }
         .access-input { width: 100%; padding: 15px; margin-top: 20px; border-radius: 50px; border: 2px solid var(--neon-blue); background: rgba(0,0,0,0.5); color: #fff; font-size: 20px; text-align: center; outline: none; font-family: 'Orbitron'; letter-spacing: 3px; }
         .btn-unlock { margin-top: 20px; width: 100%; padding: 15px; border-radius: 50px; border: none; background: var(--neon-blue); color: #000; font-weight: bold; cursor: pointer; font-family: 'Orbitron'; font-size: 18px; }
 
@@ -144,8 +144,9 @@
     </div>
 
     <div class="video-overlay"></div>
+    
     <video autoplay muted loop playsinline id="bg-video">
-        <source src="https://assets.mixkit.co/videos/preview/mixkit-matrix-style-binary-code-rain-16685-large.mp4" type="video/mp4">
+        <source src="video.mp4" type="video/mp4">
     </video>
 
     <div class="app-container" id="app-wrapper">
