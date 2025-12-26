@@ -28,64 +28,85 @@
             background: #000;
         }
 
-        /* --- 🎥 VIDEO FULL BRIGHTNESS (NO DARKNESS) --- */
+        /* --- 🎥 VIDEO FULL BRIGHTNESS --- */
         #bg-video {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             object-fit: cover;
             z-index: -100;
-            /* 🔴 FULL BRIGHTNESS & VISIBILITY */
+            /* 🔴 FULL BRIGHTNESS */
             opacity: 1 !important;
-            filter: brightness(100%); 
         }
         
-        /* Overlay hata diya taaki video dull na dikhe */
         .video-overlay {
+            /* Overlay hata diya taaki video dull na dikhe */
             display: none; 
         }
 
-        /* --- DISCLAIMER MODAL --- */
+        /* --- DISCLAIMER MODAL (FULL SCREEN) --- */
         #disclaimer-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); /* Sirf disclaimer ke piche kala rahega */
+            background: #000; /* Pura black shuru me */
             z-index: 10000;
             display: flex; justify-content: center; align-items: center;
         }
 
         .alert-box {
-            width: 90%; max-width: 600px;
+            width: 90%; max-width: 650px;
             background: rgba(10, 10, 10, 0.95); border: 2px solid var(--alert-red);
             box-shadow: 0 0 50px var(--alert-red);
             padding: 30px; text-align: center; border-radius: 10px;
             position: relative;
+            animation: shake 0.5s;
         }
+        @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 100% { transform: translateX(0); } }
 
         .gov-header { border-bottom: 2px solid #333; padding-bottom: 15px; margin-bottom: 20px; }
-        .gov-logo { font-size: 50px; color: var(--official-gold); margin-bottom: 10px; }
-        .warning-text { color: var(--alert-red); font-family: 'Orbitron'; font-size: 28px; font-weight: 900; margin: 15px 0; text-transform: uppercase; animation: blink 1s infinite; }
+        .gov-logo { font-size: 60px; color: var(--official-gold); margin-bottom: 15px; }
+        
+        .gov-title {
+            font-family: 'Times New Roman', serif; font-weight: bold;
+            font-size: 26px; color: #fff; text-transform: uppercase; letter-spacing: 1px;
+        }
+        
+        .warning-text {
+            color: var(--alert-red); font-family: 'Orbitron'; font-size: 30px;
+            font-weight: 900; margin: 20px 0; text-transform: uppercase;
+            animation: blink 1s infinite; text-shadow: 0 0 10px var(--alert-red);
+        }
         @keyframes blink { 50% { opacity: 0.5; } }
 
-        .legal-text { font-size: 14px; color: #ccc; line-height: 1.6; margin-bottom: 20px; text-align: justify; border: 1px dashed #444; padding: 10px; background: rgba(255,0,0,0.05); }
+        .legal-text {
+            font-size: 14px; color: #ccc; line-height: 1.6; margin-bottom: 25px; 
+            text-align: justify; border: 1px dashed #444; padding: 15px; 
+            background: rgba(255,0,0,0.05);
+        }
+
         .highlight-red { color: var(--alert-red); font-weight: bold; }
         .highlight-gold { color: var(--official-gold); font-weight: bold; }
 
-        .agree-btn { background: var(--alert-red); color: white; border: none; padding: 15px 40px; font-size: 18px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer; text-transform: uppercase; border-radius: 5px; transition: 0.3s; width: 100%; }
-        .agree-btn:hover { background: #cc0000; box-shadow: 0 0 30px var(--alert-red); }
+        .agree-btn { 
+            background: var(--alert-red); color: white; border: none; padding: 18px 40px; 
+            font-size: 20px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer; 
+            text-transform: uppercase; border-radius: 5px; transition: 0.3s; width: 100%; 
+            box-shadow: 0 0 20px rgba(255, 51, 51, 0.4);
+        }
+        .agree-btn:hover { background: #cc0000; box-shadow: 0 0 40px var(--alert-red); }
 
         /* --- APP CONTAINER --- */
         .app-container { opacity: 0; transition: 2s; width: 100%; }
 
-        /* --- LOCK SCREEN (Thoda transparent taaki video dikhe) --- */
+        /* --- LOCK SCREEN --- */
         #security-gate { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             z-index: 5000; 
-            background: rgba(0, 0, 0, 0.4); /* Transparent glass effect */
+            background: rgba(0, 0, 0, 0.4); /* Transparent taaki video dikhe */
             backdrop-filter: blur(5px); 
             display: flex; flex-direction: column; justify-content: center; align-items: center; 
         }
         
-        .glass-box { background: rgba(0, 20, 40, 0.6); border: 1px solid var(--neon-blue); padding: 40px; border-radius: 20px; text-align: center; width: 90%; max-width: 450px; box-shadow: 0 0 40px rgba(0, 243, 255, 0.2); }
+        .glass-box { background: rgba(0, 20, 40, 0.7); border: 1px solid var(--neon-blue); padding: 40px; border-radius: 20px; text-align: center; width: 90%; max-width: 450px; box-shadow: 0 0 40px rgba(0, 243, 255, 0.2); }
         .access-input { width: 100%; padding: 15px; margin-top: 20px; border-radius: 50px; border: 2px solid var(--neon-blue); background: rgba(0,0,0,0.5); color: #fff; font-size: 20px; text-align: center; outline: none; font-family: 'Orbitron'; letter-spacing: 3px; }
         .btn-unlock { margin-top: 20px; width: 100%; padding: 15px; border-radius: 50px; border: none; background: var(--neon-blue); color: #000; font-weight: bold; cursor: pointer; font-family: 'Orbitron'; font-size: 18px; }
 
@@ -94,7 +115,7 @@
         .main-title { font-family: 'Orbitron'; font-size: 40px; color: #fff; text-shadow: 0 0 20px var(--neon-blue); margin-bottom: 50px; text-align: center; text-transform: uppercase; letter-spacing: 5px; }
         
         .features-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-bottom: 40px; }
-        .f-card { background: rgba(0, 20, 40, 0.6); border: 1px solid var(--neon-blue); padding: 20px; border-radius: 15px; width: 180px; text-align: center; transition: 0.3s; }
+        .f-card { background: rgba(0, 20, 40, 0.7); border: 1px solid var(--neon-blue); padding: 20px; border-radius: 15px; width: 180px; text-align: center; transition: 0.3s; }
         .f-card:hover { transform: translateY(-10px); box-shadow: 0 0 30px rgba(0, 243, 255, 0.3); }
         .f-card i { font-size: 35px; color: var(--neon-blue); margin-bottom: 10px; }
         .f-card h4 { font-size: 13px; color: #fff; margin-bottom: 5px; font-family: 'Orbitron'; letter-spacing: 1px; }
@@ -120,27 +141,30 @@
 
     <div class="video-overlay"></div>
     <video muted loop playsinline id="bg-video">
-        <source src="https://faizanazizix.github.io/azizi-tracker/video.mp4" type="video/mp4">
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-matrix-style-binary-code-rain-16685-large.mp4" type="video/mp4">
     </video>
 
     <div id="disclaimer-modal">
         <div class="alert-box">
             <div class="gov-header">
                 <i class="fas fa-university gov-logo"></i>
-                <div style="font-family:'Times New Roman'; font-weight:bold; font-size:24px; color:#fff;">OFFICIAL SECURITY WARNING</div>
-                <div style="font-size:10px; color:#aaa; letter-spacing:2px;">CYBER CRIME DIVISION • GOVT OF INDIA</div>
+                <div class="gov-title">OFFICIAL SECURITY WARNING</div>
+                <div style="font-size:12px; color:#aaa; letter-spacing:3px; margin-top:5px;">CYBER CRIME DIVISION • GOVT OF INDIA</div>
             </div>
 
-            <div class="warning-text">⚠️ ALERT: ILLEGAL TOOL</div>
+            <div class="warning-text">⚠️ ALERT: RESTRICTED TOOL</div>
 
             <div class="legal-text">
-                <p style="margin-bottom:10px;">
-                    <span class="highlight-red">DISCLAIMER:</span> This Tool is for <strong>Educational purpose only</strong>. Using this tool is <span class="highlight-red">ILLEGAL</span> and violates <strong>Section 43 & 66 of the IT Act, 2000</strong>.
+                <p style="margin-bottom:15px;">
+                    <span class="highlight-red">WARNING:</span> This Tool is for <strong>Educational purpose only</strong>. Using this tool for spying is <span class="highlight-red">ILLEGAL</span> and violates <strong>Section 43 & 66 of the IT Act, 2000</strong>.
+                </p>
+                <p style="margin-bottom:15px;">
+                    This system retrieves data from <span class="highlight-gold">Secret Satellites, Government Databases (UIDAI), and the Dark Web</span>. Accessing this information without proper authorization is a <strong>NON-BAILABLE OFFENSE</strong>.
                 </p>
                 <p>
-                    <strong>YOUR IP ADDRESS IS BEING LOGGED:</strong> <span id="user-ip" style="color:var(--alert-red); font-family:monospace;">FETCHING...</span>
+                    <strong>YOUR IP ADDRESS IS BEING LOGGED:</strong> <span id="user-ip" style="color:var(--alert-red); font-family:monospace; font-weight:bold;">FETCHING...</span>
                     <br><br>
-                    Click ACCEPT to activate the system.
+                    Use it at your own risk. The developer <strong>[FAIZAN AZIZI]</strong> will not be responsible for any legal inquiry, police action, or court cases filed against the user.
                 </p>
             </div>
 
@@ -204,7 +228,7 @@
         document.getElementById('user-ip').innerText = fakeIP;
 
         function acceptTerms() {
-            // 🔴 100% FORCE PLAY - Jab button dabega tabhi video chalega
+            // 🔴 VIDEO START ON CLICK
             var video = document.getElementById('bg-video');
             video.play().then(() => {
                 console.log("Video Started Successfully");
