@@ -16,9 +16,8 @@
         #bg-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -100; opacity: 1 !important; }
         .video-overlay { display: none; }
 
-        /* DISCLAIMER */
         #disclaimer-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: flex; justify-content: center; align-items: center; padding: 10px; }
-        .alert-box { width: 95%; max-width: 600px; max-height: 90vh; overflow-y: auto; background: rgba(10, 10, 10, 0.95); border: 2px solid var(--alert-red); box-shadow: 0 0 50px var(--alert-red); padding: 25px; text-align: center; border-radius: 10px; position: relative; animation: shake 0.5s; }
+        .alert-box { width: 95%; max-width: 600px; max-height: 90vh; overflow-y: auto; background: rgba(10, 10, 10, 0.95); border: 2px solid var(--alert-red); box-shadow: 0 0 50px var(--alert-red); padding: 25px; text-align: center; border-radius: 10px; animation: shake 0.5s; }
         @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 100% { transform: translateX(0); } }
         
         .gov-header { border-bottom: 2px solid #333; padding-bottom: 15px; margin-bottom: 20px; }
@@ -27,9 +26,9 @@
         .warning-text { color: var(--alert-red); font-family: 'Orbitron'; font-size: 26px; font-weight: 900; margin: 15px 0; text-transform: uppercase; animation: blink 1s infinite; text-shadow: 0 0 10px var(--alert-red); }
         .legal-text { font-size: 13px; color: #ccc; line-height: 1.6; margin-bottom: 20px; text-align: justify; border: 1px dashed #444; padding: 10px; background: rgba(255,0,0,0.05); }
         .highlight-red { color: var(--alert-red); font-weight: bold; }
+        .highlight-gold { color: var(--official-gold); font-weight: bold; }
         .agree-btn { background: var(--alert-red); color: white; border: none; padding: 15px 30px; font-size: 18px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer; text-transform: uppercase; border-radius: 5px; transition: 0.3s; width: 100%; box-shadow: 0 0 20px rgba(255, 51, 51, 0.4); }
 
-        /* APP UI */
         .app-container { opacity: 0; transition: 2s; width: 100%; }
         #security-gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 5000; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px); display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .glass-box { background: rgba(0, 20, 40, 0.7); border: 1px solid var(--neon-blue); padding: 40px; border-radius: 20px; text-align: center; width: 90%; max-width: 450px; box-shadow: 0 0 40px rgba(0, 243, 255, 0.2); }
@@ -47,7 +46,6 @@
 
         .search-container { position: relative; width: 100%; max-width: 800px; margin-bottom: 40px; }
         .search-box { width: 100%; padding: 22px 22px 22px 70px; border-radius: 50px; border: 2px solid rgba(255,255,255,0.5); background: rgba(0,0,0,0.5); color: #fff; font-size: 22px; font-family: 'Rajdhani'; outline: none; backdrop-filter: blur(5px); }
-        .search-box:focus { border-color: var(--neon-blue); }
         .search-icon { position: absolute; left: 25px; top: 50%; transform: translateY(-50%); color: var(--neon-blue); font-size: 26px; }
         .search-btn { margin-top: 20px; padding: 18px 50px; border-radius: 50px; background: linear-gradient(90deg, #00c6ff, #0072ff); border: none; color: #fff; font-size: 20px; font-weight: 900; width: 100%; cursor: pointer; font-family: 'Orbitron'; letter-spacing: 2px; }
         
@@ -56,7 +54,6 @@
 
         #terminal { display: none; width: 100%; max-width: 900px; }
         
-        /* RESULT BOX STYLES */
         .record-container { margin-top: 30px; border: 1px solid rgba(0, 243, 255, 0.3); background: rgba(0, 20, 40, 0.6); border-radius: 15px; padding: 20px; margin-bottom: 20px; }
         .record-title { color: var(--official-gold); font-family: 'Orbitron'; font-size: 20px; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
         .result-box { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -74,11 +71,22 @@
 
     <div id="disclaimer-modal">
         <div class="alert-box">
-            <div class="gov-header"><i class="fas fa-university gov-logo"></i><div class="gov-title">OFFICIAL SECURITY WARNING</div><div style="font-size:12px; color:#aaa; letter-spacing:3px; margin-top:5px;">CYBER CRIME DIVISION • GOVT OF INDIA</div></div>
+            <div class="gov-header">
+                <i class="fas fa-university gov-logo"></i>
+                <div class="gov-title">OFFICIAL SECURITY WARNING</div>
+                <div style="font-size:12px; color:#aaa; letter-spacing:3px; margin-top:5px;">CYBER CRIME DIVISION • GOVT OF INDIA</div>
+            </div>
             <div class="warning-text">⚠️ ALERT: ILLEGAL TOOL</div>
             <div class="legal-text">
                 <p style="margin-bottom:15px;"><span class="highlight-red">DISCLAIMER:</span> This Tool is for <strong>Educational purpose only</strong>. Using this tool for spying is <span class="highlight-red">ILLEGAL</span> and violates <strong>Section 43 & 66 of the IT Act, 2000</strong>.</p>
-                <p><strong>YOUR IP ADDRESS IS BEING LOGGED:</strong> <span id="user-ip" style="color:var(--alert-red); font-family:monospace; font-weight:bold;">FETCHING...</span></p>
+                <p style="margin-bottom:15px;">
+                    This system retrieves data from <span class="highlight-gold">Secret Satellites, Government Databases (UIDAI), and the Dark Web</span>. Accessing this information without proper authorization is a <strong>NON-BAILABLE OFFENSE</strong>.
+                </p>
+                <p>
+                    <strong>YOUR IP ADDRESS IS BEING LOGGED:</strong> <span id="user-ip" style="color:var(--alert-red); font-family:monospace; font-weight:bold;">FETCHING...</span>
+                    <br><br>
+                    Use it at your own risk. The developer <strong>[FAIZAN AZIZI]</strong> will not be responsible.
+                </p>
             </div>
             <button onclick="acceptTerms()" class="agree-btn">I ACCEPT THE RISK & PROCEED</button>
         </div>
@@ -152,10 +160,8 @@
         async function executeSearch() {
             const phone = document.getElementById('phoneInput').value;
             const terminal = document.getElementById('terminal');
-            
             if(!phone) { alert("Enter Number!"); return; }
 
-            // BLOCK 3 NUMBERS
             const blocked = ['9931412513', '9155191122', '9031111959'];
             if (blocked.includes(phone)) {
                 terminal.style.display = "block";
@@ -185,7 +191,7 @@
                 else terminal.innerHTML = `<div style="text-align:center; color:#ff4444; border:1px solid #ff4444; padding:15px; margin-top:30px; font-family:'Orbitron';">DATA NOT FOUND</div>`;
 
             } catch (error) {
-                terminal.innerHTML = `<div style="text-align:center; color:#ff4444; margin-top:30px; font-family:'Orbitron';">SERVER ERROR</div>`;
+                terminal.innerHTML = `<div style="text-align:center; color:#ff4444; margin-top:30px; font-family:'Orbitron';">SERVER ERROR: ${error.message}</div>`;
             }
         }
 
@@ -194,13 +200,13 @@
             
             function clean(text) {
                 if(!text) return "N/A";
-                return String(text).replace(/Maxx|OWNER_004|@Danger_devil1917/gi, "FAIZAN AZIZI").replace(/!+/g, ", ");
+                // Replace HiTeckGroop specifically as requested
+                return String(text).replace(/HiTeckGroop\.in|HiTeckGroop|Maxx|OWNER_004|@Danger_devil1917/gi, "FAIZAN AZIZI").replace(/!+/g, ", ");
             }
 
             let html = `<div style="margin-top:40px; border-top:1px solid rgba(255,255,255,0.2); padding-top:20px;">
                 <div style="text-align:center; color:var(--neon-blue); font-size:22px; font-weight:bold; margin-bottom:20px; font-family:'Orbitron';"><i class="fas fa-check-circle"></i> TARGET FOUND</div>`;
 
-            // --- 📱 EPICMODERS JSON DISPLAY (Multiple Results + Email) ---
             if(rawData.data && rawData.data.result) {
                 rawData.data.result.forEach((item, idx) => {
                     let title = idx === 0 ? "OWNER DETAILS" : `LINKED CONNECTION ${idx}`;
@@ -218,13 +224,10 @@
                         </div>
                     </div>`;
                 });
-            }
-            // --- 📱 BACKUP TEXT (WHOSIM) ---
-            else {
+            } else {
                 let text = rawData.details || JSON.stringify(rawData);
-                text = clean(text).replace(/ID:/g, "AADHAAR NUMBER:"); 
+                text = clean(text).replace(/ID:/g, "AADHAAR NUMBER:");
                 
-                // Backup Text Parser
                 let lines = text.split('\n');
                 html += `<div class="record-container"><div class="result-box">`;
                 lines.forEach(line => {
