@@ -14,7 +14,9 @@ SESSION_STRING = "BQJV5e4Alj1enIWcX8LODbh7r0COKClAAjmDFI-w1gV4QbLTPjdL1LsYgzX2Cw
 # --- JSON CLEANER ---
 def smart_extract_json(text):
     try:
+        # Koshish 1: Result array dhundo
         if '"result":' in text or "'result':" in text:
+            # { se } tak ka sabse bada chunk dhundo
             start = text.find('{')
             end = text.rfind('}') + 1
             if start != -1 and end != -1:
@@ -29,26 +31,40 @@ async def communicate_with_bot(target_bot, message_text, mode):
         try:
             sent = await app_client.send_message(target_bot, message_text)
             
-            # Timeout Settings
-            wait_time = 60 if mode == "server2" else 20 # Whosim is faster
+            best_response = None
+            wait_time = 60 if mode == "server2" else 30 # Whosim is faster
             
             for i in range(wait_time): 
+                # Check last 5 messages (Bot split message bhej sakta hai)
                 async for message in app_client.get_chat_history(target_bot, limit=5):
                     if message.id > sent.id:
                         text = message.text or message.caption or ""
                         
                         # --- SERVER 2 (EPICMODERS) ---
                         if mode == "server2":
-                            if "getting information" in text.lower() or "please wait" in text.lower(): continue
-                            if '"result"' in text or "'result'" in text: return text
-                            if "{" in text and "}" in text: return text # Fallback
+                            # Ignore Wait messages
+                            if "getting information" in text.lower() or "please wait" in text.lower():
+                                continue
+                            
+                            # Agar "result" keyword mil gaya, matlab yahi asli maal hai -> RETURN
+                            if '"result"' in text or "'result'" in text:
+                                return text
+                            
+                            # Fallback: Store potential JSON
+                            if "{" in text and "}" in text:
+                                best_response = text
                         
                         # --- SERVER 1 (WHOSIM) ---
                         else:
-                            return text # Whosim ka koi bhi reply valid hai
+                            return text # Whosim ka pehla text hi asli hota hai
 
+                # Agar best response mil chuka hai (Server 2 ke liye fallback)
+                if best_response and i > 5:
+                    return best_response
+                
                 await asyncio.sleep(1)
-            return None
+            
+            return best_response
         except Exception as e:
             print(f"Bot Error: {e}")
             return None
@@ -66,15 +82,14 @@ def get_info():
         
         if not number: return jsonify({"error": "No number provided"})
 
-        # --- SERVER SELECTION ---
+        # Select Bot based on Button
         target_bot = "whosim_bot" if server_mode == "server1" else "epicmoders"
         
-        print(f"Searching on {server_mode} ({target_bot})...")
-        
+        print(f"Trying {server_mode} ({target_bot})...")
         response_text = asyncio.run(communicate_with_bot(target_bot, number, server_mode))
         
         if response_text:
-            # SERVER 2: Returns JSON Data
+            # SERVER 2 (JSON)
             if server_mode == "server2":
                 json_data = smart_extract_json(response_text)
                 if json_data:
@@ -82,11 +97,11 @@ def get_info():
                 else:
                     return jsonify({"source": "epicmoders", "details": response_text})
             
-            # SERVER 1: Returns Raw Text (Frontend will convert to Cards)
+            # SERVER 1 (TEXT -> Frontend will convert to Cards)
             else:
                 return jsonify({"source": "whosim", "details": response_text})
 
-        return jsonify({"error": "Data not found on selected server"})
+        return jsonify({"error": "Data not found"})
 
     except Exception as e:
         return jsonify({"error": f"Internal Error: {str(e)}"})
