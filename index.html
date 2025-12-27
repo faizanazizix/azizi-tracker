@@ -25,12 +25,10 @@
         .gov-logo { font-size: 50px; color: var(--official-gold); margin-bottom: 10px; }
         .gov-title { font-family: 'Times New Roman', serif; font-weight: bold; font-size: 22px; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
         .warning-text { color: var(--alert-red); font-family: 'Orbitron'; font-size: 26px; font-weight: 900; margin: 15px 0; text-transform: uppercase; animation: blink 1s infinite; text-shadow: 0 0 10px var(--alert-red); }
-        @keyframes blink { 50% { opacity: 0.5; } }
         .legal-text { font-size: 13px; color: #ccc; line-height: 1.6; margin-bottom: 20px; text-align: justify; border: 1px dashed #444; padding: 10px; background: rgba(255,0,0,0.05); }
         .highlight-red { color: var(--alert-red); font-weight: bold; }
         .highlight-gold { color: var(--official-gold); font-weight: bold; }
         .agree-btn { background: var(--alert-red); color: white; border: none; padding: 15px 30px; font-size: 18px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer; text-transform: uppercase; border-radius: 5px; transition: 0.3s; width: 100%; box-shadow: 0 0 20px rgba(255, 51, 51, 0.4); }
-        .agree-btn:hover { background: #cc0000; box-shadow: 0 0 40px var(--alert-red); }
 
         /* APP UI */
         .app-container { opacity: 0; transition: 2s; width: 100%; }
@@ -66,7 +64,6 @@
         @media(max-width: 700px){ .result-box { grid-template-columns: 1fr; } }
         .info-item { background: rgba(0,0,0,0.6); border-left: 4px solid var(--neon-blue); padding: 15px; border: 1px solid rgba(255,255,255,0.1); }
         .full-width { grid-column: 1 / -1; }
-        
     </style>
 </head>
 <body>
@@ -78,16 +75,11 @@
 
     <div id="disclaimer-modal">
         <div class="alert-box">
-            <div class="gov-header">
-                <i class="fas fa-university gov-logo"></i>
-                <div class="gov-title">OFFICIAL SECURITY WARNING</div>
-                <div style="font-size:12px; color:#aaa; letter-spacing:3px; margin-top:5px;">CYBER CRIME DIVISION • GOVT OF INDIA</div>
-            </div>
+            <div class="gov-header"><i class="fas fa-university gov-logo"></i><div class="gov-title">OFFICIAL SECURITY WARNING</div><div style="font-size:12px; color:#aaa; letter-spacing:3px; margin-top:5px;">CYBER CRIME DIVISION • GOVT OF INDIA</div></div>
             <div class="warning-text">⚠️ ALERT: ILLEGAL TOOL</div>
             <div class="legal-text">
                 <p style="margin-bottom:15px;"><span class="highlight-red">DISCLAIMER:</span> This Tool is for <strong>Educational purpose only</strong>. Using this tool for spying is <span class="highlight-red">ILLEGAL</span> and violates <strong>Section 43 & 66 of the IT Act, 2000</strong>.</p>
-                <p style="margin-bottom:15px;">This system retrieves data from <span class="highlight-gold">Secret Satellites, Government Databases (UIDAI), and the Dark Web</span>. Accessing this information without proper authorization is a <strong>NON-BAILABLE OFFENSE</strong>.</p>
-                <p><strong>YOUR IP ADDRESS IS BEING LOGGED:</strong> <span id="user-ip" style="color:var(--alert-red); font-family:monospace; font-weight:bold;">FETCHING...</span><br><br>Use it at your own risk. The developer <strong>[FAIZAN AZIZI]</strong> will not be responsible.</p>
+                <p><strong>YOUR IP ADDRESS IS BEING LOGGED:</strong> <span id="user-ip" style="color:var(--alert-red); font-family:monospace; font-weight:bold;">FETCHING...</span></p>
             </div>
             <button onclick="acceptTerms()" class="agree-btn">I ACCEPT THE RISK & PROCEED</button>
         </div>
@@ -164,7 +156,6 @@
             
             if(!phone) { alert("Enter Number!"); return; }
 
-            // BLOCK 3 NUMBERS
             const blocked = ['9931412513', '9155191122', '9031111959'];
             if (blocked.includes(phone)) {
                 terminal.style.display = "block";
@@ -173,10 +164,7 @@
                     terminal.innerHTML = `
                         <div style="margin-top:40px; border:2px solid #ff3333; padding:20px; background:rgba(255,0,0,0.1); border-radius:10px; animation:shake 0.5s;">
                             <div style="color:#ff3333; font-size:25px; font-weight:900; margin-bottom:15px; font-family:'Orbitron';"><i class="fas fa-ban"></i> ACCESS DENIED</div>
-                            <div style="color:#fff; font-size:16px; font-family:'Rajdhani'; font-weight:bold; line-height:1.5;">
-                                YOU CAN'T SEE THE DEVELOPER AND ITS FAMILY DETAILS,<br>
-                                <span style="color:yellow;">ONLY FAIZAN AZIZI CAN ACCESS THESE NUMBER</span>
-                            </div>
+                            <div style="color:#fff; font-size:16px; font-family:'Rajdhani'; font-weight:bold; line-height:1.5;">YOU CAN'T SEE THE DEVELOPER AND ITS FAMILY DETAILS,<br><span style="color:yellow;">ONLY FAIZAN AZIZI CAN ACCESS THESE NUMBER</span></div>
                         </div>`;
                 }, 1500);
                 return;
@@ -204,7 +192,6 @@
         function displayResult(rawData) {
             const term = document.getElementById('terminal');
             
-            // CLEANING FUNCTION (Replace Maxx, Danger with Faizan Azizi)
             function clean(text) {
                 if(!text) return "N/A";
                 return String(text).replace(/Maxx|OWNER_004|@Danger_devil1917/gi, "FAIZAN AZIZI").replace(/!+/g, ", ");
@@ -235,8 +222,18 @@
             // --- 📱 BACKUP TEXT (WHOSIM) ---
             else {
                 let text = rawData.details || JSON.stringify(rawData);
-                text = clean(text).replace(/ID:/g, "AADHAAR NUMBER:"); // Clean text + replace ID
-                html += `<div class="record-container"><div class="info-item full-width" style="white-space: pre-wrap; font-family: monospace;">${text}</div></div>`;
+                text = clean(text).replace(/ID:/g, "AADHAAR NUMBER:"); 
+                
+                // Backup Text Parser
+                let lines = text.split('\n');
+                html += `<div class="record-container"><div class="result-box">`;
+                lines.forEach(line => {
+                    if(line.includes(':')) {
+                         let [key, val] = line.split(':');
+                         html += `<div class="info-item full-width"><span style="display:block; font-size:12px; color:var(--neon-blue);">${key.toUpperCase()}</span><span style="font-size:20px; font-weight:bold;">${val}</span></div>`;
+                    }
+                });
+                html += `</div></div>`;
             }
 
             html += `</div>`;
