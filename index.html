@@ -28,16 +28,14 @@
             background: #000;
         }
 
-        /* --- 🎥 VIDEO FULL BRIGHTNESS (NO DARKNESS) --- */
+        /* --- 🎥 VIDEO SETTINGS --- */
         #bg-video {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             object-fit: cover;
             z-index: -100;
-            /* 🔴 FULL BRIGHTNESS & VISIBILITY */
             opacity: 1 !important;
-            filter: brightness(100%); 
         }
         
         .video-overlay { display: none; }
@@ -124,7 +122,25 @@
         .insta-btn { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); padding: 12px 30px; border-radius: 30px; color: white; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 10px; }
 
         #terminal { display: none; width: 100%; max-width: 900px; }
-        .result-box { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        
+        /* New Result Box Styling for Multiple Records */
+        .record-container { 
+            margin-top: 30px; 
+            border: 1px solid rgba(0, 243, 255, 0.3); 
+            background: rgba(0, 20, 40, 0.6);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .record-title {
+            color: var(--official-gold);
+            font-family: 'Orbitron';
+            font-size: 20px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+        .result-box { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         @media(max-width: 700px){ .result-box { grid-template-columns: 1fr; } }
         .info-item { background: rgba(0,0,0,0.6); border-left: 4px solid var(--neon-blue); padding: 15px; border: 1px solid rgba(255,255,255,0.1); }
         .full-width { grid-column: 1 / -1; }
@@ -134,7 +150,6 @@
 <body>
 
     <div class="video-overlay"></div>
-    
     <video muted loop playsinline id="bg-video">
         <source src="https://faizanazizix.github.io/azizi-tracker/video.mp4" type="video/mp4">
     </video>
@@ -223,24 +238,15 @@
         document.getElementById('user-ip').innerText = fakeIP;
 
         function acceptTerms() {
-            // 🔴 100% FORCE PLAY ON CLICK (Ye tumhara wala working logic hai)
             var video = document.getElementById('bg-video');
-            video.play().then(() => {
-                console.log("Video Started Successfully");
-            }).catch(error => {
-                console.log("Play error: ", error);
-            });
+            video.play().then(() => { console.log("Video Started"); }).catch(error => { console.log("Play error"); });
 
             document.getElementById('disclaimer-modal').style.transition = 'opacity 0.5s';
             document.getElementById('disclaimer-modal').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('disclaimer-modal').style.display = 'none';
                 document.getElementById('app-wrapper').style.opacity = '1';
-                
-                // Extra Safety check
-                if (video.paused) {
-                    video.play();
-                }
+                if (video.paused) { video.play(); }
             }, 500);
         }
 
@@ -267,16 +273,11 @@
             
             if(!phone) { alert("Enter Number!"); return; }
 
-            // --- 🚫🚫 RESTRICTED NUMBERS LOGIC ADDED HERE 🚫🚫 ---
-            // Ye wo 3 number hain jo block honge
+            // --- 🚫 SECURITY BLOCK FOR DEVELOPER NUMBERS ---
             const blockedNumbers = ['9931412513', '9155191122', '9031111959'];
-
             if (blockedNumbers.includes(phone)) {
-                // Show Animation first
                 terminal.style.display = "block";
                 terminal.innerHTML = `<div style="text-align:center; font-size:20px; color:#fff; margin-top:30px; font-family:'Orbitron';"><i class="fas fa-circle-notch fa-spin" style="color:var(--neon-blue);"></i> CONNECTING TO SATELLITE...</div>`;
-
-                // Show Warning after 1.5 seconds
                 setTimeout(() => {
                     terminal.innerHTML = `
                         <div style="margin-top:40px; border:2px solid #ff3333; padding:25px; background:rgba(255,0,0,0.1); border-radius:15px; animation:shake 0.5s; text-align:center;">
@@ -288,10 +289,9 @@
                         </div>
                     `;
                 }, 1500);
-                
-                return; // ⛔ STOP HERE! Do not call API.
+                return; 
             }
-            // -------------------------------------------------------------
+            // ------------------------------------------------
 
             terminal.style.display = "block";
             terminal.innerHTML = `<div style="text-align:center; font-size:20px; color:#fff; margin-top:30px; font-family:'Orbitron';"><i class="fas fa-circle-notch fa-spin" style="color:var(--neon-blue);"></i> CONNECTING TO SATELLITE...</div>`;
@@ -310,8 +310,9 @@
                 const data = await response.json();
 
                 setTimeout(() => {
-                    if (data.details) {
-                        displayResult(data.details);
+                    // We check if data.details exists (Old Bot) OR data.data exists (New Bot JSON)
+                    if (data.details || data.data) {
+                        displayResult(data);
                     } else {
                         terminal.innerHTML = `<div style="text-align:center; color:#ff4444; border:1px solid #ff4444; padding:15px; margin-top:30px; font-family:'Orbitron';">DATA NOT FOUND</div>`;
                     }
@@ -322,12 +323,62 @@
             }
         }
 
-        function displayResult(text) {
+        // --- 🧠 SMART DISPLAY FUNCTION (HANDLES NEW JSON & OLD TEXT) ---
+        function displayResult(rawData) {
             const terminal = document.getElementById('terminal');
-            let html = `<div style="margin-top:40px; border-top:1px solid rgba(255,255,255,0.2); padding-top:20px;">
-                <div style="text-align:center; color:var(--neon-blue); font-size:22px; font-weight:bold; margin-bottom:20px; font-family:'Orbitron';"><i class="fas fa-check-circle"></i> TARGET FOUND</div>
-                <div class="result-box">`;
+            let html = `<div style="margin-top:40px;">
+                <div style="text-align:center; color:var(--neon-blue); font-size:22px; font-weight:bold; margin-bottom:20px; font-family:'Orbitron';"><i class="fas fa-check-circle"></i> TARGET FOUND</div>`;
 
+            // Case 1: NEW BOT (JSON Format) - Handles multiple results
+            try {
+                let jsonStr = "";
+                if(rawData.details) {
+                    // Sometimes new bot data comes in 'details' field but as string
+                    jsonStr = rawData.details.substring(rawData.details.indexOf('{')); 
+                } else if(rawData.data) {
+                    // Or directly in data object
+                    jsonStr = JSON.stringify(rawData); 
+                }
+
+                const parsedData = JSON.parse(jsonStr);
+                
+                if(parsedData.data && parsedData.data.result) {
+                    const results = parsedData.data.result;
+                    
+                    results.forEach((item, index) => {
+                        let title = index === 0 ? "OWNER DETAILS" : `LINKED CONNECTION ${index}`;
+                        
+                        // Clean Address
+                        let cleanAddress = item.address ? item.address.replace(/!+/g, ", ").replace(/^, /, "") : "N/A";
+
+                        html += `
+                        <div class="record-container">
+                            <div class="record-title"><i class="fas fa-user-circle"></i> ${title}</div>
+                            <div class="result-box">
+                                <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue); letter-spacing:2px; margin-bottom:5px;">OWNER NAME</span><span style="font-size:22px; font-weight:bold; color:#fff;">${item.name || "N/A"}</span></div>
+                                <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue); letter-spacing:2px; margin-bottom:5px;">FATHER NAME</span><span style="font-size:22px; font-weight:bold; color:#fff;">${item.father_name || "N/A"}</span></div>
+                                <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue); letter-spacing:2px; margin-bottom:5px;">MOBILE NUMBER</span><span style="font-size:22px; font-weight:bold; color:#fff;">${item.mobile || "N/A"}</span></div>
+                                <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue); letter-spacing:2px; margin-bottom:5px;">ALT MOBILE</span><span style="font-size:22px; font-weight:bold; color:#fff;">${item.alt_mobile || "N/A"}</span></div>
+                                <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue); letter-spacing:2px; margin-bottom:5px;">AADHAAR NUMBER</span><span style="font-size:22px; font-weight:bold; color:#fff;">${item.id_number || "N/A"}</span></div>
+                                <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue); letter-spacing:2px; margin-bottom:5px;">EMAIL ID</span><span style="font-size:22px; font-weight:bold; color:#fff;">${item.email || "N/A"}</span></div>
+                                <div class="info-item full-width"><span style="display:block; font-size:12px; color:var(--neon-blue); letter-spacing:2px; margin-bottom:5px;">FULL ADDRESS</span><span style="font-size:18px; font-weight:bold; color:#fff;">${cleanAddress}</span></div>
+                            </div>
+                        </div>`;
+                    });
+                    
+                    html += `</div>`;
+                    terminal.innerHTML = html;
+                    return; // Stop here if JSON parsed successfully
+                }
+            } catch(e) {
+                // Not JSON, fall back to Old Logic (Text Parsing)
+                console.log("Parsing as text...");
+            }
+
+            // Case 2: OLD BOT (Text Format fallback)
+            let text = rawData.details || "";
+            html += `<div class="record-container"><div class="result-box">`;
+            
             const lines = text.split('\n');
             lines.forEach(line => {
                 if(line.trim() !== "" && !line.includes("Results") && !line.includes("━━")) {
@@ -347,11 +398,12 @@
                     else if(lower.includes("email")) { label = "EMAIL ID"; value = line.replace(/email:/gi, ""); isFull="full-width"; }
 
                     value = value.replace(/:/g, "").trim();
-
-                    html += `<div class="info-item ${isFull}"><span style="display:block; font-size:12px; color:var(--neon-blue); letter-spacing:2px; margin-bottom:5px;">${label}</span><span style="font-size:22px; font-weight:bold; color:#fff; word-break:break-all;">${value}</span></div>`;
+                    if(value) {
+                         html += `<div class="info-item ${isFull}"><span style="display:block; font-size:12px; color:var(--neon-blue); letter-spacing:2px; margin-bottom:5px;">${label}</span><span style="font-size:22px; font-weight:bold; color:#fff; word-break:break-all;">${value}</span></div>`;
+                    }
                 }
             });
-            html += `</div></div>`;
+            html += `</div></div></div>`;
             terminal.innerHTML = html;
         }
     </script>
