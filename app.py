@@ -1,87 +1,108 @@
-from flask import Flask, request, jsonify, render_template
-from telethon import TelegramClient
-from telethon.sessions import StringSession
-from flask_cors import CORS
+from flask import Flask, render_template, request, jsonify
+from pyrogram import Client, filters
 import asyncio
+import json
 import re
 
-# --- DETAILS ---
-api_id = 39183854
-api_hash = '7f8b6bfb1b72cab65e44c6cc450cd8f8'
-bot_username = '@whosim_bot'
+app = Flask(__name__)
 
-# Tumhari Generated String (Maine yaha laga di hai)
-session_string = '1BVtsOMQBuyNf34N8jj1kcjrHqHem9QC84Y-E3XG3yKPDTw7IcRqB2z8Wu5wc7uKDhLu9VB3QEfWEq7fdvKbK9OEeXav1okTF9lBUoifjF5xgs3pnTJf_DWKn_6lN8Awe-vXAU61brJdhlflxS7fjuAsf-XeMsi_9VC_-2sO43EjDtkklq1R3Il-MDthTTnOs5WyOnsAs3Fc-ddsutS6vd_z7Xxv_WRmke9SbcczQVGTL2N6sC35w6bsc8y_8sO-ActGQp57k8w3OB51HjScQN9P8NWkEclaJ976Y0gySocyTw7A9mDe2sad_w96AZWoemwb9nwL1-lFh_b-183IvIbo-WoCoVSw='
+# --- 🛠️ SETUP YOUR TELEGRAM CONFIG HERE ---
+API_ID = "YOUR_API_ID"        # my.telegram.org se milega
+API_HASH = "YOUR_API_HASH"    # my.telegram.org se milega
+SESSION_STRING = "YOUR_STRING_SESSION" # Pyrogram string session
 
-app = Flask(__name__, template_folder='.')
-CORS(app)
+# Initialize Client
+app_client = Client("my_bot", api_id=API_ID, api_hash=API_HASH, session_string=SESSION_STRING)
 
-# Async Loop Setup
-loop = asyncio.new_event_loop()
-asyncio.set_event_loop(loop)
-client = TelegramClient(StringSession(session_string), api_id, api_hash, loop=loop)
-
-def clean_and_format_text(text):
-    if not text: return ""
-    
-    # 1. Naam badalna
-    text = text.replace("MAXX", "FAIZAN AZIZI")
-    
-    # 2. "ID" ya "id" ko "Aadhaar Number" karna
-    text = re.sub(r'\bID\b', 'Aadhaar Number', text, flags=re.IGNORECASE)
-    text = re.sub(r'\bid\b', 'Aadhaar Number', text, flags=re.IGNORECASE)
-    
-    return text
-
-async def ask_telegram_final(mobile_number):
-    try:
-        # Check connection
-        if not client.is_connected():
-            await client.connect()
-        
-        # Message send karo
-        await client.send_message(bot_username, mobile_number)
-        
-        # Response ka wait karo (Max 30 seconds)
-        for i in range(30):
-            await asyncio.sleep(1) 
-            history = await client.get_messages(bot_username, limit=1)
+# --- HELPER: Message Sender & Receiver ---
+async def get_bot_response(chat_id, message_text, timeout=10):
+    async with app_client:
+        try:
+            # Message bhejo
+            sent = await app_client.send_message(chat_id, message_text)
             
-            if history:
-                msg = history[0]
-                content = msg.message or msg.caption or ""
-                
-                if not msg.out: # Agar message Bot ki taraf se aaya hai
-                    # Check conditions
-                    if "Results" in content or "Name" in content or "Mobile" in content:
-                        return clean_and_format_text(content)
-                    
-                    if len(content) > 15 and "Search" not in content and "Wait" not in content:
-                        return clean_and_format_text(content)
-
-        return "Timeout: Data not found or Bot is slow."
-    except Exception as e:
-        return f"System Error: {str(e)}"
+            # Response ka wait karo
+            response = None
+            async for message in app_client.get_chat_history(chat_id, limit=1):
+                # Check karo ki ye naya message hai (hamare bhejne ke baad ka)
+                if message.id > sent.id:
+                    response = message.text
+                    break
+            
+            # Agar turant nahi aaya, thoda wait karke retry karo
+            if not response:
+                await asyncio.sleep(timeout)
+                async for message in app_client.get_chat_history(chat_id, limit=1):
+                    if message.id > sent.id:
+                        response = message.text
+                        break
+            
+            return response
+        except Exception as e:
+            print(f"Error fetching from {chat_id}: {e}")
+            return None
 
 @app.route('/')
 def home():
     return render_template('index.html')
 
+# --- 📱 MOBILE SEARCH ROUTE ---
 @app.route('/get-info', methods=['POST'])
-def get_info():
+async def get_info():
     data = request.json
-    mobile_number = data.get('number')
-    if not mobile_number: return jsonify({'error': 'No Number'}), 400
+    number = data.get('number')
 
-    try:
-        # Client loop me run karo
-        result = client.loop.run_until_complete(ask_telegram_final(mobile_number))
-        return jsonify({'details': result})
-    except Exception as e:
-        print(f"ERROR: {e}")
-        return jsonify({'error': str(e)}), 500
+    if not number:
+        return jsonify({"error": "No number provided"})
+
+    # --- 1️⃣ PRIMARY: EPICMODERS ---
+    print(f"Trying Primary Bot (Epicmoders) for {number}...")
+    response_text = await get_bot_response("epicmoders", number)
+
+    # Check agar valid JSON response aaya hai
+    if response_text and "{" in response_text and "result" in response_text:
+        # Epicmoders ka response Clean JSON string me convert karo
+        # (Kabhi kabhi wo extra text bhejta hai, use hatana padega)
+        try:
+            # JSON start aur end dhundho
+            start_idx = response_text.find('{')
+            end_idx = response_text.rfind('}') + 1
+            json_str = response_text[start_idx:end_idx]
+            
+            # Validate JSON
+            json_data = json.loads(json_str)
+            return jsonify({"source": "epicmoders", "data": json_data})
+        except:
+            pass # JSON fail hua to Backup pe jayenge
+
+    # --- 2️⃣ BACKUP: WHOSIM (WHOSPY_BOT) ---
+    print(f"Primary failed. Switching to Backup (Whosim) for {number}...")
+    response_text_backup = await get_bot_response("whospy_bot", number)
+
+    if response_text_backup:
+        return jsonify({"source": "whosim", "details": response_text_backup})
+    else:
+        return jsonify({"error": "Data not found on both servers"})
+
+# --- 🚗 VEHICLE SEARCH ROUTE ---
+@app.route('/get-vehicle', methods=['POST'])
+async def get_vehicle():
+    data = request.json
+    number = data.get('number') # e.g., JH05DY9094
+
+    if not number:
+        return jsonify({"error": "No vehicle number provided"})
+
+    print(f"Searching Vehicle {number} on Epicmoders...")
+    
+    # Command format: /vehicle <number>
+    command = f"/vehicle {number}"
+    response_text = await get_bot_response("epicmoders", command)
+
+    if response_text:
+        return jsonify({"source": "epicmoders_vehicle", "details": response_text})
+    else:
+        return jsonify({"error": "Vehicle data not found"})
 
 if __name__ == '__main__':
-    print("Starting Server...")
-    client.start()
     app.run(debug=True, port=5000)
