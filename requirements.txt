@@ -1,5 +1,4 @@
-Flask
-flask-cors
-telethon
-gunicorn
+flask
+pyrogram
+tgcrypto
 asyncio
