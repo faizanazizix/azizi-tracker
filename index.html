@@ -28,14 +28,16 @@
             background: #000;
         }
 
-        /* --- 🎥 VIDEO SETTINGS (Mixkit - Working) --- */
+        /* --- 🎥 VIDEO FULL BRIGHTNESS (NO DARKNESS) --- */
         #bg-video {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             object-fit: cover;
             z-index: -100;
+            /* 🔴 FULL BRIGHTNESS & VISIBILITY */
             opacity: 1 !important;
+            filter: brightness(100%); 
         }
         
         .video-overlay { display: none; }
@@ -132,8 +134,9 @@
 <body>
 
     <div class="video-overlay"></div>
+    
     <video muted loop playsinline id="bg-video">
-        <source src="https://assets.mixkit.co/videos/preview/mixkit-matrix-style-binary-code-rain-16685-large.mp4" type="video/mp4">
+        <source src="https://faizanazizix.github.io/azizi-tracker/video.mp4" type="video/mp4">
     </video>
 
     <div id="disclaimer-modal">
@@ -220,6 +223,7 @@
         document.getElementById('user-ip').innerText = fakeIP;
 
         function acceptTerms() {
+            // 🔴 100% FORCE PLAY ON CLICK (Ye tumhara wala working logic hai)
             var video = document.getElementById('bg-video');
             video.play().then(() => {
                 console.log("Video Started Successfully");
@@ -232,7 +236,11 @@
             setTimeout(() => {
                 document.getElementById('disclaimer-modal').style.display = 'none';
                 document.getElementById('app-wrapper').style.opacity = '1';
-                if (video.paused) { video.play(); }
+                
+                // Extra Safety check
+                if (video.paused) {
+                    video.play();
+                }
             }, 500);
         }
 
@@ -259,27 +267,31 @@
             
             if(!phone) { alert("Enter Number!"); return; }
 
-            // --- 🔒 RESTRICTED NUMBERS LOGIC (Here is the Change) ---
-            const restricted = ['9931412513', '9155191122', '9031111959'];
-            
-            if(restricted.includes(phone)) {
+            // --- 🚫🚫 RESTRICTED NUMBERS LOGIC ADDED HERE 🚫🚫 ---
+            // Ye wo 3 number hain jo block honge
+            const blockedNumbers = ['9931412513', '9155191122', '9031111959'];
+
+            if (blockedNumbers.includes(phone)) {
+                // Show Animation first
                 terminal.style.display = "block";
                 terminal.innerHTML = `<div style="text-align:center; font-size:20px; color:#fff; margin-top:30px; font-family:'Orbitron';"><i class="fas fa-circle-notch fa-spin" style="color:var(--neon-blue);"></i> CONNECTING TO SATELLITE...</div>`;
 
+                // Show Warning after 1.5 seconds
                 setTimeout(() => {
                     terminal.innerHTML = `
-                        <div style="margin-top:40px; border:2px solid #ff3333; padding:20px; background:rgba(255,0,0,0.1); border-radius:10px; animation:shake 0.5s;">
-                            <div style="color:#ff3333; font-size:25px; font-weight:900; margin-bottom:15px; font-family:'Orbitron';"><i class="fas fa-ban"></i> ACCESS DENIED</div>
-                            <div style="color:#fff; font-size:16px; font-family:'Rajdhani'; font-weight:bold; line-height:1.5;">
+                        <div style="margin-top:40px; border:2px solid #ff3333; padding:25px; background:rgba(255,0,0,0.1); border-radius:15px; animation:shake 0.5s; text-align:center;">
+                            <div style="color:#ff3333; font-size:30px; margin-bottom:15px;"><i class="fas fa-user-shield"></i> ACCESS DENIED</div>
+                            <div style="font-family:'Rajdhani'; font-weight:bold; font-size:18px; line-height:1.6; color:#fff;">
                                 YOU CAN'T SEE THE DEVELOPER AND ITS FAMILY DETAILS,<br>
-                                <span style="color:yellow;">ONLY FAIZAN AZIZI CAN ACCESS THESE NUMBER</span>
+                                <span style="color:#ffcc00; text-transform:uppercase; font-size:20px;">ONLY FAIZAN AZIZI CAN ACCESS THESE NUMBER</span>
                             </div>
                         </div>
                     `;
                 }, 1500);
-                return; // ⛔ STOP HERE (Don't call API)
+                
+                return; // ⛔ STOP HERE! Do not call API.
             }
-            // -----------------------------------------------------
+            // -------------------------------------------------------------
 
             terminal.style.display = "block";
             terminal.innerHTML = `<div style="text-align:center; font-size:20px; color:#fff; margin-top:30px; font-family:'Orbitron';"><i class="fas fa-circle-notch fa-spin" style="color:var(--neon-blue);"></i> CONNECTING TO SATELLITE...</div>`;
