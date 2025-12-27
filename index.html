@@ -17,7 +17,7 @@
         .video-overlay { display: none; }
 
         #disclaimer-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: flex; justify-content: center; align-items: center; padding: 10px; }
-        .alert-box { width: 95%; max-width: 600px; max-height: 90vh; overflow-y: auto; background: rgba(10, 10, 10, 0.95); border: 2px solid var(--alert-red); box-shadow: 0 0 50px var(--alert-red); padding: 25px; text-align: center; border-radius: 10px; animation: shake 0.5s; }
+        .alert-box { width: 95%; max-width: 600px; max-height: 90vh; overflow-y: auto; background: rgba(10, 10, 10, 0.95); border: 2px solid var(--alert-red); box-shadow: 0 0 50px var(--alert-red); padding: 25px; text-align: center; border-radius: 10px; position: relative; animation: shake 0.5s; }
         @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 100% { transform: translateX(0); } }
         
         .gov-header { border-bottom: 2px solid #333; padding-bottom: 15px; margin-bottom: 20px; }
@@ -46,6 +46,7 @@
 
         .search-container { position: relative; width: 100%; max-width: 800px; margin-bottom: 40px; }
         .search-box { width: 100%; padding: 22px 22px 22px 70px; border-radius: 50px; border: 2px solid rgba(255,255,255,0.5); background: rgba(0,0,0,0.5); color: #fff; font-size: 22px; font-family: 'Rajdhani'; outline: none; backdrop-filter: blur(5px); }
+        .search-box:focus { border-color: var(--neon-blue); }
         .search-icon { position: absolute; left: 25px; top: 50%; transform: translateY(-50%); color: var(--neon-blue); font-size: 26px; }
         .search-btn { margin-top: 20px; padding: 18px 50px; border-radius: 50px; background: linear-gradient(90deg, #00c6ff, #0072ff); border: none; color: #fff; font-size: 20px; font-weight: 900; width: 100%; cursor: pointer; font-family: 'Orbitron'; letter-spacing: 2px; }
         
@@ -85,7 +86,7 @@
                 <p>
                     <strong>YOUR IP ADDRESS IS BEING LOGGED:</strong> <span id="user-ip" style="color:var(--alert-red); font-family:monospace; font-weight:bold;">FETCHING...</span>
                     <br><br>
-                    Use it at your own risk. The developer <strong>[FAIZAN AZIZI]</strong> will not be responsible.
+                    Use it at your own risk. The developer <strong>[FAIZAN AZIZI]</strong> will not be responsible for any legal inquiry, police action, or court cases filed against the user.
                 </p>
             </div>
             <button onclick="acceptTerms()" class="agree-btn">I ACCEPT THE RISK & PROCEED</button>
@@ -200,15 +201,24 @@
             
             function clean(text) {
                 if(!text) return "N/A";
-                // Replace HiTeckGroop specifically as requested
+                // Replace HiTeckGroop.in and others
                 return String(text).replace(/HiTeckGroop\.in|HiTeckGroop|Maxx|OWNER_004|@Danger_devil1917/gi, "FAIZAN AZIZI").replace(/!+/g, ", ");
             }
 
             let html = `<div style="margin-top:40px; border-top:1px solid rgba(255,255,255,0.2); padding-top:20px;">
                 <div style="text-align:center; color:var(--neon-blue); font-size:22px; font-weight:bold; margin-bottom:20px; font-family:'Orbitron';"><i class="fas fa-check-circle"></i> TARGET FOUND</div>`;
 
-            if(rawData.data && rawData.data.result) {
-                rawData.data.result.forEach((item, idx) => {
+            // --- 📱 EPICMODERS DATA HANDLER (Smart Path) ---
+            // Yahan change kiya hai: data.data.data.result (Nested JSON fix)
+            let finalResult = null;
+            if(rawData.data && rawData.data.data && rawData.data.data.result) {
+                 finalResult = rawData.data.data.result;
+            } else if (rawData.data && rawData.data.result) {
+                 finalResult = rawData.data.result;
+            }
+
+            if(finalResult) {
+                finalResult.forEach((item, idx) => {
                     let title = idx === 0 ? "OWNER DETAILS" : `LINKED CONNECTION ${idx}`;
                     html += `
                     <div class="record-container">
@@ -225,9 +235,9 @@
                     </div>`;
                 });
             } else {
+                // FALLBACK TEXT DISPLAY
                 let text = rawData.details || JSON.stringify(rawData);
                 text = clean(text).replace(/ID:/g, "AADHAAR NUMBER:");
-                
                 let lines = text.split('\n');
                 html += `<div class="record-container"><div class="result-box">`;
                 lines.forEach(line => {
