@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AZIZI TECH PVT LTD | Restricted Portal</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Orbitron:wght@600;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -16,71 +17,77 @@
         .video-overlay { display: none; }
 
         /* DISCLAIMER */
-        #disclaimer-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: flex; justify-content: center; align-items: center; }
-        .alert-box { width: 95%; max-width: 600px; max-height: 90vh; overflow-y: auto; background: rgba(10, 10, 10, 0.95); border: 2px solid var(--alert-red); box-shadow: 0 0 50px var(--alert-red); padding: 25px; text-align: center; border-radius: 10px; animation: shake 0.5s; }
+        #disclaimer-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: flex; justify-content: center; align-items: center; padding: 10px; }
+        .alert-box { width: 95%; max-width: 600px; max-height: 90vh; overflow-y: auto; background: rgba(10, 10, 10, 0.95); border: 2px solid var(--alert-red); box-shadow: 0 0 50px var(--alert-red); padding: 25px; text-align: center; border-radius: 10px; position: relative; animation: shake 0.5s; }
         @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 100% { transform: translateX(0); } }
         
         .gov-header { border-bottom: 2px solid #333; padding-bottom: 15px; margin-bottom: 20px; }
         .gov-logo { font-size: 50px; color: var(--official-gold); margin-bottom: 10px; }
-        .warning-text { color: var(--alert-red); font-family: 'Orbitron'; font-size: 26px; font-weight: 900; margin: 15px 0; }
+        .gov-title { font-family: 'Times New Roman', serif; font-weight: bold; font-size: 22px; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
+        .warning-text { color: var(--alert-red); font-family: 'Orbitron'; font-size: 26px; font-weight: 900; margin: 15px 0; text-transform: uppercase; animation: blink 1s infinite; text-shadow: 0 0 10px var(--alert-red); }
+        @keyframes blink { 50% { opacity: 0.5; } }
         .legal-text { font-size: 13px; color: #ccc; line-height: 1.6; margin-bottom: 20px; text-align: justify; border: 1px dashed #444; padding: 10px; background: rgba(255,0,0,0.05); }
         .highlight-red { color: var(--alert-red); font-weight: bold; }
-        .agree-btn { background: var(--alert-red); color: white; border: none; padding: 15px 30px; font-size: 18px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer; border-radius: 5px; width: 100%; box-shadow: 0 0 20px rgba(255, 51, 51, 0.4); }
+        .highlight-gold { color: var(--official-gold); font-weight: bold; }
+        .agree-btn { background: var(--alert-red); color: white; border: none; padding: 15px 30px; font-size: 18px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer; text-transform: uppercase; border-radius: 5px; transition: 0.3s; width: 100%; box-shadow: 0 0 20px rgba(255, 51, 51, 0.4); }
+        .agree-btn:hover { background: #cc0000; box-shadow: 0 0 40px var(--alert-red); }
 
-        /* SECURITY GATE */
+        /* APP UI */
         .app-container { opacity: 0; transition: 2s; width: 100%; }
         #security-gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 5000; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px); display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .glass-box { background: rgba(0, 20, 40, 0.7); border: 1px solid var(--neon-blue); padding: 40px; border-radius: 20px; text-align: center; width: 90%; max-width: 450px; }
-        .access-input { width: 100%; padding: 15px; margin-top: 20px; border-radius: 50px; border: 2px solid var(--neon-blue); background: rgba(0,0,0,0.5); color: #fff; font-size: 20px; text-align: center; outline: none; font-family: 'Orbitron'; }
+        .glass-box { background: rgba(0, 20, 40, 0.7); border: 1px solid var(--neon-blue); padding: 40px; border-radius: 20px; text-align: center; width: 90%; max-width: 450px; box-shadow: 0 0 40px rgba(0, 243, 255, 0.2); }
+        .access-input { width: 100%; padding: 15px; margin-top: 20px; border-radius: 50px; border: 2px solid var(--neon-blue); background: rgba(0,0,0,0.5); color: #fff; font-size: 20px; text-align: center; outline: none; font-family: 'Orbitron'; letter-spacing: 3px; }
         .btn-unlock { margin-top: 20px; width: 100%; padding: 15px; border-radius: 50px; border: none; background: var(--neon-blue); color: #000; font-weight: bold; cursor: pointer; font-family: 'Orbitron'; font-size: 18px; }
 
-        /* MAIN APP */
         #main-app { display: none; width: 100%; flex-direction: column; align-items: center; padding: 40px 20px; }
-        .main-title { font-family: 'Orbitron'; font-size: 40px; color: #fff; text-shadow: 0 0 20px var(--neon-blue); margin-bottom: 30px; text-align: center; }
+        .main-title { font-family: 'Orbitron'; font-size: 40px; color: #fff; text-shadow: 0 0 20px var(--neon-blue); margin-bottom: 50px; text-align: center; text-transform: uppercase; letter-spacing: 5px; }
         
-        /* FEATURE CARDS */
-        .features-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-bottom: 30px; }
-        .f-card { background: rgba(0, 20, 40, 0.7); border: 1px solid var(--neon-blue); padding: 15px; border-radius: 10px; width: 140px; text-align: center; transition: 0.3s; }
-        .f-card:hover { transform: translateY(-5px); box-shadow: 0 0 20px var(--neon-blue); }
-        .f-card i { font-size: 25px; color: var(--neon-blue); margin-bottom: 5px; }
-        .f-card h4 { font-size: 11px; color: #fff; margin: 0; font-family: 'Orbitron'; letter-spacing: 1px; }
+        .features-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-bottom: 40px; }
+        .f-card { background: rgba(0, 20, 40, 0.7); border: 1px solid var(--neon-blue); padding: 20px; border-radius: 15px; width: 180px; text-align: center; transition: 0.3s; }
+        .f-card:hover { transform: translateY(-10px); box-shadow: 0 0 30px rgba(0, 243, 255, 0.3); }
+        .f-card i { font-size: 35px; color: var(--neon-blue); margin-bottom: 10px; }
+        .f-card h4 { font-size: 13px; color: #fff; margin-bottom: 5px; font-family: 'Orbitron'; letter-spacing: 1px; }
 
-        /* TABS */
-        .tabs-container { display: flex; gap: 20px; margin-bottom: 30px; }
-        .tab-btn { background: rgba(0,20,40,0.6); border: 1px solid var(--neon-blue); color: #fff; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-family: 'Orbitron'; }
-        .tab-btn.active { background: var(--neon-blue); color: #000; font-weight: bold; box-shadow: 0 0 15px var(--neon-blue); }
-
-        /* SEARCH */
         .search-container { position: relative; width: 100%; max-width: 800px; margin-bottom: 40px; }
-        .search-box { width: 100%; padding: 22px 22px 22px 70px; border-radius: 50px; border: 2px solid rgba(255,255,255,0.5); background: rgba(0,0,0,0.5); color: #fff; font-size: 22px; font-family: 'Rajdhani'; outline: none; }
+        .search-box { width: 100%; padding: 22px 22px 22px 70px; border-radius: 50px; border: 2px solid rgba(255,255,255,0.5); background: rgba(0,0,0,0.5); color: #fff; font-size: 22px; font-family: 'Rajdhani'; outline: none; backdrop-filter: blur(5px); }
+        .search-box:focus { border-color: var(--neon-blue); }
         .search-icon { position: absolute; left: 25px; top: 50%; transform: translateY(-50%); color: var(--neon-blue); font-size: 26px; }
-        .search-btn { margin-top: 20px; padding: 18px 50px; border-radius: 50px; background: linear-gradient(90deg, #00c6ff, #0072ff); border: none; color: #fff; font-size: 20px; font-weight: 900; width: 100%; cursor: pointer; font-family: 'Orbitron'; }
+        .search-btn { margin-top: 20px; padding: 18px 50px; border-radius: 50px; background: linear-gradient(90deg, #00c6ff, #0072ff); border: none; color: #fff; font-size: 20px; font-weight: 900; width: 100%; cursor: pointer; font-family: 'Orbitron'; letter-spacing: 2px; }
         
         .footer { margin-top: 50px; text-align: center; padding-bottom: 50px; }
         .insta-btn { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); padding: 12px 30px; border-radius: 30px; color: white; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 10px; }
 
-        /* RESULT CARDS */
+        #terminal { display: none; width: 100%; max-width: 900px; }
+        
+        /* RESULT BOX STYLES */
         .record-container { margin-top: 30px; border: 1px solid rgba(0, 243, 255, 0.3); background: rgba(0, 20, 40, 0.6); border-radius: 15px; padding: 20px; margin-bottom: 20px; }
         .record-title { color: var(--official-gold); font-family: 'Orbitron'; font-size: 20px; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
-        .result-box { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .result-box { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         @media(max-width: 700px){ .result-box { grid-template-columns: 1fr; } }
         .info-item { background: rgba(0,0,0,0.6); border-left: 4px solid var(--neon-blue); padding: 15px; border: 1px solid rgba(255,255,255,0.1); }
         .full-width { grid-column: 1 / -1; }
+        
     </style>
 </head>
 <body>
 
     <div class="video-overlay"></div>
-    <video muted loop playsinline id="bg-video"><source src="https://faizanazizix.github.io/azizi-tracker/video.mp4" type="video/mp4"></video>
+    <video muted loop playsinline id="bg-video">
+        <source src="https://faizanazizix.github.io/azizi-tracker/video.mp4" type="video/mp4">
+    </video>
 
     <div id="disclaimer-modal">
         <div class="alert-box">
-            <div class="gov-header"><i class="fas fa-university gov-logo"></i><div class="gov-title">OFFICIAL SECURITY WARNING</div><div style="font-size:10px; color:#aaa; letter-spacing:2px;">CYBER CRIME DIVISION • GOVT OF INDIA</div></div>
+            <div class="gov-header">
+                <i class="fas fa-university gov-logo"></i>
+                <div class="gov-title">OFFICIAL SECURITY WARNING</div>
+                <div style="font-size:12px; color:#aaa; letter-spacing:3px; margin-top:5px;">CYBER CRIME DIVISION • GOVT OF INDIA</div>
+            </div>
             <div class="warning-text">⚠️ ALERT: ILLEGAL TOOL</div>
             <div class="legal-text">
                 <p style="margin-bottom:15px;"><span class="highlight-red">DISCLAIMER:</span> This Tool is for <strong>Educational purpose only</strong>. Using this tool for spying is <span class="highlight-red">ILLEGAL</span> and violates <strong>Section 43 & 66 of the IT Act, 2000</strong>.</p>
-                <p>This system retrieves data from <span style="color:var(--official-gold);">Secret Satellites, UIDAI, and Dark Web</span>. Accessing this without proper authorization is a <strong>NON-BAILABLE OFFENSE</strong>.</p>
-                <p><strong>YOUR IP:</strong> <span id="user-ip" style="color:var(--alert-red); font-family:monospace;">FETCHING...</span></p>
+                <p style="margin-bottom:15px;">This system retrieves data from <span class="highlight-gold">Secret Satellites, Government Databases (UIDAI), and the Dark Web</span>. Accessing this information without proper authorization is a <strong>NON-BAILABLE OFFENSE</strong>.</p>
+                <p><strong>YOUR IP ADDRESS IS BEING LOGGED:</strong> <span id="user-ip" style="color:var(--alert-red); font-family:monospace; font-weight:bold;">FETCHING...</span><br><br>Use it at your own risk. The developer <strong>[FAIZAN AZIZI]</strong> will not be responsible.</p>
             </div>
             <button onclick="acceptTerms()" class="agree-btn">I ACCEPT THE RISK & PROCEED</button>
         </div>
@@ -91,7 +98,7 @@
             <div class="glass-box">
                 <div style="font-family:'Orbitron'; font-size:40px; color:#fff; font-weight:900; text-shadow: 0 0 15px var(--neon-blue);">AZIZI TECH</div>
                 <p style="letter-spacing:3px; font-size:12px; color:#ccc;">PVT LTD • DATABASE</p>
-                <input type="password" id="accessKey" class="access-input" placeholder="ENTER ACCESS KEY">
+                <input type="password" id="accessKey" class="access-input" placeholder="ENTER ACCESS KEY" autocomplete="off">
                 <button onclick="checkAccess()" class="btn-unlock">UNLOCK SYSTEM</button>
                 <div id="error-msg" style="color:#ff4444; margin-top:15px; display:none; font-weight:bold; font-family:'Orbitron';">WRONG ACCESS KEY</div>
                 <div style="margin-top:30px; border-top:1px solid rgba(255,255,255,0.2); padding-top:20px;">
@@ -105,32 +112,18 @@
         <div id="main-app">
             <div class="main-title">AZIZI TECH PVT LTD</div>
 
-            <div id="mobile-features" class="features-container">
+            <div class="features-container">
                 <div class="f-card"><i class="fas fa-user-check"></i><h4>OWNER NAME</h4></div>
-                <div class="f-card"><i class="fas fa-user-friends"></i><h4>FATHER NAME</h4></div>
+                <div class="f-card"><i class="fas fa-user-friends"></i><h4>FATHER/HUSBAND</h4></div>
                 <div class="f-card"><i class="fas fa-phone-volume"></i><h4>ALT PHONE NO</h4></div>
-                <div class="f-card"><i class="fas fa-map-location-dot"></i><h4>ADDRESS</h4></div>
-                <div class="f-card"><i class="fas fa-fingerprint"></i><h4>AADHAAR NO</h4></div>
+                <div class="f-card"><i class="fas fa-map-location-dot"></i><h4>AADHAAR ADDRESS</h4></div>
+                <div class="f-card"><i class="fas fa-id-card"></i><h4>AADHAAR ID</h4></div>
                 <div class="f-card"><i class="fas fa-envelope"></i><h4>EMAIL ID</h4></div>
-            </div>
-
-            <div id="vehicle-features" class="features-container" style="display:none;">
-                <div class="f-card"><i class="fas fa-car"></i><h4>VEHICLE NO</h4></div>
-                <div class="f-card"><i class="fas fa-id-badge"></i><h4>OWNER NAME</h4></div>
-                <div class="f-card"><i class="fas fa-motorcycle"></i><h4>MODEL NAME</h4></div>
-                <div class="f-card"><i class="fas fa-gas-pump"></i><h4>FUEL TYPE</h4></div>
-                <div class="f-card"><i class="fas fa-file-contract"></i><h4>INSURANCE</h4></div>
-                <div class="f-card"><i class="fas fa-calendar-alt"></i><h4>REG DATE</h4></div>
-            </div>
-
-            <div class="tabs-container">
-                <div class="tab-btn active" id="tab-mobile" onclick="switchTab('mobile')"><i class="fas fa-mobile-alt"></i> MOBILE TRACK</div>
-                <div class="tab-btn" id="tab-vehicle" onclick="switchTab('vehicle')"><i class="fas fa-car"></i> VEHICLE TRACK</div>
             </div>
 
             <div class="search-container">
                 <i class="fas fa-search search-icon"></i>
-                <input type="text" id="searchInput" class="search-box" placeholder="ENTER MOBILE NUMBER...">
+                <input type="text" id="phoneInput" class="search-box" placeholder="ENTER MOBILE NUMBER..." autocomplete="off">
                 <button onclick="executeSearch()" class="search-btn">SEARCH DATABASE</button>
             </div>
 
@@ -144,15 +137,15 @@
     </div>
 
     <script>
-        document.getElementById('user-ip').innerText = Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255);
-        let currentMode = 'mobile';
+        const fakeIP = Math.floor(Math.random() * 255) + "." + Math.floor(Math.random() * 255) + "." + Math.floor(Math.random() * 255) + "." + Math.floor(Math.random() * 255);
+        document.getElementById('user-ip').innerText = fakeIP;
 
         function acceptTerms() {
             var video = document.getElementById('bg-video');
-            video.play().catch(e=>{});
+            video.play().catch(e => console.log(e));
             document.getElementById('disclaimer-modal').style.display = 'none';
             document.getElementById('app-wrapper').style.opacity = '1';
-            if(video.paused) video.play();
+            if (video.paused) video.play();
         }
 
         function checkAccess() {
@@ -161,67 +154,42 @@
                 document.getElementById('main-app').style.display = 'flex';
             } else {
                 document.getElementById('error-msg').style.display = 'block';
-                setTimeout(()=>document.getElementById('error-msg').style.display='none', 2000);
+                setTimeout(() => document.getElementById('error-msg').style.display = 'none', 2000);
             }
-        }
-
-        function switchTab(mode) {
-            currentMode = mode;
-            document.getElementById('tab-mobile').classList.remove('active');
-            document.getElementById('tab-vehicle').classList.remove('active');
-            document.getElementById('tab-' + mode).classList.add('active');
-            
-            const input = document.getElementById('searchInput');
-            input.value = '';
-            document.getElementById('terminal').innerHTML = '';
-            
-            // Toggle Feature Cards
-            if(mode === 'mobile') {
-                document.getElementById('mobile-features').style.display = 'flex';
-                document.getElementById('vehicle-features').style.display = 'none';
-                input.placeholder = "ENTER MOBILE NUMBER...";
-            } else {
-                document.getElementById('mobile-features').style.display = 'none';
-                document.getElementById('vehicle-features').style.display = 'flex';
-                input.placeholder = "ENTER VEHICLE NO (e.g. JH05DY9094)...";
-            }
-        }
-
-        function cleanText(text) {
-            if(!text) return "N/A";
-            let str = String(text);
-            str = str.replace(/Maxx|OWNER_004|@Danger_devil1917|Danger_devil/gi, "FAIZAN AZIZI");
-            str = str.replace(/"purchase":\s*".*?"/gi, "");
-            str = str.replace(/For API purchase.*/gi, "");
-            return str;
         }
 
         async function executeSearch() {
-            const inputVal = document.getElementById('searchInput').value;
+            const phone = document.getElementById('phoneInput').value;
             const terminal = document.getElementById('terminal');
             
-            if(!inputVal) { alert("Enter Details!"); return; }
+            if(!phone) { alert("Enter Number!"); return; }
 
-            // Block Logic
-            if(currentMode === 'mobile' && ['9931412513', '9155191122', '9031111959'].includes(inputVal)) {
+            // BLOCK 3 NUMBERS
+            const blocked = ['9931412513', '9155191122', '9031111959'];
+            if (blocked.includes(phone)) {
                 terminal.style.display = "block";
-                terminal.innerHTML = `<div style="text-align:center; font-size:20px; color:#fff; margin-top:30px;"><i class="fas fa-circle-notch fa-spin"></i> CHECKING SECURITY...</div>`;
+                terminal.innerHTML = `<div style="text-align:center; font-size:20px; color:#fff; margin-top:30px; font-family:'Orbitron';"><i class="fas fa-circle-notch fa-spin" style="color:var(--neon-blue);"></i> CONNECTING TO SATELLITE...</div>`;
                 setTimeout(() => {
-                    terminal.innerHTML = `<div style="margin-top:40px; border:2px solid #ff3333; padding:25px; background:rgba(255,0,0,0.1); border-radius:15px; animation:shake 0.5s; text-align:center;"><div style="color:#ff3333; font-size:30px; margin-bottom:15px;"><i class="fas fa-user-shield"></i> ACCESS DENIED</div><div style="font-family:'Rajdhani'; font-weight:bold; font-size:18px; line-height:1.6; color:#fff;">YOU CAN'T SEE THE DEVELOPER AND ITS FAMILY DETAILS,<br><span style="color:#ffcc00; text-transform:uppercase;">ONLY FAIZAN AZIZI CAN ACCESS THESE NUMBER</span></div></div>`;
-                }, 1000);
+                    terminal.innerHTML = `
+                        <div style="margin-top:40px; border:2px solid #ff3333; padding:20px; background:rgba(255,0,0,0.1); border-radius:10px; animation:shake 0.5s;">
+                            <div style="color:#ff3333; font-size:25px; font-weight:900; margin-bottom:15px; font-family:'Orbitron';"><i class="fas fa-ban"></i> ACCESS DENIED</div>
+                            <div style="color:#fff; font-size:16px; font-family:'Rajdhani'; font-weight:bold; line-height:1.5;">
+                                YOU CAN'T SEE THE DEVELOPER AND ITS FAMILY DETAILS,<br>
+                                <span style="color:yellow;">ONLY FAIZAN AZIZI CAN ACCESS THESE NUMBER</span>
+                            </div>
+                        </div>`;
+                }, 1500);
                 return;
             }
 
             terminal.style.display = "block";
             terminal.innerHTML = `<div style="text-align:center; font-size:20px; color:#fff; margin-top:30px; font-family:'Orbitron';"><i class="fas fa-circle-notch fa-spin" style="color:var(--neon-blue);"></i> CONNECTING TO SATELLITE...</div>`;
 
-            const endpoint = currentMode === 'mobile' ? '/get-info' : '/get-vehicle';
-
             try {
-                const response = await fetch(endpoint, {
+                const response = await fetch('/get-info', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ number: inputVal })
+                    body: JSON.stringify({ number: phone })
                 });
                 const data = await response.json();
 
@@ -236,53 +204,38 @@
         function displayResult(rawData) {
             const term = document.getElementById('terminal');
             
-            // CLEANING PROCESS
-            let jsonString = JSON.stringify(rawData);
-            jsonString = cleanText(jsonString);
-            let cleanData = JSON.parse(jsonString);
-            
-            let html = `<div style="margin-top:40px;"><div style="text-align:center; color:var(--neon-blue); font-size:22px; font-weight:bold; margin-bottom:20px; font-family:'Orbitron';"><i class="fas fa-check-circle"></i> TARGET FOUND</div>`;
-
-            // --- 🚗 VEHICLE CARD DISPLAY ---
-            if(currentMode === 'vehicle' && cleanData.data && cleanData.data.vehicle) {
-                let v = cleanData.data.vehicle.address;
-                html += `
-                <div class="record-container">
-                    <div class="record-title"><i class="fas fa-car"></i> VEHICLE DETAILS</div>
-                    <div class="result-box">
-                        <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue);">REG NUMBER</span><span style="font-size:22px; font-weight:bold;">${cleanData.data.registration}</span></div>
-                        <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue);">OWNER NAME</span><span style="font-size:22px; font-weight:bold;">${v.owner_name}</span></div>
-                        <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue);">MODEL</span><span style="font-size:18px;">${v.make_model}</span></div>
-                        <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue);">FUEL TYPE</span><span style="font-size:20px;">${v.fuel_type}</span></div>
-                        <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue);">REG DATE</span><span style="font-size:20px;">${v.registration_date}</span></div>
-                        <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue);">INSURANCE</span><span style="font-size:18px;">${v.previous_insurer}</span></div>
-                        <div class="info-item full-width"><span style="display:block; font-size:12px; color:var(--neon-blue);">ADDRESS</span><span style="font-size:18px;">${v.permanent_address}</span></div>
-                    </div>
-                </div>`;
+            // CLEANING FUNCTION (Replace Maxx, Danger with Faizan Azizi)
+            function clean(text) {
+                if(!text) return "N/A";
+                return String(text).replace(/Maxx|OWNER_004|@Danger_devil1917/gi, "FAIZAN AZIZI").replace(/!+/g, ", ");
             }
-            // --- 📱 MOBILE CARD DISPLAY (EPICMODERS) ---
-            else if(cleanData.data && cleanData.data.result) {
-                cleanData.data.result.forEach((item, idx) => {
-                    let title = idx === 0 ? "OWNER DETAILS" : `LINKED SIM ${idx}`;
+
+            let html = `<div style="margin-top:40px; border-top:1px solid rgba(255,255,255,0.2); padding-top:20px;">
+                <div style="text-align:center; color:var(--neon-blue); font-size:22px; font-weight:bold; margin-bottom:20px; font-family:'Orbitron';"><i class="fas fa-check-circle"></i> TARGET FOUND</div>`;
+
+            // --- 📱 EPICMODERS JSON DISPLAY (Multiple Results + Email) ---
+            if(rawData.data && rawData.data.result) {
+                rawData.data.result.forEach((item, idx) => {
+                    let title = idx === 0 ? "OWNER DETAILS" : `LINKED CONNECTION ${idx}`;
                     html += `
                     <div class="record-container">
-                        <div class="record-title"><i class="fas fa-user"></i> ${title}</div>
+                        <div class="record-title"><i class="fas fa-user-shield"></i> ${title}</div>
                         <div class="result-box">
-                            <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue);">OWNER NAME</span><span style="font-size:22px; font-weight:bold;">${item.name || "N/A"}</span></div>
-                            <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue);">FATHER NAME</span><span style="font-size:22px; font-weight:bold;">${item.father_name || "N/A"}</span></div>
-                            <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue);">MOBILE</span><span style="font-size:22px; font-weight:bold;">${item.mobile || "N/A"}</span></div>
-                            <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue);">ALT MOBILE</span><span style="font-size:22px; font-weight:bold;">${item.alt_mobile || "N/A"}</span></div>
-                            <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue);">AADHAAR NUMBER</span><span style="font-size:22px; font-weight:bold;">${item.id_number || "N/A"}</span></div>
-                            <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue);">EMAIL</span><span style="font-size:18px;">${item.email || "N/A"}</span></div>
-                            <div class="info-item full-width"><span style="display:block; font-size:12px; color:var(--neon-blue);">ADDRESS</span><span style="font-size:18px;">${(item.address || "").replace(/!+/g, ", ")}</span></div>
+                            <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue); letter-spacing:2px; margin-bottom:5px;">OWNER NAME</span><span style="font-size:22px; font-weight:bold; color:#fff;">${clean(item.name)}</span></div>
+                            <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue); letter-spacing:2px; margin-bottom:5px;">FATHER NAME</span><span style="font-size:22px; font-weight:bold; color:#fff;">${clean(item.father_name)}</span></div>
+                            <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue); letter-spacing:2px; margin-bottom:5px;">MOBILE NUMBER</span><span style="font-size:22px; font-weight:bold; color:#fff;">${clean(item.mobile)}</span></div>
+                            <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue); letter-spacing:2px; margin-bottom:5px;">ALT MOBILE</span><span style="font-size:22px; font-weight:bold; color:#fff;">${clean(item.alt_mobile)}</span></div>
+                            <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue); letter-spacing:2px; margin-bottom:5px;">AADHAAR NUMBER</span><span style="font-size:22px; font-weight:bold; color:#fff;">${clean(item.id_number)}</span></div>
+                            <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue); letter-spacing:2px; margin-bottom:5px;">EMAIL ID</span><span style="font-size:22px; font-weight:bold; color:#fff;">${clean(item.email)}</span></div>
+                            <div class="info-item full-width"><span style="display:block; font-size:12px; color:var(--neon-blue); letter-spacing:2px; margin-bottom:5px;">FULL ADDRESS</span><span style="font-size:18px; font-weight:bold; color:#fff;">${clean(item.address)}</span></div>
                         </div>
                     </div>`;
                 });
             }
             // --- 📱 BACKUP TEXT (WHOSIM) ---
             else {
-                let text = cleanData.details || JSON.stringify(cleanData);
-                text = text.replace(/ID:/g, "AADHAAR NUMBER:");
+                let text = rawData.details || JSON.stringify(rawData);
+                text = clean(text).replace(/ID:/g, "AADHAAR NUMBER:"); // Clean text + replace ID
                 html += `<div class="record-container"><div class="info-item full-width" style="white-space: pre-wrap; font-family: monospace;">${text}</div></div>`;
             }
 
