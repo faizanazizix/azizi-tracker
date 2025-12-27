@@ -28,7 +28,7 @@
             background: #000;
         }
 
-        /* --- 🎥 VIDEO SETTINGS (EXACTLY AS YOU WANTED) --- */
+        /* --- 🎥 YOUR VIDEO SETTINGS --- */
         #bg-video {
             position: fixed;
             top: 0; left: 0;
@@ -217,12 +217,18 @@
         document.getElementById('user-ip').innerText = fakeIP;
 
         function acceptTerms() {
-            // Hide Disclaimer
+            // Hide Disclaimer Modal
             document.getElementById('disclaimer-modal').style.transition = 'opacity 0.5s';
             document.getElementById('disclaimer-modal').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('disclaimer-modal').style.display = 'none';
                 document.getElementById('app-wrapper').style.opacity = '1';
+                
+                // Extra Safety: Play video if paused
+                var video = document.getElementById('bg-video');
+                if (video.paused) {
+                    video.play();
+                }
             }, 500);
         }
 
