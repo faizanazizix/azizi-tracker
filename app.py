@@ -3,9 +3,10 @@ from pyrogram import Client
 import asyncio
 import json
 
-app = Flask(__name__)
+# 👇 CHANGE: template_folder='.' added to fix "TemplateNotFound" error
+app = Flask(__name__, template_folder='.')
 
-# --- 🔐 TUMHARI CREDENTIALS (READY TO USE) ---
+# --- 🔐 TUMHARI CREDENTIALS (PRE-FILLED) ---
 API_ID = 39183854
 API_HASH = "7f8b6bfb1b72cab65e44c6cc450cd8f8"
 SESSION_STRING = "BQJV5e4Alj1enIWcX8LODbh7r0COKClAAjmDFI-w1gV4QbLTPjdL1LsYgzX2Cwdw1D0PxDHlhl2wSpLW2vdJFFr_3_gWdzKqDep4pY2AZx4wwI7ooHkfNl_-SPuA1NQOw8p5VIhoR2m6-VET_QBvm37gU0UmoecNhsZLQDDsye2vrik9LvjtLdOagKN2aCsNXrRmfgeLwCi8EhOXY5IhOyH0N9vGCR66tu3XQ9Jb_HG71QQ6dxYSr9szlcjy32b096trb3yIrTr1R2i-uK7mmcwIqcROaLjHrtmNJyUMV3FawuPmHgV8T1YYbakUyY7bMtirZTYjqJ0lAbXF3LBjVMU_uKVqBAAAAAG0950mAA"
