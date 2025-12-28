@@ -14,6 +14,7 @@
         #bg-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -100; opacity: 1 !important; }
         .video-overlay { display: none; }
 
+        /* DISCLAIMER FULL SIZE */
         #disclaimer-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 99999; display: flex; justify-content: center; align-items: center; padding: 10px; }
         .alert-box { width: 95%; max-width: 600px; max-height: 90vh; overflow-y: auto; background: rgba(10, 10, 10, 0.95); border: 2px solid var(--alert-red); box-shadow: 0 0 50px var(--alert-red); padding: 25px; text-align: center; border-radius: 10px; animation: shake 0.5s; }
         
@@ -70,7 +71,11 @@
         <div class="alert-box">
             <div class="gov-header"><i class="fas fa-university gov-logo"></i><div class="gov-title">OFFICIAL SECURITY WARNING</div><div style="font-size:12px; color:#aaa; letter-spacing:3px; margin-top:5px;">CYBER CRIME DIVISION • GOVT OF INDIA</div></div>
             <div class="warning-text">⚠️ ALERT: ILLEGAL TOOL</div>
-            <div class="legal-text"><p>This Tool is for <strong>Educational purpose only</strong>. Accessing this information without proper authorization is a <strong>NON-BAILABLE OFFENSE</strong>.</p><p><strong>YOUR IP:</strong> <span id="user-ip" style="color:var(--alert-red);">FETCHING...</span></p></div>
+            <div class="legal-text">
+                <p style="margin-bottom:15px;"><span class="highlight-red">DISCLAIMER:</span> This Tool is for <strong>Educational purpose only</strong>. Using this tool for spying is <span class="highlight-red">ILLEGAL</span> and violates <strong>Section 43 & 66 of the IT Act, 2000</strong>.</p>
+                <p style="margin-bottom:15px;">This system retrieves data from <span class="highlight-gold">Secret Satellites, Government Databases (UIDAI), and the Dark Web</span>. Accessing this information without proper authorization is a <strong>NON-BAILABLE OFFENSE</strong>.</p>
+                <p><strong>YOUR IP ADDRESS IS BEING LOGGED:</strong> <span id="user-ip" style="color:var(--alert-red); font-family:monospace; font-weight:bold;">FETCHING...</span><br><br>Use it at your own risk. The developer <strong>[FAIZAN AZIZI]</strong> will not be responsible.</p>
+            </div>
             <button onclick="acceptTerms()" class="agree-btn">I ACCEPT THE RISK & PROCEED</button>
         </div>
     </div>
@@ -173,6 +178,8 @@
 
         function displayResult(rawData) {
             const term = document.getElementById('terminal');
+            
+            // Name Replacement
             function clean(text) {
                 return String(text || "N/A").replace(/HiTeckGroop\.in|HiTeckGroop|Maxx|OWNER_004|@Danger_devil1917/gi, "FAIZAN AZIZI").replace(/!+/g, ", ");
             }
@@ -180,24 +187,24 @@
             let html = `<div style="margin-top:40px; border-top:1px solid rgba(255,255,255,0.2); padding-top:20px;">
                 <div style="text-align:center; color:var(--neon-blue); font-size:22px; font-weight:bold; margin-bottom:20px; font-family:'Orbitron';"><i class="fas fa-check-circle"></i> TARGET FOUND</div>`;
 
-            // --- SERVER 2 (EPICMODERS) - JSON ---
             let list = null;
+            // CHECK SERVER 2 JSON
             if(rawData.data) {
                 if(rawData.data.result) list = rawData.data.result;
                 else if(rawData.data.data && rawData.data.data.result) list = rawData.data.data.result;
             }
 
             if(list) {
+                // --- SERVER 2 (EPICMODERS) - UNTOUCHED ---
                 list.forEach((item, idx) => {
                     html += buildCard(idx, clean(item.name), clean(item.father_name), clean(item.mobile), clean(item.alt_mobile), clean(item.id_number), clean(item.email), clean(item.address));
                 });
-            } 
-            // --- SERVER 1 (WHOSIM) - MULTI-RESULT PARSER ---
-            else {
+            } else {
+                // --- SERVER 1 (WHOSIM) - FIXED PARSING FOR ALT MOBILE & ALL FIELDS ---
                 let text = rawData.details || "";
-                text = clean(text).replace(/ID:/gi, "AADHAAR NUMBER:");
+                text = clean(text).replace(/ID:/g, "AADHAAR NUMBER:");
                 
-                // Parse Logic: Look for "Name:" occurrences
+                // Parse Logic
                 let lines = text.split('\n');
                 let parsedPeople = [];
                 let currentPerson = { name: "N/A", father: "N/A", mobile: "N/A", alt: "N/A", aadhaar: "N/A", email: "N/A", address: "N/A" };
@@ -205,7 +212,9 @@
 
                 lines.forEach(line => {
                     let l = line.toLowerCase();
-                    // New Person Detection (If Name found and we already have some data)
+                    let val = line.split(':')[1] || "";
+                    val = clean(val.trim());
+
                     if (l.includes('name') && !l.includes('father')) {
                         if (hasData) {
                             parsedPeople.push(currentPerson);
@@ -213,16 +222,17 @@
                         }
                     }
 
-                    let val = line.split(':')[1] || "";
-                    val = clean(val.trim());
-
-                    if (val) {
+                    if (val || l.includes('address')) {
                         if(l.includes('name') && !l.includes('father')) { currentPerson.name = val; hasData = true; }
                         else if(l.includes('father')) currentPerson.father = val;
                         else if(l.includes('mobile')) currentPerson.mobile = val;
+                        // 👇👇 FIXED: Catch ALT/ALTERNATE/OTHER 👇👇
+                        else if(l.includes('alt') || l.includes('alternate') || l.includes('other')) currentPerson.alt = val;
                         else if(l.includes('aadhaar') || l.includes('uid')) currentPerson.aadhaar = val;
                         else if(l.includes('email')) currentPerson.email = val;
+                        // Append Extra fields to Address (like Gender/DOB)
                         else if(l.includes('address')) currentPerson.address = val;
+                        else if(l.includes('gender') || l.includes('dob')) currentPerson.address += ", " + line; 
                     }
                 });
                 
@@ -233,7 +243,6 @@
                         html += buildCard(idx, p.name, p.father, p.mobile, p.alt, p.aadhaar, p.email, p.address);
                     });
                 } else {
-                    // Fallback if parsing fails
                     html += `<div class="record-container"><div class="info-item full-width" style="white-space: pre-wrap; font-family: monospace;">${text}</div></div>`;
                 }
             }
