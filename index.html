@@ -161,8 +161,19 @@
                 return;
             }
 
+            // --- 🚀 NEW LOADING ANIMATION HERE 🚀 ---
             terminal.style.display = "block";
-            terminal.innerHTML = `<div style="text-align:center; font-size:20px; color:#fff; margin-top:30px;"><i class="fas fa-circle-notch fa-spin"></i> FETCHING FROM ${currentServer.toUpperCase()}...</div>`;
+            terminal.innerHTML = `<div style="text-align:center; font-size:20px; color:#fff; margin-top:30px; font-family:'Orbitron';"><i class="fas fa-satellite-dish fa-spin" style="color:var(--neon-blue);"></i> CONNECTING TO SATELLITE...</div>`;
+
+            // 1.5s baad Change Text
+            setTimeout(() => {
+                terminal.innerHTML = `<div style="text-align:center; font-size:20px; color:#fff; margin-top:30px; font-family:'Orbitron';"><i class="fas fa-database fa-pulse" style="color:var(--official-gold);"></i> FETCHING DATA FROM GOVERNMENT DATABASE...</div>`;
+            }, 1500);
+
+            // 3s baad Change Text
+            setTimeout(() => {
+                terminal.innerHTML = `<div style="text-align:center; font-size:20px; color:#fff; margin-top:30px; font-family:'Orbitron';"><i class="fas fa-user-secret" style="color:var(--alert-red);"></i> ACCESSING DARKWEB...</div>`;
+            }, 3000);
 
             try {
                 const response = await fetch('/get-info', {
@@ -171,15 +182,18 @@
                     body: JSON.stringify({ number: phone, server: currentServer })
                 });
                 const data = await response.json();
-                if (data.data || data.details) displayResult(data);
-                else terminal.innerHTML = `<div style="text-align:center; color:#ff4444; margin-top:30px;">DATA NOT FOUND</div>`;
+                
+                // 4s baad result dikhao (taaki animation dikhe)
+                setTimeout(() => {
+                    if (data.data || data.details) displayResult(data);
+                    else terminal.innerHTML = `<div style="text-align:center; color:#ff4444; margin-top:30px;">DATA NOT FOUND</div>`;
+                }, 4000);
+
             } catch (e) { terminal.innerHTML = `<div style="text-align:center; color:#ff4444; margin-top:30px;">SERVER ERROR</div>`; }
         }
 
         function displayResult(rawData) {
             const term = document.getElementById('terminal');
-            
-            // Name Replacement
             function clean(text) {
                 return String(text || "N/A").replace(/HiTeckGroop\.in|HiTeckGroop|Maxx|OWNER_004|@Danger_devil1917/gi, "FAIZAN AZIZI").replace(/!+/g, ", ");
             }
@@ -188,23 +202,20 @@
                 <div style="text-align:center; color:var(--neon-blue); font-size:22px; font-weight:bold; margin-bottom:20px; font-family:'Orbitron';"><i class="fas fa-check-circle"></i> TARGET FOUND</div>`;
 
             let list = null;
-            // CHECK SERVER 2 JSON
             if(rawData.data) {
                 if(rawData.data.result) list = rawData.data.result;
                 else if(rawData.data.data && rawData.data.data.result) list = rawData.data.data.result;
             }
 
             if(list) {
-                // --- SERVER 2 (EPICMODERS) - UNTOUCHED ---
                 list.forEach((item, idx) => {
                     html += buildCard(idx, clean(item.name), clean(item.father_name), clean(item.mobile), clean(item.alt_mobile), clean(item.id_number), clean(item.email), clean(item.address));
                 });
             } else {
-                // --- SERVER 1 (WHOSIM) - FIXED PARSING FOR ALT MOBILE & ALL FIELDS ---
+                // --- SERVER 1 (WHOSIM) PARSER FIXED ---
                 let text = rawData.details || "";
                 text = clean(text).replace(/ID:/g, "AADHAAR NUMBER:");
                 
-                // Parse Logic
                 let lines = text.split('\n');
                 let parsedPeople = [];
                 let currentPerson = { name: "N/A", father: "N/A", mobile: "N/A", alt: "N/A", aadhaar: "N/A", email: "N/A", address: "N/A" };
@@ -226,11 +237,9 @@
                         if(l.includes('name') && !l.includes('father')) { currentPerson.name = val; hasData = true; }
                         else if(l.includes('father')) currentPerson.father = val;
                         else if(l.includes('mobile')) currentPerson.mobile = val;
-                        // 👇👇 FIXED: Catch ALT/ALTERNATE/OTHER 👇👇
                         else if(l.includes('alt') || l.includes('alternate') || l.includes('other')) currentPerson.alt = val;
                         else if(l.includes('aadhaar') || l.includes('uid')) currentPerson.aadhaar = val;
                         else if(l.includes('email')) currentPerson.email = val;
-                        // Append Extra fields to Address (like Gender/DOB)
                         else if(l.includes('address')) currentPerson.address = val;
                         else if(l.includes('gender') || l.includes('dob')) currentPerson.address += ", " + line; 
                     }
