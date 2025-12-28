@@ -28,24 +28,25 @@ async def communicate_with_bot(target_bot, message_text, mode):
     async with Client("my_bot", api_id=API_ID, api_hash=API_HASH, session_string=SESSION_STRING) as app_client:
         try:
             sent = await app_client.send_message(target_bot, message_text)
+            
             best_response = None
-            wait_time = 60 if mode == "server2" else 30 
+            wait_time = 60 if mode == "server2" else 20 
             
             for i in range(wait_time): 
                 async for message in app_client.get_chat_history(target_bot, limit=5):
                     if message.id > sent.id:
                         text = message.text or message.caption or ""
                         
-                        # SERVER 2 (EPICMODERS) - NO TOUCH
+                        # --- SERVER 2 (EPICMODERS) - NO TOUCH ---
                         if mode == "server2":
                             if "getting information" in text.lower() or "please wait" in text.lower(): continue
                             if '"result"' in text or "'result'" in text: return text
                             if "{" in text and "}" in text: best_response = text
                         
-                        # SERVER 1 (WHOSIM)
+                        # --- SERVER 1 (WHOSIM) - FIXED ---
                         else:
-                            # Whosim text me result bhejta hai, use turant pakad lo
-                            if len(text) > 20 and "search" not in text.lower(): 
+                            # Agar text khali nahi hai, to return kar do. Koi filter mat lagao.
+                            if text and len(text) > 5: 
                                 return text 
 
                 if best_response and i > 5: return best_response
@@ -81,7 +82,7 @@ def get_info():
                 else:
                     return jsonify({"source": "epicmoders", "details": response_text})
             else:
-                # Server 1 text return karega
+                # Server 1 Simple Text Return
                 return jsonify({"source": "whosim", "details": response_text})
 
         return jsonify({"error": "Data not found"})
