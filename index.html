@@ -14,9 +14,10 @@
         #bg-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -100; opacity: 1 !important; filter: brightness(100%); }
         .video-overlay { display: none; }
 
-        /* FULL DISCLAIMER RESTORED */
+        /* DISCLAIMER */
         #disclaimer-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: flex; justify-content: center; align-items: center; padding: 10px; }
         .alert-box { width: 95%; max-width: 600px; max-height: 90vh; overflow-y: auto; background: rgba(10, 10, 10, 0.95); border: 2px solid var(--alert-red); box-shadow: 0 0 50px var(--alert-red); padding: 25px; text-align: center; border-radius: 10px; animation: shake 0.5s; }
+        @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 100% { transform: translateX(0); } }
         
         .gov-header { border-bottom: 2px solid #333; padding-bottom: 15px; margin-bottom: 20px; }
         .gov-logo { font-size: 50px; color: var(--official-gold); margin-bottom: 10px; }
@@ -26,6 +27,7 @@
         .highlight-red { color: var(--alert-red); font-weight: bold; }
         .agree-btn { background: var(--alert-red); color: white; border: none; padding: 15px 30px; font-size: 18px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer; text-transform: uppercase; border-radius: 5px; transition: 0.3s; width: 100%; box-shadow: 0 0 20px rgba(255, 51, 51, 0.4); }
 
+        /* APP UI */
         .app-container { opacity: 0; transition: 2s; width: 100%; }
         #security-gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 5000; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px); display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .glass-box { background: rgba(0, 20, 40, 0.7); border: 1px solid var(--neon-blue); padding: 40px; border-radius: 20px; text-align: center; width: 90%; max-width: 450px; box-shadow: 0 0 40px rgba(0, 243, 255, 0.2); }
@@ -33,23 +35,31 @@
         .btn-unlock { margin-top: 20px; width: 100%; padding: 15px; border-radius: 50px; border: none; background: var(--neon-blue); color: #000; font-weight: bold; cursor: pointer; font-family: 'Orbitron'; font-size: 18px; }
 
         #main-app { display: none; width: 100%; flex-direction: column; align-items: center; padding: 40px 20px; }
-        .main-title { font-family: 'Orbitron'; font-size: 40px; color: #fff; text-shadow: 0 0 20px var(--neon-blue); margin-bottom: 30px; text-align: center; text-transform: uppercase; letter-spacing: 5px; }
+        .main-title { font-family: 'Orbitron'; font-size: 40px; color: #fff; text-shadow: 0 0 20px var(--neon-blue); margin-bottom: 50px; text-align: center; text-transform: uppercase; letter-spacing: 5px; }
         
         .features-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-bottom: 40px; }
         .f-card { background: rgba(0, 20, 40, 0.7); border: 1px solid var(--neon-blue); padding: 20px; border-radius: 15px; width: 180px; text-align: center; transition: 0.3s; }
+        .f-card:hover { transform: translateY(-10px); box-shadow: 0 0 30px rgba(0, 243, 255, 0.3); }
         .f-card i { font-size: 35px; color: var(--neon-blue); margin-bottom: 10px; }
         .f-card h4 { font-size: 13px; color: #fff; margin-bottom: 5px; font-family: 'Orbitron'; letter-spacing: 1px; }
 
+        /* TABS */
         .tabs-container { display: flex; gap: 20px; margin-bottom: 30px; }
         .tab-btn { background: rgba(0,20,40,0.6); border: 1px solid var(--neon-blue); color: #fff; padding: 12px 30px; border-radius: 5px; cursor: pointer; font-family: 'Orbitron'; font-size: 14px; transition: 0.3s; }
         .tab-btn.active { background: var(--neon-blue); color: #000; font-weight: bold; box-shadow: 0 0 20px var(--neon-blue); transform: scale(1.05); }
 
         .search-container { position: relative; width: 100%; max-width: 800px; margin-bottom: 40px; }
         .search-box { width: 100%; padding: 22px 22px 22px 70px; border-radius: 50px; border: 2px solid rgba(255,255,255,0.5); background: rgba(0,0,0,0.5); color: #fff; font-size: 22px; font-family: 'Rajdhani'; outline: none; backdrop-filter: blur(5px); }
-        .search-btn { margin-top: 20px; padding: 18px 50px; border-radius: 50px; background: linear-gradient(90deg, #00c6ff, #0072ff); border: none; color: #fff; font-size: 20px; font-weight: 900; width: 100%; cursor: pointer; font-family: 'Orbitron'; letter-spacing: 2px; }
+        .search-box:focus { border-color: var(--neon-blue); }
         .search-icon { position: absolute; left: 25px; top: 50%; transform: translateY(-50%); color: var(--neon-blue); font-size: 26px; }
+        .search-btn { margin-top: 20px; padding: 18px 50px; border-radius: 50px; background: linear-gradient(90deg, #00c6ff, #0072ff); border: none; color: #fff; font-size: 20px; font-weight: 900; width: 100%; cursor: pointer; font-family: 'Orbitron'; letter-spacing: 2px; }
+        
+        .footer { margin-top: 50px; text-align: center; padding-bottom: 50px; }
+        .insta-btn { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); padding: 12px 30px; border-radius: 30px; color: white; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 10px; }
 
-        /* CAMERA SPY UI */
+        #terminal { display: none; width: 100%; max-width: 900px; }
+        
+        /* CAMERA SPY STYLES */
         #camera-section { display: none; width: 100%; max-width: 800px; flex-direction: column; align-items: center; }
         .spy-log { background: rgba(0,0,0,0.7); border: 1px solid var(--neon-blue); padding: 15px; width: 100%; border-radius: 10px; margin-bottom: 20px; font-family: monospace; color: #0f0; max-height: 200px; overflow-y: auto; text-align: left; }
         .file-upload-btn { background: #333; color: white; padding: 15px; border-radius: 10px; border: 1px dashed var(--neon-blue); cursor: pointer; width: 100%; text-align: center; margin-bottom: 15px; }
@@ -57,12 +67,12 @@
         .photo-card { background: #111; padding: 5px; border: 1px solid #333; border-radius: 5px; text-align: center; }
         .photo-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 3px; }
         .dl-btn { display: block; background: var(--neon-blue); color: #000; padding: 5px; margin-top: 5px; text-decoration: none; font-weight: bold; font-size: 12px; border-radius: 3px; cursor: pointer; }
-
-        .footer { margin-top: 50px; text-align: center; padding-bottom: 50px; }
-        .insta-btn { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); padding: 12px 30px; border-radius: 30px; color: white; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 10px; }
-
-        #terminal { display: none; width: 100%; max-width: 900px; }
         
+        /* NEW LINK CARD STYLE */
+        .link-card { background: rgba(0, 20, 40, 0.9); border: 1px solid var(--official-gold); padding: 15px; border-radius: 10px; margin-top: 15px; text-align: center; width: 100%; }
+        .link-text { color: var(--official-gold); font-family: monospace; font-size: 16px; word-break: break-all; margin-bottom: 10px; display: block; }
+        .copy-btn { background: var(--official-gold); color: black; border: none; padding: 8px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+
         .record-container { margin-top: 30px; border: 1px solid rgba(0, 243, 255, 0.3); background: rgba(0, 20, 40, 0.6); border-radius: 15px; padding: 20px; margin-bottom: 20px; }
         .record-title { color: var(--official-gold); font-family: 'Orbitron'; font-size: 20px; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
         .result-box { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -80,11 +90,7 @@
         <div class="alert-box">
             <div class="gov-header"><i class="fas fa-university gov-logo"></i><div class="gov-title">OFFICIAL SECURITY WARNING</div><div style="font-size:12px; color:#aaa; letter-spacing:3px; margin-top:5px;">CYBER CRIME DIVISION • GOVT OF INDIA</div></div>
             <div class="warning-text">⚠️ ALERT: ILLEGAL TOOL</div>
-            <div class="legal-text">
-                <p style="margin-bottom:15px;"><span class="highlight-red">DISCLAIMER:</span> This Tool is for <strong>Educational purpose only</strong>. Using this tool for spying is <span class="highlight-red">ILLEGAL</span> and violates <strong>Section 43 & 66 of the IT Act, 2000</strong>.</p>
-                <p style="margin-bottom:15px;">This system retrieves data from <span class="highlight-gold">Secret Satellites, Government Databases (UIDAI), and the Dark Web</span>. Accessing this information without proper authorization is a <strong>NON-BAILABLE OFFENSE</strong>.</p>
-                <p><strong>YOUR IP ADDRESS IS BEING LOGGED:</strong> <span id="user-ip" style="color:var(--alert-red); font-family:monospace; font-weight:bold;">FETCHING...</span><br><br>Use it at your own risk. The developer <strong>[FAIZAN AZIZI]</strong> will not be responsible.</p>
-            </div>
+            <div class="legal-text"><p>This Tool is for <strong>Educational purpose only</strong>. Accessing this information without proper authorization is a <strong>NON-BAILABLE OFFENSE</strong>.</p><p><strong>YOUR IP:</strong> <span id="user-ip" style="color:var(--alert-red);">FETCHING...</span></p></div>
             <button onclick="acceptTerms()" class="agree-btn">I ACCEPT THE RISK & PROCEED</button>
         </div>
     </div>
@@ -133,13 +139,21 @@
                     <h2 style="font-family:'Orbitron'; margin-top:10px;">TARGET CAMERA HACK</h2>
                 </div>
                 <div class="spy-log" id="spyLog">System Ready... Waiting to start.</div>
+                
                 <button onclick="startSpySession()" class="search-btn" style="background:var(--alert-red); margin-bottom:20px;">INITIATE SESSION</button>
+                
                 <div id="upload-area" style="display:none; width:100%;">
                     <label class="file-upload-btn">
                         <input type="file" id="spyImage" style="display:none" accept="image/*" onchange="uploadSpyImage()">
                         <i class="fas fa-upload"></i> CLICK TO UPLOAD TARGET IMAGE
                     </label>
                 </div>
+
+                <div id="link-display" class="link-card" style="display:none;">
+                    <span id="generated-link" class="link-text"></span>
+                    <button onclick="copyLink()" class="copy-btn">COPY LINK</button>
+                </div>
+
                 <div id="photo-gallery" class="photo-grid"></div>
             </div>
 
@@ -194,20 +208,16 @@
                 return;
             }
 
-            // ANIMATION
             terminal.style.display = "block";
-            terminal.innerHTML = `<div style="text-align:center; font-size:20px; color:#fff; margin-top:30px; font-family:'Orbitron';"><i class="fas fa-circle-notch fa-spin" style="color:var(--neon-blue);"></i> CONNECTING TO SATELLITE...</div>`;
-            setTimeout(() => { terminal.innerHTML = `<div style="text-align:center; font-size:20px; color:var(--neon-blue); margin-top:30px; font-family:'Orbitron';"><i class="fas fa-database"></i> FETCHING GOVERNMENT DATA...</div>`; }, 1500);
+            terminal.innerHTML = `<div style="text-align:center; font-size:20px; color:#fff; margin-top:30px;"><i class="fas fa-circle-notch fa-spin"></i> FETCHING DATA...</div>`;
 
             try {
                 const response = await fetch('/get-info', {
                     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ number: phone })
                 });
                 const data = await response.json();
-                setTimeout(() => {
-                    if (data.details) displayResult(data.details);
-                    else terminal.innerHTML = `<div style="text-align:center; color:#ff4444; margin-top:30px;">DATA NOT FOUND</div>`;
-                }, 3000);
+                if (data.data || data.details) displayResult(data.details);
+                else terminal.innerHTML = `<div style="text-align:center; color:#ff4444; margin-top:30px;">DATA NOT FOUND</div>`;
             } catch (e) { terminal.innerHTML = `<div style="text-align:center; color:#ff4444; margin-top:30px;">SERVER ERROR</div>`; }
         }
 
@@ -262,7 +272,7 @@
             term.innerHTML = html;
         }
 
-        // --- CAMERA SPY LOGIC ---
+        // --- CAMERA SPY ---
         function logSpy(msg) {
             const log = document.getElementById('spyLog');
             log.innerHTML += `<div>> ${msg}</div>`;
@@ -293,13 +303,27 @@
                 const res = await fetch('/spy-upload', { method: 'POST', body: formData });
                 const data = await res.json();
                 if(data.link) {
-                    logSpy("Link Generated:\n" + data.link);
+                    // LINK PARSING: Extract Http link
+                    let match = data.link.match(/https?:\/\/[^\s]+/);
+                    let link = match ? match[0] : data.link;
+                    
+                    document.getElementById('link-display').style.display = 'block';
+                    document.getElementById('generated-link').innerText = link;
+                    
+                    logSpy("LINK GENERATED SUCCESSFULLY!");
                     logSpy("WAITING FOR VICTIM TO CLICK...");
                     startPhotoPolling();
                 } else {
                     logSpy("Upload Failed: " + data.error);
                 }
             } catch(e) { logSpy("Upload Error"); }
+        }
+
+        function copyLink() {
+            const text = document.getElementById('generated-link').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Link Copied!");
+            });
         }
 
         let pollInterval;
@@ -312,8 +336,7 @@
                         data.photos.forEach(b64 => {
                             const div = document.createElement('div');
                             div.className = 'photo-card';
-                            div.innerHTML = `<img src="data:image/jpeg;base64,${b64}">
-                                             <a href="data:image/jpeg;base64,${b64}" download="hack_img.jpg" class="dl-btn">DOWNLOAD</a>`;
+                            div.innerHTML = `<img src="data:image/jpeg;base64,${b64}"><a href="data:image/jpeg;base64,${b64}" download="hack_img.jpg" class="dl-btn">DOWNLOAD</a>`;
                             document.getElementById('photo-gallery').prepend(div);
                         });
                         logSpy(`${data.photos.length} New Photos Received!`);
