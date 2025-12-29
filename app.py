@@ -48,7 +48,7 @@ def save_keys(keys):
         with open(KEY_FILE, 'w') as f: json.dump(keys, f, indent=4)
     except: pass
 
-# --- KEY VERIFICATION ---
+# --- KEY VERIFICATION (MASTER: AZIZI_2513) ---
 @app.route('/verify-access', methods=['POST'])
 def verify_access():
     try:
@@ -94,48 +94,35 @@ def generate_key():
         return jsonify({'key': new_key, 'duration': f'{hours} Hours'})
     except Exception as e: return jsonify({'error': str(e)})
 
-# --- 🔴 NEW ADMIN STATS ROUTE 🔴 ---
+# --- ADMIN STATS ---
 @app.route('/admin-stats', methods=['POST'])
 def admin_stats():
     try:
-        # Security Check (Although frontend handles it, backend should too ideally, but keeping simple)
         keys = load_keys()
         stats_list = []
-        
         for k, v in keys.items():
             status = v['status']
             time_left = "Not Started"
-            
             if status == 'active':
                 expiry = datetime.fromisoformat(v['expiry_time'])
                 if datetime.now() < expiry:
-                    remaining = expiry - datetime.now()
-                    # Format: HH:MM:SS
-                    time_left = str(remaining).split('.')[0]
+                    time_left = str(expiry - datetime.now()).split('.')[0]
                 else:
                     status = 'expired'
                     time_left = "00:00:00"
-            
             elif status == 'unused':
                 time_left = f"{v['hours']} Hours (Pending)"
-
-            stats_list.append({
-                'key': k,
-                'hours': v['hours'],
-                'status': status.upper(),
-                'time_left': time_left
-            })
-            
+            stats_list.append({'key': k, 'hours': v['hours'], 'status': status.upper(), 'time_left': time_left})
         return jsonify({'stats': stats_list})
     except Exception as e: return jsonify({'error': str(e)})
 
-# --- WHOSIM LOGIC ---
+# --- WHOSIM LOGIC (FIXED - NO ID REPLACEMENT) ---
 def clean_and_format_text(text):
     if not text: return ""
     text = text.replace("MAXX", "FAIZAN AZIZI")
     text = text.replace("HiTeckGroop", "FAIZAN AZIZI")
-    text = re.sub(r'\bID\b', 'Aadhaar Number', text, flags=re.IGNORECASE)
-    text = re.sub(r'\bid\b', 'Aadhaar Number', text, flags=re.IGNORECASE)
+    # Maine yahan se ID replace karne wala code hata diya hai
+    # Taki original 'ID' word hi rahe aur parser confuse na ho
     return text
 
 async def ask_telegram_final(mobile_number):
