@@ -48,14 +48,13 @@ def save_keys(keys):
         with open(KEY_FILE, 'w') as f: json.dump(keys, f, indent=4)
     except: pass
 
-# --- KEY VERIFICATION (UPDATED MASTER KEY) ---
+# --- KEY VERIFICATION ---
 @app.route('/verify-access', methods=['POST'])
 def verify_access():
     try:
         data = request.json
         user_key = data.get('key', '').strip()
         
-        # 🔴 NEW MASTER KEY LOGIC 🔴
         if user_key == "AZIZI_2513":
             return jsonify({'status': 'valid', 'message': 'WELCOME OWNER FAIZAN! (MASTER ACCESS)', 'is_admin': True})
 
@@ -93,6 +92,41 @@ def generate_key():
         keys[new_key] = {'hours': int(hours), 'status': 'unused', 'created_at': datetime.now().isoformat()}
         save_keys(keys)
         return jsonify({'key': new_key, 'duration': f'{hours} Hours'})
+    except Exception as e: return jsonify({'error': str(e)})
+
+# --- 🔴 NEW ADMIN STATS ROUTE 🔴 ---
+@app.route('/admin-stats', methods=['POST'])
+def admin_stats():
+    try:
+        # Security Check (Although frontend handles it, backend should too ideally, but keeping simple)
+        keys = load_keys()
+        stats_list = []
+        
+        for k, v in keys.items():
+            status = v['status']
+            time_left = "Not Started"
+            
+            if status == 'active':
+                expiry = datetime.fromisoformat(v['expiry_time'])
+                if datetime.now() < expiry:
+                    remaining = expiry - datetime.now()
+                    # Format: HH:MM:SS
+                    time_left = str(remaining).split('.')[0]
+                else:
+                    status = 'expired'
+                    time_left = "00:00:00"
+            
+            elif status == 'unused':
+                time_left = f"{v['hours']} Hours (Pending)"
+
+            stats_list.append({
+                'key': k,
+                'hours': v['hours'],
+                'status': status.upper(),
+                'time_left': time_left
+            })
+            
+        return jsonify({'stats': stats_list})
     except Exception as e: return jsonify({'error': str(e)})
 
 # --- WHOSIM LOGIC ---
