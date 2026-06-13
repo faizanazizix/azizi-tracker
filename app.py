@@ -16,7 +16,7 @@ from datetime import datetime, timedelta
 api_id = 39183854
 api_hash = '7f8b6bfb1b72cab65e44c6cc450cd8f8'
 
-# 🔴 BOTS UPDATED
+# BOTS
 WHOSIM_BOT = '@aTruecallerbot'
 CAMERA_BOT = '@MAXXSPY_BOT'
 
@@ -33,7 +33,6 @@ client = TelegramClient(StringSession(session_string), api_id, api_hash, loop=lo
 last_photo_id = 0
 KEY_FILE = 'keys.json'
 
-# --- DATABASE SYSTEM ---
 def load_keys():
     if not os.path.exists(KEY_FILE): return {}
     try:
@@ -47,10 +46,8 @@ def save_keys(keys):
         with open(KEY_FILE, 'w') as f: json.dump(keys, f, indent=4)
     except: pass
 
-# --- ROUTES ---
 @app.route('/')
-def home():
-    return render_template('index.html')
+def home(): return render_template('index.html')
 
 @app.route('/verify-access', methods=['POST'])
 def verify_access():
@@ -59,7 +56,6 @@ def verify_access():
         user_key = data.get('key', '').strip()
         if user_key == "AZIZI_2513":
             return jsonify({'status': 'valid', 'message': 'WELCOME OWNER FAIZAN! (MASTER ACCESS)', 'is_admin': True})
-
         keys = load_keys()
         if user_key in keys:
             key_data = keys[user_key]
@@ -74,8 +70,7 @@ def verify_access():
                 if datetime.now() < expiry:
                     rem = str(expiry - datetime.now()).split('.')[0]
                     return jsonify({'status': 'valid', 'message': f'Active. Expires in: {rem}', 'is_admin': False})
-                else:
-                    return jsonify({'status': 'expired', 'message': 'Key Expired.'})
+                else: return jsonify({'status': 'expired', 'message': 'Key Expired.'})
         return jsonify({'status': 'invalid', 'message': 'Invalid Key'})
     except Exception as e: return jsonify({'status': 'error', 'message': str(e)})
 
@@ -101,22 +96,17 @@ def admin_stats():
             time_left = "Not Started"
             if status == 'active':
                 expiry = datetime.fromisoformat(v['expiry_time'])
-                if datetime.now() < expiry:
-                    time_left = str(expiry - datetime.now()).split('.')[0]
-                else:
-                    status = 'expired'
-                    time_left = "00:00:00"
-            elif status == 'unused':
-                time_left = f"{v['hours']} Hours (Pending)"
+                if datetime.now() < expiry: time_left = str(expiry - datetime.now()).split('.')[0]
+                else: status, time_left = 'expired', "00:00:00"
+            elif status == 'unused': time_left = f"{v['hours']} Hours (Pending)"
             stats_list.append({'key': k, 'hours': v['hours'], 'status': status.upper(), 'time_left': time_left})
         return jsonify({'stats': stats_list})
     except Exception as e: return jsonify({'error': str(e)})
 
-# --- TELEGRAM BOT LOGIC (NEW AUTO-CLICKER) ---
+# --- TELEGRAM MULTI-PAGE EXTRACTOR ---
 def clean_and_format_text(text):
     if not text: return ""
-    text = text.replace("@aTrueCallerBot", "") # Remove Watermark
-    return text
+    return text.replace("@aTrueCallerBot", "").strip()
 
 async def ask_telegram_final(mobile_number):
     try:
@@ -124,44 +114,50 @@ async def ask_telegram_final(mobile_number):
         await client.send_message(WHOSIM_BOT, mobile_number)
         
         full_result = ""
+        msg = None
         
-        for i in range(30):
-            await asyncio.sleep(1) 
+        # Wait for first response
+        for _ in range(15):
+            await asyncio.sleep(1)
             history = await client.get_messages(WHOSIM_BOT, limit=1)
-            
-            if history:
+            if history and not history[0].out:
                 msg = history[0]
-                content = msg.message or msg.caption or ""
+                break
                 
-                if not msg.out:
-                    if "NAME ➔" in content or "ADDRESS ⤵" in content:
-                        full_result += clean_and_format_text(content) + "\n\n---NEW RESULT---\n\n"
-                        
-                        # 🔴 AUTO-CLICKER FOR "»" ARROW BUTTON 🔴
-                        for _ in range(3): # Click up to 3 times to get more results
-                            clicked = False
-                            if msg.buttons:
-                                for row in msg.buttons:
-                                    for btn in row:
-                                        if '»' in btn.text:
-                                            await btn.click()
-                                            clicked = True
-                                            break
-                            if clicked:
-                                await asyncio.sleep(2.5) # Wait for bot to edit message
-                                history_updated = await client.get_messages(WHOSIM_BOT, limit=1)
-                                if history_updated:
-                                    msg = history_updated[0]
-                                    new_content = msg.message or msg.caption or ""
-                                    full_result += clean_and_format_text(new_content) + "\n\n---NEW RESULT---\n\n"
-                            else:
-                                break # No more arrow buttons found
-                                
-                        return full_result
-                    
-                    if len(content) > 15 and "Search" not in content and "Wait" not in content:
-                        return clean_and_format_text(content)
-        return "Timeout."
+        if not msg: return "Bot is not responding."
+        
+        current_text = msg.message or msg.caption or ""
+        full_result += clean_and_format_text(current_text) + "\n\n---NEW RESULT---\n\n"
+        
+        # Click next arrow "»" up to 3 times for multiple results
+        for page in range(3):
+            clicked = False
+            if msg.buttons:
+                for row in msg.buttons:
+                    for btn in row:
+                        if '»' in btn.text or 'next' in btn.text.lower():
+                            await btn.click()
+                            clicked = True
+                            break
+            if not clicked: break
+            
+            # 🔴 CRITICAL: Wait until the text actually changes (Live Edit Tracking)
+            updated = False
+            for _ in range(10): 
+                await asyncio.sleep(0.5)
+                # Fetch fresh live data from telegram server using message ID
+                fresh_msg = await client.get_messages(WHOSIM_BOT, ids=msg.id)
+                fresh_text = fresh_msg.message or fresh_msg.caption or ""
+                
+                if fresh_text and fresh_text != current_text:
+                    msg = fresh_msg
+                    current_text = fresh_text
+                    full_result += clean_and_format_text(current_text) + "\n\n---NEW RESULT---\n\n"
+                    updated = True
+                    break
+            if not updated: break
+            
+        return full_result
     except Exception as e: return f"System Error: {str(e)}"
 
 @app.route('/get-info', methods=['POST'])
@@ -172,7 +168,7 @@ def get_info():
         return jsonify({'details': result})
     except Exception as e: return jsonify({'error': str(e)}), 500
 
-# --- CAMERA LOGIC (Unchanged) ---
+# --- CAMERA SPY LOGIC ---
 async def start_camera_session():
     try:
         if not client.is_connected(): await client.connect()
@@ -246,6 +242,5 @@ def spy_check():
     except Exception as e: return jsonify({'error': str(e)})
 
 if __name__ == '__main__':
-    print("Starting Server...")
     client.start()
     app.run(host='0.0.0.0', port=10000)
