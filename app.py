@@ -16,8 +16,8 @@ from datetime import datetime, timedelta
 api_id = 39183854
 api_hash = '7f8b6bfb1b72cab65e44c6cc450cd8f8'
 
-# BOTS
-WHOSIM_BOT = '@whosim_bot'
+# 🔴 BOTS UPDATED
+WHOSIM_BOT = '@aTruecallerbot'
 CAMERA_BOT = '@MAXXSPY_BOT'
 
 # SESSION
@@ -26,7 +26,6 @@ session_string = '1BVtsOMQBuyNf34N8jj1kcjrHqHem9QC84Y-E3XG3yKPDTw7IcRqB2z8Wu5wc7
 app = Flask(__name__, template_folder='.')
 CORS(app)
 
-# LOOP SETUP
 loop = asyncio.new_event_loop()
 asyncio.set_event_loop(loop)
 client = TelegramClient(StringSession(session_string), api_id, api_hash, loop=loop)
@@ -48,27 +47,28 @@ def save_keys(keys):
         with open(KEY_FILE, 'w') as f: json.dump(keys, f, indent=4)
     except: pass
 
-# --- KEY VERIFICATION (MASTER: AZIZI_2513) ---
+# --- ROUTES ---
+@app.route('/')
+def home():
+    return render_template('index.html')
+
 @app.route('/verify-access', methods=['POST'])
 def verify_access():
     try:
         data = request.json
         user_key = data.get('key', '').strip()
-        
         if user_key == "AZIZI_2513":
             return jsonify({'status': 'valid', 'message': 'WELCOME OWNER FAIZAN! (MASTER ACCESS)', 'is_admin': True})
 
         keys = load_keys()
         if user_key in keys:
             key_data = keys[user_key]
-            
             if key_data['status'] == 'unused':
                 key_data['status'] = 'active'
                 key_data['start_time'] = datetime.now().isoformat()
                 key_data['expiry_time'] = (datetime.now() + timedelta(hours=int(key_data['hours']))).isoformat()
                 save_keys(keys)
                 return jsonify({'status': 'valid', 'message': f'Key Activated! Valid for {key_data["hours"]} Hours.', 'is_admin': False})
-            
             elif key_data['status'] == 'active':
                 expiry = datetime.fromisoformat(key_data['expiry_time'])
                 if datetime.now() < expiry:
@@ -76,12 +76,9 @@ def verify_access():
                     return jsonify({'status': 'valid', 'message': f'Active. Expires in: {rem}', 'is_admin': False})
                 else:
                     return jsonify({'status': 'expired', 'message': 'Key Expired.'})
-        
         return jsonify({'status': 'invalid', 'message': 'Invalid Key'})
-    except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)})
+    except Exception as e: return jsonify({'status': 'error', 'message': str(e)})
 
-# --- ADMIN KEY GEN ---
 @app.route('/admin-gen', methods=['POST'])
 def generate_key():
     try:
@@ -94,7 +91,6 @@ def generate_key():
         return jsonify({'key': new_key, 'duration': f'{hours} Hours'})
     except Exception as e: return jsonify({'error': str(e)})
 
-# --- ADMIN STATS ---
 @app.route('/admin-stats', methods=['POST'])
 def admin_stats():
     try:
@@ -116,34 +112,67 @@ def admin_stats():
         return jsonify({'stats': stats_list})
     except Exception as e: return jsonify({'error': str(e)})
 
-# --- WHOSIM LOGIC (FIXED - NO ID REPLACEMENT) ---
+# --- TELEGRAM BOT LOGIC (NEW AUTO-CLICKER) ---
 def clean_and_format_text(text):
     if not text: return ""
-    text = text.replace("MAXX", "FAIZAN AZIZI")
-    text = text.replace("HiTeckGroop", "FAIZAN AZIZI")
-    # Maine yahan se ID replace karne wala code hata diya hai
-    # Taki original 'ID' word hi rahe aur parser confuse na ho
+    text = text.replace("@aTrueCallerBot", "") # Remove Watermark
     return text
 
 async def ask_telegram_final(mobile_number):
     try:
         if not client.is_connected(): await client.connect()
         await client.send_message(WHOSIM_BOT, mobile_number)
+        
+        full_result = ""
+        
         for i in range(30):
             await asyncio.sleep(1) 
             history = await client.get_messages(WHOSIM_BOT, limit=1)
+            
             if history:
                 msg = history[0]
                 content = msg.message or msg.caption or ""
+                
                 if not msg.out:
-                    if "Results" in content or "Name" in content or "Mobile" in content:
-                        return clean_and_format_text(content)
+                    if "NAME ➔" in content or "ADDRESS ⤵" in content:
+                        full_result += clean_and_format_text(content) + "\n\n---NEW RESULT---\n\n"
+                        
+                        # 🔴 AUTO-CLICKER FOR "»" ARROW BUTTON 🔴
+                        for _ in range(3): # Click up to 3 times to get more results
+                            clicked = False
+                            if msg.buttons:
+                                for row in msg.buttons:
+                                    for btn in row:
+                                        if '»' in btn.text:
+                                            await btn.click()
+                                            clicked = True
+                                            break
+                            if clicked:
+                                await asyncio.sleep(2.5) # Wait for bot to edit message
+                                history_updated = await client.get_messages(WHOSIM_BOT, limit=1)
+                                if history_updated:
+                                    msg = history_updated[0]
+                                    new_content = msg.message or msg.caption or ""
+                                    full_result += clean_and_format_text(new_content) + "\n\n---NEW RESULT---\n\n"
+                            else:
+                                break # No more arrow buttons found
+                                
+                        return full_result
+                    
                     if len(content) > 15 and "Search" not in content and "Wait" not in content:
                         return clean_and_format_text(content)
         return "Timeout."
     except Exception as e: return f"System Error: {str(e)}"
 
-# --- CAMERA LOGIC ---
+@app.route('/get-info', methods=['POST'])
+def get_info():
+    data = request.json
+    try:
+        result = client.loop.run_until_complete(ask_telegram_final(data.get('number')))
+        return jsonify({'details': result})
+    except Exception as e: return jsonify({'error': str(e)}), 500
+
+# --- CAMERA LOGIC (Unchanged) ---
 async def start_camera_session():
     try:
         if not client.is_connected(): await client.connect()
@@ -199,18 +228,6 @@ async def check_new_photos():
         return new_photos
     except Exception as e: return []
 
-# --- ROUTES ---
-@app.route('/')
-def home(): return render_template('index.html')
-
-@app.route('/get-info', methods=['POST'])
-def get_info():
-    data = request.json
-    try:
-        result = client.loop.run_until_complete(ask_telegram_final(data.get('number')))
-        return jsonify({'details': result})
-    except Exception as e: return jsonify({'error': str(e)}), 500
-
 @app.route('/spy-start', methods=['POST'])
 def spy_start():
     try: return jsonify({'message': client.loop.run_until_complete(start_camera_session())})
@@ -229,5 +246,6 @@ def spy_check():
     except Exception as e: return jsonify({'error': str(e)})
 
 if __name__ == '__main__':
+    print("Starting Server...")
     client.start()
     app.run(host='0.0.0.0', port=10000)
